@@ -1,0 +1,111 @@
+% dsort, 11/2010, Thomas Ogrisegg
+
+\documentclass{article}
+\usepackage[german]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{a4wide}
+\usepackage{url}
+\parindent0pt
+\addtolength{\parskip}{10pt}
+
+\begin{document}
+
+\begin{center}
+\begin{Large}
+OPERATING SYSTEMS BEISPIEL 2
+\end{Large}
+\end{center}
+
+
+
+
+\section*{Aufgabenstellung}
+
+
+\begin{verbatim}
+SYNOPSIS:
+        dsort "command1" "command2"
+\end{verbatim}
+
+Schreiben Sie ein Programm, das die beiden Kommandos \emph{command1}
+und \emph{command2} ausführt, deren Ausgaben einliest und in ein
+gemeinsames Array speichert. Dieses Array wird dann sortiert und an
+das Unix-Kommando \emph{uniq -d} weitergegeben. Die Ausgabe Ihres
+Programmes soll also identisch sein mit jener des folgenden
+Shellskripts\footnote{Anmerkung: \$1 und \$2 stehen für command1 und
+command2}:
+
+\begin{verbatim}
+#!/bin/sh
+
+( $1; $2 ) | sort | uniq -d
+\end{verbatim}
+
+\section*{Anleitung}
+
+Das Programm soll für die beiden Kommandos jeweils mittels Pipes die
+Ausgabe der Kindprozesse zeilenweise einlesen und in ein Array
+speichern. Die Kindprozesse werden mit \emph{fork(2)} erzeugt und
+sollen die Bourne-Shell mit dem Parameter -c ausführen (also
+\emph{/bin/sh -c}). Dadurch ist es möglich dem Programm mittels
+Anführungszeichen ein Shellkommando zu übergeben – die Shell kümmert
+sich um alles Weitere.
+
+Das vom Programm erzeugte Array mit den Ausgaben der Kommandos soll
+dann sortiert werden. Danach wird ein neuer Kindprozess gestartet,
+welcher das Programm \emph{uniq} mit der Option \emph{-d} ausführen
+soll. Das sortierte Array wird diesem Prozess über die Standardeingabe
+übergeben (wieder \emph{pipe(2)} verwenden), indem zeilenweise in die
+Pipe geschrieben wird.
+
+Der \emph{uniq}-Prozess sucht im \emph{-d}-Modus alle mehrmals
+nacheinander vorkommenden Zeilen heraus und gibt sie auf die
+Standardausgabe aus. \emph{uniq} ist ein UNIX-Standardprogramm und
+muss von Ihnen nicht programmiert werden.
+
+Beispiel:
+\begin{verbatim}
+  $ ./dsort "cat /etc/passwd" "cat /etc/passwd.tmp"
+\end{verbatim}
+
+Dieser Befehl würde die beiden Dateien /etc/passwd und /etc/passwd.tmp
+vergleichen und alle Zeilen die in beiden Dateien (oder in einer Datei
+mehrmals) vorhanden sind auf die Standardausgabe ausgeben.
+
+Beispiel:
+\begin{verbatim}
+  $ ./dsort "seq 0 3 100" "seq 0 11 100"
+\end{verbatim}
+
+Dieser Befehl gibt alle gemeinsamen Teiler von 3 und 11, die zwischen
+0 und 100 liegen, aus.
+
+\section*{Hinweise}
+
+Beachten Sie insbesondere folgende Punkte:
+
+\begin{itemize}
+\item Sie müssen sowohl das Array als auch die Strings des Arrays
+dynamisch allozieren und auf eine saubere Freigabe achten. Hierfür
+stehen die Funktionen \emph{malloc(3)}, \emph{realloc(3)},
+\emph{free(3)} und bspw.\ auch \emph{strdup(3)} zur Verfügung.
+\item Zum Sortieren der Zeilen können Sie \emph{qsort(3)} verwenden.
+\item Ihr Programm sollte zeilenweise einlesen (z.B.\ mit
+\emph{fgets(3)}) bzw.\ sortieren.
+\item Sie können davon ausgehen, dass eine Eingabezeile nicht länger
+als 1023 echte Zeichen ist.
+\item Die Funktion \emph{popen(3)} darf nicht verwendet werden.
+\item Achten Sie darauf, dass der Elternprozess sich erst beendet,
+nachdem alle Kindprozesse terminiert haben.
+\item Gewisse Nicht-ANSI-Funktionen (wie etwa \emph{strdup(3)}) werden
+erst sichtbar, wenn mit\\
+\verb,-D_XOPEN_SOURCE=500, kompiliert wird.
+\item Achten Sie unbedingt darauf, dass alle Ressourcen auch wieder
+freigegeben werden (besonders im Fehlerfall)!
+\end{itemize}
+
+\section*{Richtlinien}
+Bitte beachten Sie auch die Allgemeinen Hinweise zur Beispielgruppe 2 und die Richtlinien f\"ur die Erstellung von C-Programmen auf der \"Ubungswebsite.
+Insbesondere ist es ab dieser Beispielgruppe notwendig, die Dokumentation in Doxygen zu f\"uhren. Es muss zumindest das HTML Output generierbar sein. Bitte dokumentieren Sie ausnahmslos alle Funktionen (auch static-Funktionen, siehe \verb|EXTRACT_STATIC| im Doxygen Cfg-File). Eine kurze Einf\"uhrung haben wir Ihnen auf: \url{http://wiki.vmars.tuwien.ac.at/index.php/Doxygen_Primer} bereitgestellt. Achten Sie weiters darauf, dass nach au{\ss}en hin sichtbare Funktionen (exportierte Funktionen) im Header File beschrieben werden und lokale (static Funktionen) nur im C File. Sie sollten auch Ihre Typen (insb. structs), Konstanten und globale Variablen dokumentieren. 
+\end{document}

@@ -1,0 +1,38 @@
+\documentclass{article}
+\usepackage[german]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{url}
+\usepackage{a4wide}
+\parindent0pt
+\addtolength{\parskip}{10pt}
+
+\begin{document}
+
+\begin{center}
+\begin{Large}
+OPERATING SYSTEMS BEISPIEL 2
+\end{Large}
+\end{center}
+
+\section{Benutzung von \emph{gzip}}
+
+\subsection{Aufgabenstellung}
+Schreiben Sie ein Programm, das Eingaben mit \emph{gzip(1)} komprimiert.
+\begin{verbatim}
+    SYNOPSIS
+        mygzip [file]
+\end{verbatim}
+
+
+\subsection{Anleitung}  
+Das Programm erstellt zwei Pipes und führt zwei mal \emph{fork(2)} aus (und erzeugt damit zwei Kinder – nicht Kind und Enkelkind).
+Das erste Kind biegt \emph{stdin} auf die erste und \emph{stdout} auf die zweite Pipe um und startet mit \emph{execlp(3)} das Programm \emph{gzip(1)} mit dem Parametern \emph{-cf}.
+Der Vater liest die zu komprimierenden Daten von \emph{stdin} ein und schreibt sie über die erste Pipe zum gzip-Prozess.
+Das zweite Kind liest über die zweite Pipe vom \emph{gzip}-Prozess und schreibt die gelesenen Daten in die Datei \emph{file} bzw.\ auf \emph{stdout} wenn keine Datei angegeben wurde.
+Achten Sie darauf, das Sie die Dateien binär öffnen.
+
+\section*{Richtlinien}
+Bitte beachten Sie auch die Allgemeinen Hinweise zur Beispielgruppe 2 und die Richtlinien f\"ur die Erstellung von C-Programmen auf der \"Ubungswebsite.
+Insbesondere ist es ab dieser Beispielgruppe notwendig, die Dokumentation in Doxygen zu f\"uhren. Es muss zumindest das HTML Output generierbar sein. Bitte dokumentieren Sie ausnahmslos alle Funktionen (auch static-Funktionen, siehe \verb|EXTRACT_STATIC| im Doxygen Cfg-File). Eine kurze Einf\"uhrung haben wir Ihnen auf: \url{http://wiki.vmars.tuwien.ac.at/index.php/Doxygen_Primer} bereitgestellt. Achten Sie weiters darauf, dass nach au{\ss}en hin sichtbare Funktionen (exportierte Funktionen) im Header File beschrieben werden und lokale (static Funktionen) nur im C File. Sie sollten auch Ihre Typen (insb. structs), Konstanten und globale Variablen dokumentieren. 
+\end{document}

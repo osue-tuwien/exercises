@@ -1,0 +1,79 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[german]{babel}
+\usepackage{a4wide}
+\pagestyle{empty}
+\parindent0pt
+
+\begin{document}
+\begin{center}
+\begin{Large}
+OPERATING SYSTEMS BEISPIEL 1
+\end{Large}
+\end{center}
+ 
+\section*{Aufgabenstellung A}
+       Schreiben Sie ein C-Programm \emph{mycompress},
+      das die als Argumente übergebenen Dateien mittels
+      eines einfachen Algorithmus komprimiert.
+      Wird kein Argument angegeben, so ist von
+      \emph{stdin} zu lesen.
+\begin{verbatim}
+	 SYNOPSIS
+        mycompress [file1] [file2] ...
+\end{verbatim}
+
+\subsection*{Anleitung}
+      Das Programm soll den Inhalt des übergebenen Files
+      auslesen, komprimieren und nach der Komprimierung in ein
+      File mit dem Namen \emph{[ursprüngliches File].comp}
+      ausgeben. Wird kein File übergeben, so ist von stdin zu
+      lesen und in das File \emph{Stdin.comp} auszugeben. Die
+      Komprimierung soll so erfolgen, dass die Zeichen durch
+      \verb|Zeichen + Anzahl| ersetzt werden - z.B.: \verb|aaa| durch \verb|a3|
+      und \verb|b| durch \verb|b1|. 
+	Newline ist auch ein Zeichen und soll ebenfalls mit [zeichen][anzahl] komprimiert werden.
+      
+      Geben Sie die Anzahl der Zeichen - auch \emph{newline}
+      sowohl des unkomprimierten, als auch des komprimierten Files
+      auf dem Bildschirm aus (Sie werden feststellen, dass die
+      Komprimierung nur bei vielen gleichen Zeichen effizient ist).
+
+ 	
+      
+      Definieren Sie für die maximale Anzahl an Zeichen in einer
+      Zeile eine Konstante, wobei Sie annehmen dürfen, dass keine
+      Zeile mehr Zeichen enthält.
+
+      
+\subsection*{Testen}
+      Testen Sie Ihr Programm mit verschiedenen Textfiles, z.B
+      soll eine Testdatei \emph{Test.txt} mit folgenden Inhalt:
+\subsubsection*{File: Test.txt}
+\begin{verbatim}
+      aaabbbbbc
+      dddddddde
+      ggghhhhha
+\end{verbatim}
+die Bildschirmausgabe:
+\begin{verbatim}
+      Test.txt:        30 Zeichen
+      Test.txt.comp:   22 Zeichen
+\end{verbatim}
+
+und die Outputdatei:
+
+\subsubsection*{File: Test.txt.comp}
+\begin{verbatim}
+      a3b5c1
+      1d8e1
+      1g3h5a1
+      1
+\end{verbatim}
+
+liefern.
+    	
+	
+
+\end{document}
+

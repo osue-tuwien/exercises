@@ -1,0 +1,72 @@
+% TeX source file
+% Sysprog SS 2005
+% Beispiel 3: proxy
+% Christian Steiner
+
+
+\documentclass{article}
+\usepackage[german]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{a4wide}
+\usepackage{url}
+\parindent0pt
+\addtolength{\parskip}{10pt}
+
+\begin{document}
+
+\begin{center}
+\begin{Large}
+OPERATING SYSTEMS BEISPIEL 2
+\end{Large}
+\end{center}
+
+\section*{Aufgabenstellung}
+
+Implementieren Sie ein Programm, welches ein auf der Kommandozeile angegebenes
+Programm in einem Kindprozess ausführt und je nach angegebenen Optionen 
+\emph{stdin}, \emph{stdout} und \emph{stderr} in files umlenkt.
+
+\begin{verbatim}
+    SYNOPSIS:
+       proxy [-i infile] [-o outfile] [-e errfile] <cmd> [options]
+\end{verbatim}
+
+Wird ein Ziel nicht angegeben (eine oder mehrere der Optionen \verb_-i_,
+\verb_-o_ oder \verb_-e_ fehlt) oder wurde \verb_-_ als Filename angegeben, soll
+der entsprechende Ein-/Ausgabekanal unverändert bleiben. Der Rückgabewert des
+\verb_proxy_-Programms soll dem Rückgabewert des ausgeführten Programms
+entsprechen.
+
+\section*{Anleitung}
+
+Verwenden Sie \emph{getopt(3)} zur Argumentbehandlung. Benötigt das
+auszuführende Programm eine oder mehrere Optionen, können Sie durch Voranstellen
+von \verb|--| eine Fehlermeldung von {\em getopt} vermeiden – das Parsen der
+Parameter endet dann an dieser Stelle.\\
+(Beispiel: \verb|./proxy -o outfile -- ls -o *|)
+
+Erzeugen Sie anschließend mit \emph{fork(2)} einen Kindprozess. Lenken Sie
+mittels \emph{dup(2)} oder \emph{dup2(2)} die entsprechenden Filedeskriptoren um
+(vergessen Sie nicht, den ursprünglichen Deskriptor gegebenenfalls vorher zu
+schließen) und führen Sie zuletzt das Programm samt Optionen mithilfe von
+\emph{execvp(2)} aus. Vergessen Sie im Vaterprozess nicht, den Exitstatus des
+Kindprozesses abzuholen (und so die Entstehung eines Zombieprozesses zu
+vermeiden).
+
+\section*{Testen}
+
+Verwenden Sie \verb_proxy_, um mehrere Programme auszuführen:
+
+\begin{verbatim}
+	./proxy cat
+	
+	./proxy -i Makefile -o Makefile.cat cat
+
+	./proxy -i - -o - -- grep -ni
+\end{verbatim}
+
+\section*{Richtlinien}
+Bitte beachten Sie auch die Allgemeinen Hinweise zur Beispielgruppe 2 und die Richtlinien f\"ur die Erstellung von C-Programmen auf der \"Ubungswebsite.
+Insbesondere ist es ab dieser Beispielgruppe notwendig, die Dokumentation in Doxygen zu f\"uhren. Es muss zumindest das HTML Output generierbar sein. Bitte dokumentieren Sie ausnahmslos alle Funktionen (auch static-Funktionen, siehe \verb|EXTRACT_STATIC| im Doxygen Cfg-File). Eine kurze Einf\"uhrung haben wir Ihnen auf: \url{http://wiki.vmars.tuwien.ac.at/index.php/Doxygen_Primer} bereitgestellt. Achten Sie weiters darauf, dass nach au{\ss}en hin sichtbare Funktionen (exportierte Funktionen) im Header File beschrieben werden und lokale (static Funktionen) nur im C File. Sie sollten auch Ihre Typen (insb. structs), Konstanten und globale Variablen dokumentieren. 
+\end{document}

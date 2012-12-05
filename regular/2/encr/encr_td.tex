@@ -1,0 +1,89 @@
+% TeX source file
+% Sysprog SS 2005
+% Beispiel 3: encr
+% Christian Steiner
+
+\documentclass{article}
+\usepackage{a4wide}
+\usepackage[german]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{url}
+\parindent0pt
+\addtolength{\parskip}{10pt}
+
+\begin{document}
+
+\begin{center}
+\begin{Large}
+OPERATING SYSTEMS BEISPIEL 2
+\end{Large}
+\end{center}
+
+
+
+
+\section*{Aufgabenstellung}
+
+Implementieren Sie ein Programm, welches kontinuierlich Strings
+(Passwörter) von \emph{stdin} einliest und diese von einem Kindprozess
+verschlüsseln lässt.
+
+\begin{verbatim}
+SYNOPSIS:
+        encr
+\end{verbatim}
+
+Jedes Mal, wenn der Vaterprozess eine Zeile eingelesen hat, wird ein
+eigener Kindprozess erzeugt, der das Passwort (exklusive des
+abschließenden Newline-Zeichens) mittels \emph{crypt(3)}
+verschlüsselt. Danach soll der Kindprozess mittels \emph{sleep(3)}
+eine längere (pseudozufällige) Verarbeitungsdauer simulieren, um das
+nichtblockierende Einlesen des Vaterprozesses zu demonstrieren, und
+schließlich das verschlüsselte Passwort auf \emph{stdout} ausgeben.
+
+\section*{Anleitung}
+
+Lesen Sie in einer Schleife zeilenweise Strings von \emph{stdin} ein
+und entfernen Sie das abschließende Newline (\verb+\n+). Erzeugen Sie
+mittels \emph{fork(2)} einen Kindprozess und verschlüsseln Sie in
+diesem das Passwort; der Vaterprozess liest zu diesem Zeitpunkt
+bereits wieder von \emph{stdin} ein. Beachten Sie, dass in dieser
+Situation mehrere Kindprozesse asynchron und in nicht vorhersehbarer
+Reihenfolge terminieren können!
+
+Der Exit-Status jedes Kindes muss so früh wie möglich abgeholt werden.
+Behandeln Sie das Signal {\em SIGCHLD}, um das zu gewährleisten.
+Achten Sie darauf, dass {\em fgets(3)} den Fehlercode {\em EINTR}
+liefert, wenn es durch ein Signal unterbrochen wird. In diesem Fall
+muss {\em fgets(3)} erneut aufgerufen werden.
+
+\section*{Testen}
+
+Testen Sie ihr Programm z.B.\ wie folgt
+\begin{verbatim}
+bash$ ./encr
+jamesbond
+micky
+encr: jamesbond -> aCqHsO4OYLnq.
+encr: micky -> aCSHDy093k9FQ
+turing07
+encr: turing07 -> aCJvjJDrpvXWE
+asdfqwer
+encr: asdfqwer -> aCZpdSZB6ohMQ
+\end{verbatim}
+
+Die Ausgabe ihres Programmes muss nicht genau wie in diesem Beispiel
+formatiert sein. Die Reihenfolge von Input und Output wird vermutlich
+anders sein, ebenso wie das verschlüsselte Wort je nach gewähltem Salt
+variiert.
+
+Beachten Sie beim Testen auch den Fall, in dem der Vaterprozess durch
+ein Signal terminiert wird, während noch Kindprozesse aktiv sind. Auch
+in diesem Fall muss der Vaterprozess auf das Terminieren seiner Kinder
+warten.
+
+\section*{Richtlinien}
+Bitte beachten Sie auch die Allgemeinen Hinweise zur Beispielgruppe 2 und die Richtlinien f\"ur die Erstellung von C-Programmen auf der \"Ubungswebsite.
+Insbesondere ist es ab dieser Beispielgruppe notwendig, die Dokumentation in Doxygen zu f\"uhren. Es muss zumindest das HTML Output generierbar sein. Bitte dokumentieren Sie ausnahmslos alle Funktionen (auch static-Funktionen, siehe \verb|EXTRACT_STATIC| im Doxygen Cfg-File). Eine kurze Einf\"uhrung haben wir Ihnen auf: \url{http://wiki.vmars.tuwien.ac.at/index.php/Doxygen_Primer} bereitgestellt. Achten Sie weiters darauf, dass nach au{\ss}en hin sichtbare Funktionen (exportierte Funktionen) im Header File beschrieben werden und lokale (static Funktionen) nur im C File. Sie sollten auch Ihre Typen (insb. structs), Konstanten und globale Variablen dokumentieren. 
+\end{document}

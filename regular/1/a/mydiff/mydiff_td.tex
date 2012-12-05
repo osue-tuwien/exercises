@@ -1,0 +1,72 @@
+\documentclass{article}
+\usepackage[german]{babel}
+\usepackage[utf8]{inputenc}
+\pagestyle{empty}
+
+\begin{document}
+
+\begin{center}
+\begin{Large}
+OPERATING SYSTEMS BEISPIEL 1
+\end{Large}
+\end{center}
+
+\section*{Aufgabenstellung A}
+Implementieren Sie eine Abwandlung des Unix-Kommandos \emph{diff}.
+Schreiben Sie zu diesem Zweck ein C-Programm
+\emph{mydiff}, dass 2 übergebene Dateien zeilenweise
+miteinander vergleicht und, falls sich 2 Zeilen voneinander
+unterscheiden, die Zeilennummer und die Anzahl der
+verschiedenen Zeichen ausgibt.
+
+\begin{verbatim}
+	SYNOPSIS
+      		mydiff file1 file2
+\end{verbatim}
+
+
+\subsection*{Anleitung}
+      Das Programm soll jede Datei zeilenweise einlesen und die
+      gelesenen Zeichen miteinander vergleichen. Sind die Zeilen
+      ungleich lang, so soll nur bis zur Länge der kürzeren Zeile
+      verglichen werden - z.B.: \emph{,,Haus$\backslash$n''} und \emph{,,Haustor$\backslash$n''}
+      sind als gleich zu behandeln. Falls eine Datei mehr Zeilen enthält
+      als die andere, sollen die restlichen Zeilen ebenfalls ignoriert
+      werden. Pro Zeile soll gezählt werden, wieviele Zeichen an der
+      gleichen Position nicht übereinstimmen.
+
+
+      Definieren Sie für die maximale Anzahl an Zeichen in einer
+      Zeile eine Konstante, wobei Sie annehmen dürfen, dass keine
+      Zeile mehr Zeichen enthält.
+
+\subsection*{Testen}
+Erstellen Sie eine Testdatei \emph{difftest1.txt} mit folgendem Inhalt:
+\subsubsection*{File: difftest1.txt}
+\begin{verbatim}
+      abcdefg
+      Garten
+      abcdefg
+\end{verbatim}
+      und eine zweite Testdatei \emph{difftest2.txt} mit
+      folgendem Inhalt:
+\subsubsection*{File: difftest2.txt}
+\begin{verbatim}
+      abcdefg
+      Gartenzaun
+      ahciejg
+      abcdefg
+\end{verbatim}
+    Rufen Sie Ihr Programm mit folgenden Argumenten auf:
+\begin{verbatim}
+    $ mydiff difftest1.txt difftest2.txt
+    Zeile: 3 Zeichen: 3
+\end{verbatim}
+\begin{verbatim}
+    $ mydiff difftest1.txt bloedsinn.txt
+    mydiff: File bloedsinn.txt existiert nicht!
+\end{verbatim}
+
+
+\end{document}
+ 

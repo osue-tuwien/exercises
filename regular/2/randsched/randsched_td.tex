@@ -1,0 +1,109 @@
+\documentclass{article}
+\usepackage[german]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{a4wide}
+\usepackage{url}
+\parindent0pt
+\addtolength{\parskip}{10pt}
+
+\begin{document}
+\begin{center}
+\begin{Large}
+OPERATING SYSTEMS BEISPIEL 2
+\end{Large}
+\end{center}
+\section*{Aufgabenstellung}
+
+Sie sind der neue Systemadministrator im lokalen Atomkraftwerk. Schon bald ist
+Ihnen klar, dass im Wesentlichen einfach nur alle paar Minuten ein Programm
+aufgerufen werden muss, dessen Output in eine Protokolldatei abzutippen ist.
+Falls doch mal ein Fehler auftritt, muss aber von Ihnen der sofortige
+Reaktor-Shutdown eingeleitet werden. Sich Ihrer kritischen, dennoch gefährlichen
+und schlecht bezahlten Position bewusst, fassen Sie schnell den Entschluss,
+diesen Vorgang möglichst transparent zu automatisieren.
+
+\subsection*{Anleitung}
+Implementieren Sie die folgenden Hilfsprogramme, um den Reaktor zu simulieren:
+
+\begin{verbatim}
+          SYNOPSIS:  rventgas
+
+          SYNOPSIS:  rshutdown
+\end{verbatim}
+
+Das Programm \emph{rventgas} soll mit einer Wahrscheinlichkeit von 6/7
+erfolgreich mit der Meldung \verb_STATUS OK_ terminieren, sonst soll
+\verb_PRESSURE TOO HIGH - IMMEDIATE SHUTDOWN REQUIRED_ ausgegeben werden und die
+Terminierung erfolgt mit einem Fehlercode.
+
+Das Programm \emph{rshutdown} schreibt mit einer Wahrscheinlichkeit von 1/3 die
+Meldung\\
+\verb_SHUTDOWN COMPLETED_ auf \emph{stdout} und terminiert, sonst soll
+\verb_KaBOOM!_ ausgegeben und ein Fehlercode zurückgegeben werden.
+
+Nun zum eigentlichen Teil der Aufgabe: Implementieren Sie das folgende Programm:
+
+\begin{verbatim}
+SYNOPSIS:  schedule [-s <seconds>] [-f <seconds>] <program> <emergency> <logfile>
+
+-s <seconds>   Zeitfenster Anfang (Default: 1 Sekunde)
+-f <seconds>   Zeitfenster Ende (Default: 0 Sekunden)
+<program>      Programm inkl. Pfad, das wiederholt ausgefuehrt werden soll
+<emergency>    Programm inkl. Pfad, das im Fehlerfall ausgefuehrt wird
+<logfile>      Pfad zu einer Datei, in der die Ausgabe von <program> sowie
+               Erfolg/Misserfolg von <emergency> protokolliert werden
+\end{verbatim}
+
+Das Programm \emph{schedule} erzeugt einen Kindprozess, der wiederholt zufällig
+irgendwann im spezifizierten Zeitfenster (in $s$ bis $s+f$ Sekunden, als
+Granularität genügt eine volle Sekunde) das Programm \emph{program} als
+Enkelkind startet und auf seine Beendigung wartet. Falls \emph{program} mit
+einem Fehlercode terminiert, wird einmalig \emph{emergency} ausgeführt und der
+Kindprozess beendet. Wird z.\,B.\ \emph{schedule} mit \verb_-s 5_ und
+\verb_-f 2_ aufgerufen, wartet der Kindprozess zunächst zwischen 5 und 7
+Sekunden und führt dann \emph{program} aus. Terminiert \emph{program}
+fehlerfrei, wartet der Kindprozess wieder zwischen 5 und 7 Sekunden, bevor er
+\emph{program} ein weiteres Mal ausführt.
+
+Weiters soll der Kindprozess alle Daten, die der \emph{program}-Enkelprozess auf
+\emph{stdout} ausgegeben hat, über eine Pipe an den Vaterprozess schicken.
+Dieser gibt das Gelesene auf (sein) \emph{stdout} aus und fügt es gleichzeitig
+an die angegebene \emph{logfile} an. Ausgaben von \emph{emergency} müssen nicht
+im Logfile aufscheinen; es genügt zu protokollieren, ob \emph{emergency} ohne
+Fehlercode terminiert hat. Nachdem \emph{emergency} beendet ist, soll auch
+\emph{schedule} terminieren. Implementieren Sie außerdem noch eine
+Signalbehandlung, um \emph{schedule} sauber beenden zu können, ohne auf eine
+Fehlfunktion des Reaktors hoffen zu müssen.
+
+\subsection*{Testen}
+
+Das typische Output sollte so ähnlich aussehen:
+\begin{verbatim}
+$# ./schedule -s 2 -f 5 ./rventgas ./rshutdown logfile
+STATUS OK
+STATUS OK
+STATUS OK
+STATUS OK
+STATUS OK
+PRESSURE TOO HIGH - IMMEDIATE SHUTDOWN REQUIRED
+SHUTDOWN COMPLETED.
+EMERGENCY SUCCESSFUL
+
+$# cat logfile
+STATUS OK
+STATUS OK
+STATUS OK
+STATUS OK
+STATUS OK
+PRESSURE TOO HIGH - IMMEDIATE SHUTDOWN REQUIRED
+EMERGENCY SUCCESSFUL
+\end{verbatim}
+Die Meldung \verb_SHUTDOWN COMPLETED_ ist eigentlich von \emph{rshutdown} und
+scheint nicht im logfile auf, wo aber sehr wohl \verb_EMERGENCY SUCCESSFUL_
+anzeigt, dass der \emph{emergency}-Prozess erfolgreich war.
+
+\section*{Richtlinien}
+Bitte beachten Sie auch die Allgemeinen Hinweise zur Beispielgruppe 2 und die Richtlinien f\"ur die Erstellung von C-Programmen auf der \"Ubungswebsite.
+Insbesondere ist es ab dieser Beispielgruppe notwendig, die Dokumentation in Doxygen zu f\"uhren. Es muss zumindest das HTML Output generierbar sein. Bitte dokumentieren Sie ausnahmslos alle Funktionen (auch static-Funktionen, siehe \verb|EXTRACT_STATIC| im Doxygen Cfg-File). Eine kurze Einf\"uhrung haben wir Ihnen auf: \url{http://wiki.vmars.tuwien.ac.at/index.php/Doxygen_Primer} bereitgestellt. Achten Sie weiters darauf, dass nach au{\ss}en hin sichtbare Funktionen (exportierte Funktionen) im Header File beschrieben werden und lokale (static Funktionen) nur im C File. Sie sollten auch Ihre Typen (insb. structs), Konstanten und globale Variablen dokumentieren. 
+\end{document}

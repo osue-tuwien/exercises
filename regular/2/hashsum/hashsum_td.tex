@@ -1,0 +1,77 @@
+% TeX source file
+% Sysprog WS 2010
+% Beispiel 2: Hashsum
+% Sebastian Falbesoner
+
+\documentclass{article}
+\usepackage[german]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{a4wide}
+\parindent0pt
+\addtolength{\parskip}{10pt}
+
+\begin{document}
+
+\begin{center}
+\begin{Large}
+OPERATING SYSTEMS BEISPIEL 2
+\end{Large}
+\end{center}
+
+
+
+
+\section*{Aufgabenstellung}
+
+Schreiben Sie ein Programm, welches für alle Dateien in einem angegebenen
+Verzeichnis jeweils eine Zeile mit dem dazugehörigen MD5-Hashwert und dem
+Dateityp ausgibt. Dafür sollen die Standardtools \texttt{ls} (mit Parameter
+\texttt{-1a}), \texttt{md5sum}, und \texttt{file} verwendet werden, indem
+diese als Kindprozesse per \texttt{fork()}/\texttt{exec()} aufgerufen
+werden.
+
+
+\begin{verbatim}
+SYNOPSIS:
+	hashes [-i ignorepraefix] <directory>
+\end{verbatim}
+
+Mit dem Parameter \verb_-i_ (“ignore”) werden Dateien, die mit dem
+darauffolgenden Muster (nicht case-sensitive!) beginnen, ausgenommen;
+so führt ein Aufruf \verb_hashes -i . ~_ dazu, dass alle versteckten
+Dateien im Home-Verzeichnis nicht behandelt werden.
+
+
+\section*{Anleitung}
+Nachdem mit dem Kindprozess \texttt{ls} der gesamte Inhalt des angegebenen
+Verzeichnisses ermittelt und an den Vaterprozess zurückgeben wird, erzeugt man
+in einer Schleife jeweils für jede der von \texttt{ls} empfangenen Dateinamen
+einen Kindprozess der \texttt{md5sum} mit diesem Namen als Argument ausführt,
+gleiches danach für \texttt{file}. Weiters werden die gewonnenen Informationen
+jeweils in einer Zeile (Format: \texttt{Dateiname md5summe dateityp})
+ausgegeben. Beachten Sie, dass es sich nicht bei allen von \texttt{ls}
+gelisteten Einträgen um Dateien handelt (z.B.\ \texttt{.} und \texttt{..}); in dem Fall liefert dann
+\texttt{md5sum} einen nicht-erfolgreichen Return-Code zurück (welcher
+mittels \texttt{wait()/waitpid()} ermittelt werden kann) und der Eintrag soll in
+diesem Fall ignoriert werden.
+
+Bitte beachten Sie auch die Allgemeinen Hinweise zur
+Beispielgruppe 2 und die Richtlinien für die Erstellung von
+C-Programmen auf der Übungs-Website.
+
+\section*{Beispielaufruf}
+\begin{verbatim}
+[~]$ mkdir hashtests
+[~]$ cd hashtests
+[hashtests]$ touch emptyfile
+[hashtests]$ echo "das ist das haus vom nikolaus" > textfile
+[hashtests]$ echo "compressme" | gzip -cf > compressed.gz
+[hashtests]$ cd ..
+[~]$ ./hashsum ./hashtests
+compressed.gz: 35a0ec3087535c23863a774497881ada gzip compressed data, from Unix, [...]
+emptyfile: d41d8cd98f00b204e9800998ecf8427e empty
+textfile: 536b30bbea5ee48aca04807038e25875 ASCII text
+[~]$
+\end{verbatim}
+\end{document}

@@ -1,0 +1,82 @@
+\documentclass{article}
+\usepackage[german]{babel}
+\usepackage{a4wide}
+\parindent0pt
+
+\usepackage[utf8x]{inputenc}
+%\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+%\chapterstyle{veelo}
+%\usepackage{ucs}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+\setlength\parindent{0pt}
+\setlength{\parskip}{1.5ex}
+
+\begin{document}
+
+\begin{center}
+\LARGE OPERATING SYSTEMS UE BEISPIEL 3
+\end{center}
+
+\section*{Aufgabenstellung}
+
+Ganz knapp vor der Prüfung für Betriebssysteme, auf die Sie sich seit 
+Monaten freuen, erfahren Sie, dass all Ihre Freunde dachten, die Prüfung fände 
+drei Tage später statt. Sofort evaluieren Sie deren Fehler und merken, das Problem
+liegt am fehlenden Zeitmanagement Ihrer Kollegen. Hilfsbereit, wie Sie sind, wollen 
+Sie sie unterstützen und schreiben zu diesem Behufe eine simple Kalenderapplikation.
+
+\begin{verbatim}
+    SYNOPSIS
+        calserver [-v]
+        calclient [-r idx] [-d offset] [entry]
+\end{verbatim}
+
+\subsection*{Details}
+
+Server und Client sollen über Shared Memory miteinander 
+kommunizieren. Der Server verwaltet hierbei die Kalenderdaten, 
+mit der Option \emph{-v} gibt er Auskunft über die Aktionen, 
+die er dabei durchführt.\\
+Der Client fungiert gleichzeitig als Eingabe- und als Ausgabeapplikation. 
+Soll ein neuer Eintrag eingefügt werden, so wird \emph{calclient} mit 
+\emph{entry} als Text für diesen Eintrag aufgerufen. Ohne Angabe von \emph{entry} 
+sollen die Tageseinträge angezeigt werden.
+Mit dem Argument \emph{offset} wird der zu bearbeitende Tag relativ zum heutigen
+angegeben, beispielsweise würde \emph{-d 1} den morgigen Tag auswählen. Mit 
+\emph{-r idx} wird am ausgewählten Tag der Eintrag an Stelle \emph{idx} entfernt 
+oder, falls \emph{entry} mitangegeben wird, damit überschrieben.
+
+\subsection*{Beispiele}
+
+\begin{verbatim} calclient 
+Output: 
+1: Prf BSys
+2: Abgabe Beispiel 1
+\end{verbatim}
+Zeigt heutige Termine an.
+
+\begin{verbatim} calclient -d 3 "VO BSys" 
+\end{verbatim}
+Legt den Eintrag \emph{VO BSys} in drei Tagen an.
+
+\begin{verbatim} calclient -r 2 "Prf BSys" 
+\end{verbatim}
+Ersetzt den zweiten Eintrag am heutigen Tag durch \emph{Prf BSys}.
+
+\subsection*{Hinweise}
+Überlegen Sie sich eine geeignete Datenstruktur zum Speichern der Einträge. Als 
+Schlüssel eignen sich u.a. UNIX-Timestamps (siehe dazu \emph{time(7)} im Abschnitt \emph{The Epoch}
+bzw.\\ \emph{http://de.wikipedia.org/wiki/Unixzeit}), wobei sie dazu pro Tag einen geeigneten
+Repräsentanten finden sollten. Sinnvolle Funktionen um damit umzugehen sind \emph{time(2)} und,
+falls notwendig, \emph{mktime(3)}. \\
+Bitte beachten Sie auch die Allgemeinen Hinweise zu Beispielgruppe 3 und die Richtlinien
+für die Erstellung von C-Programmen.\\
+Vergessen Sie keinesfalls auf sprechende Fehlermeldungen.
+
+\end{document}
+

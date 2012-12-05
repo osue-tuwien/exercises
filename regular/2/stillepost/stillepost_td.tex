@@ -1,0 +1,114 @@
+% TeX source file
+% Sysprog WS 2005
+% Beispiel 3: stillepost
+% Dietmar Schabus (e0147322@student.tuwien.ac.at)
+
+\documentclass{article}
+\usepackage[german]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{a4wide}
+\usepackage{url}
+\parindent0pt
+\addtolength{\parskip}{10pt}
+
+\begin{document}
+
+\begin{center}
+\begin{Large}
+OPERATING SYSTEMS BEISPIEL 2
+\end{Large}
+\end{center}
+
+
+
+
+\section*{Aufgabenstellung}
+
+Gründen Sie eine Prozessfamilie bestehend aus einem Mutterprozess und
+zwei Kindprozessen (nicht Kind und Enkelkind). Spielen Sie dann mit
+der Familie ein Stille-Post-Spiel.
+
+Das von Ihnen zu entwickelnde Programm {\tt stillepost} soll sich
+folgendermaßen verhalten:
+
+\begin{itemize}
+\item Der Benutzer des Programms überlegt sich einen beliebigen
+String.
+\item Er ruft das Programm (also den Mutterprozess) mit dem String als
+Parameter auf. Beispiel:
+\verb@stillepost "OSUE macht Spass."@
+\item Der Mutterprozess sagt den String an sein erstes Kind weiter,
+jedoch nicht ohne eine kleine Veränderung einzubauen – wie beim
+Stille-Post-Spiel üblich.
+\item Das erste Kind erhält diesen String, verändert ihn wieder
+geringfügig und gibt ihn an das zweite Kind weiter.
+\item Das zweite Kind verfährt ebenso wie das erste, nur gibt es den
+von ihm veränderten String nicht an einen anderen Prozess weiter,
+sondern sagt ihn laut (gibt ihn auf {\tt stdout} aus).
+\end{itemize}
+
+
+
+
+
+\section*{Anleitung}
+
+Das Programm soll folgende Synopsis befolgen:
+\begin{verbatim}
+SYNOPSIS:
+     stillepost [-v] <string>
+\end{verbatim}
+
+Beachten Sie: Wenn Sie einen String übergeben wollen, der Leerzeichen
+enthält, müssen Sie ihn in Hochkommata einschließen, damit er als
+nur ein Argument behandelt wird: \verb_"String mit Leerzeichen"_
+
+Der Mutterprozess soll seine Kinder mittels \emph{fork(2)} erzeugen,
+die Kommunikation zwischen den Prozessen soll über Unnamed Pipes
+erfolgen, welche mit \emph{pipe(2)} erzeugt werden.
+
+Die Veränderungen eines jeden Mitspielers (Prozesses) sollen so
+vorgenommen werden, dass mittels \emph{rand(3)} eine zufällige
+Position innerhalb des Strings gewählt, und dann das Zeichen an
+dieser Stelle durch ein anderes, ebenfalls zufälliges Zeichen aus
+{\tt [a-zA-Z]} ersetzt wird.
+
+Stellen Sie mittels \emph{srand(3)} sicher, dass alle Prozesse eine
+unterschiedliche Random-Seed verwenden, damit nicht jeder Prozess die
+selben Änderungen vornimmt.
+
+Die Option {\tt -v} schließlich soll es ermöglichen, das Spiel aus
+der Sicht eines allwissenden Betrachters zu verfolgen. Wird die Option
+angegeben, gibt jeder Prozess den String zuerst unverändert und dann
+in der veränderten Form (wie er ihn weitergeben wird) auf
+\emph{stdout} aus.
+
+Führen Sie eine sinnvolle Beschränkung für die Länge des Strings
+ein.
+
+\section*{Testen}
+
+Testen Sie ihr Programm vor allem mit der Option {\tt -v}, da dann
+deutlich sichtbarer ist, was jeder einzelne Prozess tut.
+
+Beispielrunde:
+\begin{verbatim}
+bash$ ./stillepost -v "OSUE macht Spass."
+Mutter: erhalten: OSUE macht Spass.
+Mutter: weiter  : OSUE macht Xpass.
+Kind1 : erhalten: OSUE macht Xpass.
+Kind1 : weiter  : OSkE macht Xpass.
+Kind2 : erhalten: OSkE macht Xpass.
+Kind2 : weiter  : OSkE macAt Xpass.
+Kind2 : Ende    : OSkE macAt Xpass.
+\end{verbatim}
+
+Die Ausgabe ihres Programms muss nicht genau wie in dem Beispiel
+formatiert sein. Natürlich wird der String umso unkenntlicher, je
+kürzer er ist.
+
+\section*{Richtlinien}
+Bitte beachten Sie auch die Allgemeinen Hinweise zur Beispielgruppe 2 und die Richtlinien f\"ur die Erstellung von C-Programmen auf der \"Ubungswebsite.
+Insbesondere ist es ab dieser Beispielgruppe notwendig, die Dokumentation in Doxygen zu f\"uhren. Es muss zumindest das HTML Output generierbar sein. Bitte dokumentieren Sie ausnahmslos alle Funktionen (auch static-Funktionen, siehe \verb|EXTRACT_STATIC| im Doxygen Cfg-File). Eine kurze Einf\"uhrung haben wir Ihnen auf: \url{http://wiki.vmars.tuwien.ac.at/index.php/Doxygen_Primer} bereitgestellt. Achten Sie weiters darauf, dass nach au{\ss}en hin sichtbare Funktionen (exportierte Funktionen) im Header File beschrieben werden und lokale (static Funktionen) nur im C File. Sie sollten auch Ihre Typen (insb. structs), Konstanten und globale Variablen dokumentieren. 
+\end{document}

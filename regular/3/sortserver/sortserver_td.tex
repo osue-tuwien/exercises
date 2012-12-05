@@ -1,0 +1,39 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[german]{babel}
+\usepackage{a4wide}
+\usepackage{graphicx}
+\parindent0pt
+
+\begin{document}
+\begin{center}
+\begin{Large}
+OPERATING SYSTEMS UE BEISPIEL 3
+\end{Large}
+\end{center}
+
+\section*{Aufgabenstellung}
+
+Schreiben Sie einen Sortier-Server und einen dazu passenden Client.
+\begin{verbatim}
+    SYNOPSIS
+        sortserv
+        sortclient
+\end{verbatim}
+Der Server soll aus einem Shared-Memory einzelne Zahlen vom Typ \emph{long} einlesen und
+diese anschließend sortieren. Die sortierte Zahlenfolge soll dann auf die gleiche Art und
+Weise zur\"uck an den Client geschickt werden.
+
+Der Client liest Zahlen von \emph{stdin} und schreibt Sie in den \emph{Shared-Memory}.
+Nach der Eingabe von \verb|EOF (^D)| beginnt der Client die sortierte Zahlenfolge aus dem
+\emph{Shared-Memory} zu lesen und gibt die vom Server sortierten Werte auf {\em stdout} aus.
+
+\section*{Hinweis}
+Es sollen beliebig lange Zahlenfolgen erlaubt sein, die Gr\"osse des Shared Memory hingegen soll vor der Laufzeit auf einen konstanten Wert festgelegt werden. Versuchen Sie die Gr\"osse des Shared Memory zu minimieren und auf einige wenige Bytes zu beschr\"anken.
+
+\section*{Anleitung}
+Schreiben Sie zwei Programme, die die Prozesse mittels einer Client/Server-Struktur realisieren. Achten Sie auf eine saubere Terminierung, nachdem alle Zahlen ausgegeben sind. Verwenden Sie zum Sortieren den Befehl \emph{qsort(3)}.
+Bitte beachten Sie auch die Allgemeinen Hinweise zur Beispielgruppe 3 und die Richtlinien
+für die Erstellung von C-Programmen.
+
+\end{document}

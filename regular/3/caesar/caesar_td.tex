@@ -1,0 +1,107 @@
+% TeX source file
+% Sysprog WS 2005
+% Beispiel 2: caesar
+% Dietmar Schabus (e0147322@student.tuwien.ac.at)
+
+\documentclass{article}
+\usepackage[german]{babel}
+\usepackage{a4wide}
+\parindent0pt
+
+\begin{document}
+
+\begin{center}
+\begin{Large}
+OPERATING SYSTEMS UE BEISPIEL 3
+\end{Large}
+\end{center}
+
+
+
+\section*{Aufgabenstellung}
+
+\begin{verbatim}
+SYNOPSIS:
+     readin <filename>
+     caesar <key>
+\end{verbatim} 
+
+Implementieren Sie zwei Programme {\tt readin} und {\tt caesar}, die
+einen einfachen (und leicht zu knackenden!)
+Verschl"usselungsalgorithmus anwenden.
+
+Das Programm {\tt readin} liest zeilenweise aus einem als Argument
+"ubergebenen Textfile, und schreibt jede Zeile nacheinander auf
+folgende Weise modifiziert in ein Shared Memory:
+\begin{itemize}
+\item Alle Gro"sbuchstaben (alle Zeichen in {\tt [A-Z]}) werden
+unver"andert beibehalten.
+\item Alle Kleinbuchstaben (alle Zeichen in {\tt [a-z]}) werden in
+Gro"sbuchstaben konvertiert.
+\item Alle anderen Zeichen fallen weg.
+\end{itemize}
+Das Programm {\tt caesar} erwartet als Argument eine Zahl zwischen 1
+und 25. Es liest jede Zeile aus dem Shared Memory und ersetzt jeden
+Buchstaben durch den im Alphabet um {\tt key} weiter rechts stehenden
+Buchstaben (wobei sich rechts neben dem Z wieder das A befinden
+soll). Bei einem {\tt key} von 3 wird also z.B. A zu D, B zu E, C zu
+F, W zu Z, X zu A und Y zu B. Die so verschl"usselte Zeile wird dann
+auf {\tt stdout} ausgegeben, und die n"achste Zeile wird gelesen.
+
+{\tt caesar} soll die n"achste Zeile erst dann lesen, wenn {\tt
+readin} sie vollst"andig ins Shared Memory geschrieben hat und {\tt
+readin} soll erst dann die n"achste Zeile ins Shared Memory schreiben,
+wenn die vorherige schon von {\tt caesar} gelesen wurde.
+
+Sobald {\tt readin} die letzte Zeile des Eingabefiles verarbeitet hat,
+schreibt es einen frei w"ahlbaren String in das Shared Memory, der
+{\tt caesar} anzeigt, dass alle Arbeit getan ist. Darauf sollen beide
+Programme terminieren.
+
+
+
+\section*{Anleitung}
+Folgende vereinfachenden Einschr"ankungen gelten:
+\begin{itemize}
+\item Im Eingabefile stehen nur ASCII-Zeichen. Umlaute und dergleichen
+m"ussen also nicht behandelt werden.
+\item Keine Zeile ist l"anger als 1022 Zeichen (inklusive Newline).
+\end{itemize}
+
+
+
+
+\section*{Testen}
+Testen Sie Ihr Programm mit mehreren Eingabefiles. 
+Erstellen Sie z.B. ein Testfile \emph{t1} mit folgendem Inhalt: 
+\begin{verbatim}
+Ich habe das dritte Sysprog-Beispiel,
+das gar nicht schwer war,
+schon fast fertig.
+\end{verbatim}
+Rufen Sie dann die beiden Programme auf (Reihenfolge je nach Ihrer
+Implementierung):
+\begin{verbatim}
+  readin t1 &
+  caesar 15 > t2
+\end{verbatim}
+Dann haben Sie in \emph{t2} die verschl"usselte Version von \emph{t1}.
+
+\pagebreak
+Mit
+\begin{verbatim}
+  readin t2 &
+  caesar 11
+\end{verbatim}
+k"onnen Sie diese wieder entschl"usseln, und sollten folgende Ausgabe
+erhalten:
+\begin{verbatim}
+ICHHABEDASZWEITESYSPROGBEISPIEL
+DASGARNICHTSCHWERWAR
+SCHONFASTFERTIG
+\end{verbatim}
+
+Bitte beachten Sie auch die Allgemeinen Hinweise zur Beispielgruppe 3
+und die Richtlinien f"ur die Erstellung von C-Programmen.
+
+\end{document}

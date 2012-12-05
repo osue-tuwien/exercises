@@ -1,0 +1,55 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[german]{babel}
+\usepackage{a4wide}
+\usepackage[T1]{fontenc}
+\pagestyle{empty}
+\parindent0pt
+
+\begin{document}
+
+\begin{center}
+\begin{Large}
+OPERATING SYSTEMS BEISPIEL 1
+\end{Large}
+\end{center}
+
+\section*{Aufgabenstellung A}
+
+Implementieren Sie ein Programm {\tt ispalindrom}, welches
+eingegebene Strings auf Palindromeigenschaften überprüft.
+
+\begin{verbatim}
+    SYNOPSIS:
+        ispalindrom [-s] [-i]
+\end{verbatim}
+
+Das Programm {\tt ispalindrom} soll zeilenweise Strings mit einer
+Länge von bis zu 40 echten Zeichen von der Standardeingabe lesen;
+prüfen, ob ein Palindrom vorliegt, d.h. der Text rückwärts gelesen
+mit sich selbst ident ist; und den Text gefolgt von "`ist ein
+Palindrom"' bzw. "`ist kein Palindrom"' auf die Standardausgabe
+ausgeben. Die Option {\tt -s} soll bewirken, dass Leerzeichen
+ignoriert werden; die Option {\tt -i} soll bewirken, dass nicht
+zwischen Groß- und Kleinschreibung unterschieden wird.
+
+\subsection*{Testen}
+
+Testen Sie Ihr Programm mit verschiedenen Eingaben, wie z.B.:
+
+\begin{verbatim}
+      % ispalindrom
+      Reliefpfeiler
+      Reliefpfeiler ist kein Palindrom
+      reliefpfeiler
+      reliefpfeiler ist ein Palindrom
+      % ispalindrom -i -s
+      Reliefpfeiler
+      Reliefpfeiler ist ein Palindrom
+      O Genie der Herr ehre Dein Ego
+      O Genie der Herr ehre Dein Ego ist ein Palindrom
+      xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      ispalindrom: Eingabe zu lang, max 40 Zeichen!
+\end{verbatim}
+
+\end{document}

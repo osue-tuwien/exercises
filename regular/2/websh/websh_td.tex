@@ -1,0 +1,84 @@
+% TeX source file
+% Sysprog WS 2010
+% Beispiel 2: websh
+% Philip Pickering
+
+\documentclass{article}
+\usepackage[german]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{a4wide}
+\usepackage{url}
+\parindent0pt
+\addtolength{\parskip}{10pt}
+
+\begin{document}
+
+\begin{center}
+\begin{Large}
+OPERATING SYSTEMS BEISPIEL 2
+\end{Large}
+\end{center}
+
+
+
+
+\section*{Aufgabenstellung}
+
+Schreiben Sie ein Programm, welches beliebige Programme aufruft und
+deren Ausgaben für das Web formatiert.
+
+\begin{verbatim}
+SYNOPSIS:
+        websh [-e] [-h] [-s WORD:TAG]
+\end{verbatim}
+
+
+
+\section*{Anleitung}
+
+Der Mutterprozess liest in einer Endlosschleife Zeilen ein und startet
+jeweils zwei Kindprozesse. Der erste führt das in der Zeile angegebene
+Programm inklusive Argumente durch ein beliebiges Mitglied der
+\verb_exec_-Familie aus. Die Standardausgabe soll dabei an den zweiten
+Prozess umgeleitet werden.
+
+Der zweite Kindprozess soll also die Ausgabe des ersten bekommen und
+diese verarbeiten, um das Ergebnis in einem Webbrowser darstellbar auf
+der Standardausgabe auszugeben. Primär sind daher Zeilenumbrüche zu
+behandeln. Mit dem Parameter \verb_-e_ soll die gesamte Ausgabe in ein
+vollständiges HTML-Dokument eingebettet werden, also mit
+umschließenden HTML- und BODY-Tags. Die Option \verb_-h_ fügt den
+Programmaufruf als Überschrift zwischen den jeweiligen
+Programmausgaben ein, und \verb_-s_ sucht nach Zeilen mit \verb_WORD_
+und setzt sie in den angegebenen \verb_TAG_.
+
+Sie dürfen eine sinnvolle Länge der Zeilen annehmen, als Konstante
+definieren und damit arbeiten.
+
+Ein Aufruf mit folgenden Eingaben: 
+
+\begin{verbatim}
+$ ./websh -e -h -s Linux:h2
+uname -sr
+ls /dev/null
+\end{verbatim}
+
+sollte folgende Ausgabe produzieren:
+
+\begin{verbatim}
+<HTML><HEAD></HEAD><BODY>
+<h1>uname -sm</h1>
+<h2>Linux x86_64</h2><br />
+<h1>ls /dev/null</h1>
+/dev/null<br />
+</BODY></HTML> 
+\end{verbatim}
+
+Bitte beachten Sie auch die Allgemeinen Hinweise zur
+Beispielgruppe 2 und die Richtlinien für die Erstellung von
+C-Programmen auf der Übungs-Website.
+
+
+
+\end{document}

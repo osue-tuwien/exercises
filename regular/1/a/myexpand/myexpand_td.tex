@@ -1,0 +1,69 @@
+\documentclass{article}
+\usepackage[german]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{a4wide}
+\pagestyle{empty}
+\parindent0pt
+
+\begin{document}
+
+\begin{center}
+\begin{Large}
+OPERATING SYSTEMS BEISPIEL 1
+\end{Large}
+\end{center}
+
+\section*{Aufgabenstellung A}
+Implementieren Sie eine vereinfachte Variante des Unix-Kommandos {\tt
+expand}.
+\begin{verbatim}
+    SYNOPSIS:
+        myexpand [-t tabstop] [file...]
+\end{verbatim}
+
+Das Programm {\tt myexpand} soll die als Argumente angegebenen Dateien
+lesen. Ist keine Datei angegeben, soll von {\it stdin} gelesen werden.
+Dabei werden auftretende Tabs durch Leerzeichen ersetzt. Die Ausgabe
+soll auf {\it stdout} erfolgen. Der optionale Parameter \verb|tabstop|
+gibt an, an welchen Positionen die Tabs enden sollen (fehlt dieser,
+ist der Wert 8 anzunehmen).
+
+\subsection*{Anleitung}
+Lesen Sie die Dateien zeichenweise ein und überprüfen Sie den
+ASCII-Code des eingelesenen Zeichens. Handelt es sich um ein Tab
+(\verb|\t|), berechnen Sie die Position \verb|p| des folgenden
+Zeichens als nächstes Vielfaches von \verb|tabstop| größer der
+aktuellen Position plus 1:
+
+\verb|p = tabstop * ((x / tabstop) + 1)|
+
+wobei \verb|x| die Position des Tabs in der aktuellen Zeile und
+\verb|/| eine ganzzahlige Division (mit Abschneiden der
+Nachkommastellen) beschreibt.
+
+\subsection*{Testen}
+Testen Sie Ihr Programm mit mehreren Eingabedateien. Erstellen Sie
+z.B. eine Testdatei t1 mit folgendem Inhalt (\verb|\t| steht für einen
+Tab-Character):
+\begin{verbatim}
+	1234567890
+	123\t90
+\end{verbatim}
+
+Befehl: \verb!myexpand t1! oder \verb!cat t1 | myexpand!
+
+Ausgabe:
+\begin{verbatim}
+	1234567890
+	123     90
+\end{verbatim}
+
+Befehl: \verb!myexpand -t 6 t1!
+
+Ausgabe:
+\begin{verbatim}
+	1234567890
+	123   90
+\end{verbatim}
+
+\end{document}

@@ -1,0 +1,88 @@
+\documentclass{article}
+\usepackage[german]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{url}
+\usepackage{a4wide}
+\parindent0pt
+\addtolength{\parskip}{10pt}
+
+\begin{document}
+
+\begin{center}
+\begin{Large}
+OPERATING SYSTEMS BEISPIEL 2
+\end{Large}
+\end{center}
+
+\section{Forksort}
+
+\subsection{Aufgabenstellung}
+Schreiben Sie ein Programm, das Eingaben sortiert.
+\begin{verbatim}
+    SYNOPSIS
+        forksort
+\end{verbatim}
+
+\subsection{Anleitung}
+Das Programm soll die Daten von \emph{stdin} lesen. Die erste Zeile muss eine
+Zahl größer Null sein, die die Anzahl der zu sortierenden Strings angibt.
+Die darauffolgenden Zeilen enthalten die Strings selbst; Sie können die
+Strings auf je 62 echte Zeichen begrenzen. (Vergessen Sie nicht dafür eine
+Konstante zu definieren!)
+
+\subsection{Arbeitsweise}
+Forksort funktioniert wie eine rekursive Merge-Sort-Variante.
+\begin{enumerate}
+\item Lesen Sie die Anzahl der Strings ein.
+\item Ist die Anzahl gleich Eins, dann geben Sie das „sortierte“
+  Ergebnis aus. (Es ist einfach der eine String selbst.)
+\item Ist die Anzahl größer Eins, dann erstellen Sie vier Unnamed-Pipes (zwei
+  je Kind) und forken diese zwei Kindprozesse. Verwenden Sie \emph{dup2(2)} und
+  \emph{execlp(3)} um \emph{stdin/stdout} der neuen Prozesse auf eigene Streams
+  zu verbiegen und danach Forksort rekursiv aufzurufen.
+\item Schreiben Sie je die Hälfte der Strings auf die \emph{stdin} der
+  beiden Kinder. Ist die Anzahl der Eingaben ungerade, dann wählen Sie
+  ein beliebiges Kind aus, das einen String mehr bekommt. Vergessen Sie nicht
+  auch die Anzahl der Strings an das jeweilige Kind zu übermitteln.
+\item Lesen Sie nun die Strings der Kinder ein, und geben Sie diese vereinigt
+  aus. (Dieser Vorgang nennt sich \emph{Merge}.) Achten Sie darauf, dass die
+  beiden Streams schon (für sich alleine) sortiert sind. Sie können also
+  solange die Strings des ersten Kindes ausgeben, bis der kleinste String des
+  zweiten Kindes kleiner als der kleinste, noch nicht ausgegebene, String des
+  ersten Kindes ist. Danach lesen Sie vom zweiten Kind, bis der String des
+  ersten Kindes wiederum kleiner ist. Wiederholen Sie diesen Vorgang solange,
+  bis alle Strings ausgegeben sind.
+
+  Der Merge-Vorgang muss einen linearen Aufwand haben.
+\item Verwenden Sie \emph{wait(2)} oder \emph{waitpid(2)}, um den Exit-Status
+  der beiden Kinder zu lesen.
+\end{enumerate}
+
+\subsection{Hinweise}
+Achten Sie darauf, dass das rekursive Fork nicht zu einer Endlos-Schleife führt.
+Dazu sind zwei Regeln zu beachten:
+\begin{enumerate}
+\item Forken Sie nur, wenn die Anzahl größer eins ist.
+\item Die an das jeweilige Kind übergebene Anzahl muss stets kleiner sein als
+  die des Vaters.
+\end{enumerate}
+Beginnen Sie am besten, indem Sie eine Variante schreiben, die nur einen String
+sortieren kann. Erweitern Sie nun die Funktion für zwei Strings, indem Sie ein
+Fork implementieren und jeweils einen String an jedes Kind schreiben. Diese
+können ja schon einen einzelnen String sortieren. Ein einfaches
+\emph{strcmp(3)} als Merge-Implementation sollte jetzt noch reichen. Wenn das
+funktioniert, können Sie Ihre Merge-Implementierung verallgemeinern, um auch
+mehr als zwei Strings sortieren zu können.
+
+Um Fehlermeldungen und Debug-Messages auszugeben, verwenden Sie stets
+\emph{stderr}, da die \emph{stdout} in den meisten Fällen verbogen ist.
+
+Zum Testen der Merge-Implementierung können Sie mit \emph{execlp(3)} statt
+Forksort auch \emph{sort(1)} aufrufen. Für die endgültige Abgabe ist diese
+Vorgehensweise nicht gültig, zum Testen aber durchaus sinnvoll.
+
+\section*{Richtlinien}
+Bitte beachten Sie auch die Allgemeinen Hinweise zur Beispielgruppe 2 und die Richtlinien f\"ur die Erstellung von C-Programmen auf der \"Ubungswebsite.
+Insbesondere ist es ab dieser Beispielgruppe notwendig, die Dokumentation in Doxygen zu f\"uhren. Es muss zumindest das HTML Output generierbar sein. Bitte dokumentieren Sie ausnahmslos alle Funktionen (auch static-Funktionen, siehe \verb|EXTRACT_STATIC| im Doxygen Cfg-File). Eine kurze Einf\"uhrung haben wir Ihnen auf: \url{http://wiki.vmars.tuwien.ac.at/index.php/Doxygen_Primer} bereitgestellt. Achten Sie weiters darauf, dass nach au{\ss}en hin sichtbare Funktionen (exportierte Funktionen) im Header File beschrieben werden und lokale (static Funktionen) nur im C File. Sie sollten auch Ihre Typen (insb. structs), Konstanten und globale Variablen dokumentieren. 
+\end{document}

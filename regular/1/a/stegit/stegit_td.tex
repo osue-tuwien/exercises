@@ -1,0 +1,99 @@
+\documentclass{article}
+\usepackage[german]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{a4wide}
+\pagestyle{empty}
+\parindent0pt
+
+\begin{document}
+\begin{center}
+\begin{Large}
+OPERATING SYSTEMS BEISPIEL 1
+\end{Large}
+\end{center}
+\section*{Aufgabenstellung A}
+
+Eines kalten Herbstabends finden Sie am Bildschirm eine seltsame Botschaft, die
+Ihnen erklärt, dass Sie auserwählt wurden.
+
+Beeindruckt beschließen Sie den Anweisungen darin sogleich Folge zu leisten --
+bevor Sie überhaupt noch wissen, worum es geht. Der Absender behauptet wichtige
+Informationen für Sie zu haben, benötigt aber schnellstens ein Tool, um Ihnen
+die geheime, möglicherweise existenzverändernde Botschaft zuschicken zu können.
+Sie erkennen sofort die Wichtigkeit der Situation und machen sich aufgeregt an
+die Implementierung des Programms \emph{stegit}, um raschest die geheime
+Botschaft lesen zu können.
+
+\begin{verbatim}
+          SYNOPSIS: stegit -f|-h [-o <filename>]
+
+           -f                 find mode
+           -h                 hide mode
+          [-o <filename>]     output filename
+\end{verbatim}
+
+Dieses Programm soll in zwei Modi ausgeführt werden können: \emph{Verstecken}
+und \emph{Finden}.
+
+Im Modus \emph{Verstecken} wird solange von \emph{stdin} gelesen, bis \emph{EOF}
+auftritt oder die Enter-Taste betätigt wird. Dann wird die eingelesene Botschaft
+in einem Text versteckt und auf \emph{stdout} oder in die Ausgabedatei
+ausgegeben. Im Modus \emph{Finden} soll wiederum von \emph{stdin} so lange
+gelesen werden, bis \emph{EOF} auftritt. Aus dem eingelesenen Text soll die
+geheime Botschaft ermittelt werden und entweder auf \emph{stdout} angezeigt oder
+in die Ausgabedatei geschrieben werden. Falls eine Ausgabedatei angegeben wurde,
+muss dafür gesorgt werden, dass sie überschrieben wird, wenn sie schon vorhanden
+war; ansonsten soll sie neu angelegt werden.
+
+\subsection*{Anleitung}
+Suchen Sie sich 28 beliebige Wörter und initialisieren Sie damit ein
+Zeichenketten-Array. Dieses soll sich fix im Programm befinden und nicht
+veränderbar sein. Mit Hilfe der Array-Indizes weisen Sie jedem Buchstaben im
+englischen Alphabet, und den Sonderzeichen \emph{Leerzeichen} und \emph{Punkt},
+ein Wort zu. Damit sollte es kein Problem mehr sein, die eingelesene Botschaft
+in (unter Umständen) unsinnigen Text umzuwandeln. Sonderzeichen und nicht
+zugeordnete Zeichen werden ignoriert (geschluckt). Damit der resultierende
+End-Text "`realistischer"' aussieht, bauen Sie zufällig (nach je 5-15 Wörtern)
+Punkte ein -- die Sie beim Einlesen im Find-Modus natürlich wiederum ignorieren.
+Die maximale Länge der geheimen Botschaft (Cleartext) können Sie auf 300 Zeichen
+begrenzen.
+
+Beispieltabelle:
+\begin{verbatim}
+p -> "der"
+s -> "Himmel"
+c -> "ist"
+h -> "heute"
+t -> "klar"
+. -> "la"
+\end{verbatim}
+Die Geheimbotschaft:
+\begin{verbatim}
+pscht...
+\end{verbatim}
+würde nach der Hide-Operation in folgenden Text resultieren (der Punkt ist
+Zufall):
+\begin{verbatim}
+der himmel ist heute klar. la la la
+\end{verbatim}
+
+\subsection*{Testen}
+Starten Sie das Programm:
+\begin{verbatim}
+stegit -h -o secret_message_within
+\end{verbatim}
+und geben Sie folgenden Text ein (möglichst ohne dass Sie mitlesen!):
+\begin{verbatim}
+es muessen beide aufgabenstellungen a und b geloest werden
+\end{verbatim}
+Drücken Sie die Enter-Taste und betrachten Sie die nun versteckte Botschaft mit:
+\begin{verbatim}
+cat secret_message_within
+\end{verbatim}
+Versuchen Sie aus dem entstandenen Text mit:
+\begin{verbatim}
+stegit -f < secret_message_within
+\end{verbatim}
+die geheime Botschaft wiederherzustellen. Sie könnte Sie vor bösen
+Überraschungen bewahren.
+\end{document}
