@@ -1,19 +1,8 @@
-\documentclass{article}
-\usepackage[german]{babel}
-\usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage{a4wide}
-\usepackage{url}
-\parindent0pt
-\addtolength{\parskip}{10pt}
+\input{../../template.ltx}
 
 \begin{document}
-\begin{center}
-\begin{Large}
-OPERATING SYSTEMS BEISPIEL 2
-\end{Large}
-\end{center}
-\section*{Aufgabenstellung}
+
+\osuetitle{2}
 
 Sie sind der neue Systemadministrator im lokalen Atomkraftwerk. Schon bald ist
 Ihnen klar, dass im Wesentlichen einfach nur alle paar Minuten ein Programm
@@ -103,7 +92,6 @@ Die Meldung \verb_SHUTDOWN COMPLETED_ ist eigentlich von \emph{rshutdown} und
 scheint nicht im logfile auf, wo aber sehr wohl \verb_EMERGENCY SUCCESSFUL_
 anzeigt, dass der \emph{emergency}-Prozess erfolgreich war.
 
-\section*{Richtlinien}
-Bitte beachten Sie auch die Allgemeinen Hinweise zur Beispielgruppe 2 und die Richtlinien f\"ur die Erstellung von C-Programmen auf der \"Ubungswebsite.
-Insbesondere ist es ab dieser Beispielgruppe notwendig, die Dokumentation in Doxygen zu f\"uhren. Es muss zumindest das HTML Output generierbar sein. Bitte dokumentieren Sie ausnahmslos alle Funktionen (auch static-Funktionen, siehe \verb|EXTRACT_STATIC| im Doxygen Cfg-File). Eine kurze Einf\"uhrung haben wir Ihnen auf: \url{http://wiki.vmars.tuwien.ac.at/index.php/Doxygen_Primer} bereitgestellt. Achten Sie weiters darauf, dass nach au{\ss}en hin sichtbare Funktionen (exportierte Funktionen) im Header File beschrieben werden und lokale (static Funktionen) nur im C File. Sie sollten auch Ihre Typen (insb. structs), Konstanten und globale Variablen dokumentieren. 
+\osueguidelinestwo
+
 \end{document}
