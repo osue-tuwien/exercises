@@ -2,26 +2,11 @@
 % Sysprog SS 2005
 % Beispiel 3: calculator
 % Martin Kirner
-
-\documentclass{article}
-\usepackage[german]{babel}
-\usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage{a4wide}
-\usepackage{url}
-\parindent0pt
-\addtolength{\parskip}{10pt}
+\input{../../template.ltx}
 
 \begin{document}
 
-\begin{center}
-\begin{Large}
-OPERATING SYSTEMS UE BEISPIEL 2
-\end{Large}
-\end{center}
-
-
-
+\osuetitle{2}
 
 \section*{Aufgabenstellung}
 
@@ -75,8 +60,6 @@ Sie die Ergebnisse abrunden (Kommastellen abschneiden) – die Eingabe
 \verb_5 2 /_ ergibt als Ergebnis einfach \verb_2_ anstelle von
 \verb_2.5_.
 
+\osueguidelinestwo
 
-\section*{Richtlinien}
-Bitte beachten Sie auch die Allgemeinen Hinweise zur Beispielgruppe 2 und die Richtlinien f\"ur die Erstellung von C-Programmen auf der \"Ubungswebsite.
-Insbesondere ist es ab dieser Beispielgruppe notwendig, die Dokumentation in Doxygen zu f\"uhren. Es muss zumindest das HTML Output generierbar sein. Bitte dokumentieren Sie ausnahmslos alle Funktionen (auch static-Funktionen, siehe \verb|EXTRACT_STATIC| im Doxygen Cfg-File). Eine kurze Einf\"uhrung haben wir Ihnen auf: \url{http://wiki.vmars.tuwien.ac.at/index.php/Doxygen_Primer} bereitgestellt. Achten Sie weiters darauf, dass nach au{\ss}en hin sichtbare Funktionen (exportierte Funktionen) im Header File beschrieben werden und lokale (static Funktionen) nur im C File. Sie sollten auch Ihre Typen (insb. structs), Konstanten und globale Variablen dokumentieren. 
 \end{document}

@@ -1,17 +1,8 @@
-\documentclass{article}
-\usepackage[german]{babel}
-\usepackage[utf8]{inputenc}
-\usepackage{a4wide}
-\pagestyle{empty}
-\parindent0pt
+\input{../../../template.ltx}
 
 \begin{document}
-\begin{center}
-\begin{Large}
-OPERATING SYSTEMS BEISPIEL 1
-\end{Large}
-\end{center}
 
+\osuetitle{1}
 
 \section*{Aufgabenstellung A}
 Schreiben Sie einen Rechner, der die Postfix-Notation versteht. 
@@ -76,11 +67,6 @@ Ausgabe:
 Leerzeichen zwischen Operatoren und Zahlen sind erlaubt, aber nicht notwendig. \verb|1 2 -3 + | ist nicht gültig, da das Minus zur \verb|3| gehört und von \emph{strtod(3)} konsumiert wird. \verb|1 2 *3 + | oder \verb|1 2 - 3 + | hingegen ist in Ordnung.
 Für die Winkelfunktionen müssen Sie \emph{math.h} einbinden, sowie beim Linken den Parameter \emph{-lm} verwenden.
 
+\osueguidelinesone
 
 \end{document}
-
-
-
-
-
-
