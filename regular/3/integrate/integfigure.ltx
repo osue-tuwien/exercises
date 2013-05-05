@@ -1,0 +1,92 @@
+% yeah, it's TeX...
+\documentclass[16pt]{article}
+
+\usepackage{lmodern}
+\usepackage[paperwidth=12.6cm,paperheight=9cm,margin=0pt]{geometry}
+\usepackage{xcolor}
+\usepackage{tikz}
+
+\definecolor{axisgray}{gray}{0.5}
+\definecolor{paktblue}{rgb}{0,0,1}
+\definecolor{rectred} {rgb}{0.8,0,0}
+
+\pagestyle{empty}
+
+\renewcommand{\familydefault}{\sfdefault}
+
+\begin{document}
+\begin{center}
+\begin{tikzpicture}[scale=0.23,thick]
+
+% abscissa
+\path[draw=axisgray] (-3,0) -- (42,0);
+
+% ordinate
+\path[draw=axisgray] (0,-3) -- (0,33);
+
+% min line
+\path[draw=paktblue] (5,-1) -- (5,29);
+
+% barrier packet 1 and 2
+\path[draw=paktblue] (15,-1) -- (15,29);
+
+% barrier packet 2 and 3
+\path[draw=paktblue] (25,-1) -- (25,29);
+
+% max line
+\path[draw=paktblue] (35,-1) -- (35,29);
+
+% the function
+\draw[very thick]
+	(0,0)
+	.. controls (0,0)   and (3,25)  .. (10,25)
+	.. controls (17,25) and (18,10) .. (25,10)
+	.. controls (32,10) and (40,33) .. (40,33)
+;
+
+% the columns
+\path[draw=rectred] ( 5,0) rectangle ( 6,22);
+\path[draw=rectred] ( 6,0) rectangle ( 7,23.4);
+\path[draw=rectred] ( 7,0) rectangle ( 8,24.3);
+\path[draw=rectred] ( 8,0) rectangle ( 9,24.8);
+\path[draw=rectred] ( 9,0) rectangle (10,25);
+\path[draw=rectred] (10,0) rectangle (11,24.9);
+\path[draw=rectred] (11,0) rectangle (12,24.6);
+\path[draw=rectred] (12,0) rectangle (13,24);
+\path[draw=rectred] (13,0) rectangle (14,23);
+\path[draw=rectred] (14,0) rectangle (15,21.8);
+\path[draw=rectred] (15,0) rectangle (16,20.3);
+\path[draw=rectred] (16,0) rectangle (17,18.5);
+\path[draw=rectred] (17,0) rectangle (18,16.6);
+\path[draw=rectred] (18,0) rectangle (19,14.8);
+\path[draw=rectred] (19,0) rectangle (20,13.3);
+\path[draw=rectred] (20,0) rectangle (21,12);
+\path[draw=rectred] (21,0) rectangle (22,11.1);
+\path[draw=rectred] (22,0) rectangle (23,10.5);
+\path[draw=rectred] (23,0) rectangle (24,10.1);
+\path[draw=rectred] (24,0) rectangle (25,10);
+\path[draw=rectred] (25,0) rectangle (26,10.15);
+\path[draw=rectred] (26,0) rectangle (27,10.55);
+\path[draw=rectred] (27,0) rectangle (28,11.25);
+\path[draw=rectred] (28,0) rectangle (29,12.1);
+\path[draw=rectred] (29,0) rectangle (30,13.2);
+\path[draw=rectred] (30,0) rectangle (31,14.5);
+\path[draw=rectred] (31,0) rectangle (32,16);
+\path[draw=rectred] (32,0) rectangle (33,17.6);
+\path[draw=rectred] (33,0) rectangle (34,19.3);
+\path[draw=rectred] (34,0) rectangle (35,21.3);
+
+% "min" label
+\node[at={(5,-1)},rotate=-90,anchor=west] {min};
+
+% "max" label
+\node[at={(35,-1)},rotate=-90,anchor=west] {max};
+
+% Paket labels
+\node[at={(10,28)}] {\Large Paket 1};
+\node[at={(20,28)}] {\Large Paket 2};
+\node[at={(30,28)}] {\Large Paket 3};
+
+\end{tikzpicture}
+\end{center}
+\end{document}
