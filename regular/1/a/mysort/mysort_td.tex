@@ -1,16 +1,8 @@
-\documentclass{article}
-\usepackage[german]{babel}
-\usepackage[utf8]{inputenc}
-\usepackage{a4wide}
-\pagestyle{empty}
-\parindent0pt
+\input{../../../template.ltx}
 
 \begin{document}
-\begin{center}
-\begin{Large}
-OPERATING SYSTEMS BEISPIEL 1
-\end{Large}
-\end{center}
+
+\osuetitle{1}
 
 \section*{Aufgabenstellung A}
 Schreiben Sie eine abgewandelte Version des UNIX-Kommandos {\bf sort} als C-Programm. Es soll nur die Option \verb|-r| (absteigend sortieren) implementiert werden. Alle anderen Optionen können ignoriert werden. Wird keine Datei angegeben so sollen die Daten \"uber \emph{stdin} eingelesen werden.
@@ -56,11 +48,6 @@ Ausgabe:
 \subsection*{Hinweis}
 {\bf { ( echo a ; echo B )} $|$ sort} sortiert B vor a, weil die Großbuchstaben im Zeichensatz vor den Kleinbuchstaben kommen. {\bf { ( echo a ; echo B )} $|$ sort -f} würde diese Eigenschaft ignorieren sein. Die Option \verb|-f| braucht aber {\bf nicht} implementiert werden.
 
+\osueguidelinesone
 
 \end{document}
-
-
-
-
-
-

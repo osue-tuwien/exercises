@@ -2,25 +2,11 @@
 % Sysprog WS 2010
 % Beispiel 2: Hashsum
 % Sebastian Falbesoner
-
-\documentclass{article}
-\usepackage[german]{babel}
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage{a4wide}
-\parindent0pt
-\addtolength{\parskip}{10pt}
+\input{../../template.ltx}
 
 \begin{document}
 
-\begin{center}
-\begin{Large}
-OPERATING SYSTEMS BEISPIEL 2
-\end{Large}
-\end{center}
-
-
-
+\osuetitle{2}
 
 \section*{Aufgabenstellung}
 
@@ -56,10 +42,6 @@ gelisteten Einträgen um Dateien handelt (z.B.\ \texttt{.} und \texttt{..}); in 
 mittels \texttt{wait()/waitpid()} ermittelt werden kann) und der Eintrag soll in
 diesem Fall ignoriert werden.
 
-Bitte beachten Sie auch die Allgemeinen Hinweise zur
-Beispielgruppe 2 und die Richtlinien für die Erstellung von
-C-Programmen auf der Übungs-Website.
-
 \section*{Beispielaufruf}
 \begin{verbatim}
 [~]$ mkdir hashtests
@@ -74,4 +56,7 @@ emptyfile: d41d8cd98f00b204e9800998ecf8427e empty
 textfile: 536b30bbea5ee48aca04807038e25875 ASCII text
 [~]$
 \end{verbatim}
+
+\osueguidelinestwo
+
 \end{document}
