@@ -15,7 +15,7 @@ Implementieren Sie ein Programm, welches kontinuierlich Strings
 verschlüsseln lässt.
 
 \begin{verbatim}
-SYNOPSIS:
+    SYNOPSIS:
         encr
 \end{verbatim}
 
@@ -46,17 +46,18 @@ muss \osuefunc{fgets(3)} erneut aufgerufen werden.
 \subsection*{Testen}
 
 Testen Sie ihr Programm z.B.\ wie folgt
-\begin{verbatim}
-bash$ ./encr
-jamesbond
-micky
+
+\begin{osuefmtcode}
+$ \osueinput{./encr}
+\osueinput{jamesbond}
+\osueinput{micky}
 encr: jamesbond -> aCqHsO4OYLnq.
 encr: micky -> aCSHDy093k9FQ
-turing07
+\osueinput{turing07}
 encr: turing07 -> aCJvjJDrpvXWE
-asdfqwer
+\osueinput{asdfqwer}
 encr: asdfqwer -> aCZpdSZB6ohMQ
-\end{verbatim}
+\end{osuefmtcode}
 
 Die Ausgabe ihres Programmes muss nicht genau wie in diesem Beispiel
 formatiert sein. Die Reihenfolge von Input und Output wird vermutlich

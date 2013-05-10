@@ -18,11 +18,12 @@ die Implementierung des Programms \osueprog{stegit}, um raschest die geheime
 Botschaft lesen zu können.
 
 \begin{verbatim}
-          SYNOPSIS: stegit -f|-h [-o <filename>]
+    SYNOPSIS:
+        stegit -f|-h [-o <filename>]
 
-           -f                 find mode
-           -h                 hide mode
-          [-o <filename>]     output filename
+         -f                 find mode
+         -h                 hide mode
+        [-o <filename>]     output filename
 \end{verbatim}
 
 Dieses Programm soll in zwei Modi ausgeführt werden können: \emph{Verstecken}
@@ -43,51 +44,65 @@ soll sie neu angelegt werden.
 Suchen Sie sich 28 beliebige Wörter und initialisieren Sie damit ein
 Zeichenketten-Array. Dieses soll sich fix im Programm befinden und nicht
 veränderbar sein. Mit Hilfe der Array-Indizes weisen Sie jedem Buchstaben im
-englischen Alphabet, und den Sonderzeichen \emph{Leerzeichen} und \emph{Punkt},
-ein Wort zu. Damit sollte es kein Problem mehr sein, die eingelesene Botschaft
-in (unter Umständen) unsinnigen Text umzuwandeln. Sonderzeichen und nicht
-zugeordnete Zeichen werden ignoriert (geschluckt). Damit der resultierende
-End-Text "`realistischer"' aussieht, bauen Sie zufällig (nach je 5-15 Wörtern)
-Punkte ein -- die Sie beim Einlesen im Find-Modus natürlich wiederum ignorieren.
-Die maximale Länge der geheimen Botschaft (Cleartext) können Sie auf 300 Zeichen
-begrenzen.
+englischen Alphabet, sowie den Sonderzeichen \emph{Leerzeichen} und
+\emph{Punkt}, ein Wort zu. Damit sollte es kein Problem mehr sein, die
+eingelesene Botschaft in (unter Umständen) unsinnigen Text umzuwandeln.
+Sonderzeichen und nicht zugeordnete Zeichen werden ignoriert (geschluckt). Damit
+der resultierende End-Text "`realistischer"' aussieht, bauen Sie zufällig (nach
+je 5 bis 15 Wörtern) Punkte ein -- die Sie beim Einlesen im Find-Modus natürlich
+wiederum ignorieren.  Die maximale Länge der geheimen Botschaft (Cleartext)
+können Sie auf 300 Zeichen begrenzen.
 
 Beispieltabelle:
-\begin{verbatim}
+
+\begin{osuefmtcode}
 p -> "der"
 s -> "Himmel"
 c -> "ist"
 h -> "heute"
 t -> "klar"
 . -> "la"
-\end{verbatim}
+\end{osuefmtcode}
+
 Die Geheimbotschaft:
-\begin{verbatim}
+
+\begin{osuefmtcode}
 pscht...
-\end{verbatim}
+\end{osuefmtcode}
+
 würde nach der Hide-Operation in folgenden Text resultieren (der Punkt ist
 Zufall):
-\begin{verbatim}
+
+\begin{osuefmtcode}
 der himmel ist heute klar. la la la
-\end{verbatim}
+\end{osuefmtcode}
 
 \subsection*{Testen}
+
 Starten Sie das Programm:
-\begin{verbatim}
-stegit -h -o secret_message_within
-\end{verbatim}
+
+\begin{osuefmtcode}
+./stegit -h -o secret_message_within
+\end{osuefmtcode}
+
 und geben Sie folgenden Text ein (möglichst ohne dass Sie mitlesen!):
-\begin{verbatim}
+
+\begin{osuefmtcode}
 es muessen beide aufgabenstellungen a und b geloest werden
-\end{verbatim}
+\end{osuefmtcode}
+
 Drücken Sie die Enter-Taste und betrachten Sie die nun versteckte Botschaft mit:
-\begin{verbatim}
+
+\begin{osuefmtcode}
 cat secret_message_within
-\end{verbatim}
+\end{osuefmtcode}
+
 Versuchen Sie aus dem entstandenen Text mit:
-\begin{verbatim}
-stegit -f < secret_message_within
-\end{verbatim}
+
+\begin{osuefmtcode}
+./stegit -f < secret_message_within
+\end{osuefmtcode}
+
 die geheime Botschaft wiederherzustellen. Sie könnte Sie vor bösen
 Überraschungen bewahren.
 

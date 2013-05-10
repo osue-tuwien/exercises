@@ -6,11 +6,12 @@
 
 \section*{Aufgabenstellung}
 
-Ganz knapp vor der Prüfung für Betriebssysteme, auf die Sie sich seit 
-Monaten freuen, erfahren Sie, dass all Ihre Freunde dachten, die Prüfung fände 
-drei Tage später statt. Sofort evaluieren Sie deren Fehler und merken, das Problem
-liegt am fehlenden Zeitmanagement Ihrer Kollegen. Hilfsbereit, wie Sie sind, wollen 
-Sie sie unterstützen und schreiben zu diesem Behufe eine simple Kalenderapplikation.
+Ganz knapp vor der Prüfung für \emph{Betriebssysteme}, auf die Sie sich seit
+Monaten freuen, erfahren Sie, dass all Ihre Freunde dachten, die Prüfung fände
+drei Tage später statt. Sofort evaluieren Sie deren Fehler und merken, das
+Problem liegt am fehlenden Zeitmanagement Ihrer Kollegen. Hilfsbereit, wie Sie
+sind, wollen Sie sie unterstützen und schreiben zu diesem Behufe eine simple
+Kalenderapplikation.
 
 \begin{verbatim}
     SYNOPSIS
@@ -20,42 +21,49 @@ Sie sie unterstützen und schreiben zu diesem Behufe eine simple Kalenderapplika
 
 \subsection*{Details}
 
-Server und Client sollen über Shared Memory miteinander 
-kommunizieren. Der Server verwaltet hierbei die Kalenderdaten, 
-mit der Option \osuearg{-v} gibt er Auskunft über die Aktionen, 
-die er dabei durchführt.\\
-Der Client fungiert gleichzeitig als Eingabe- und als Ausgabeapplikation. 
-Soll ein neuer Eintrag eingefügt werden, so wird \osueprog{calclient} mit 
-\osuearg{entry} als Text für diesen Eintrag aufgerufen. Ohne Angabe von \osuearg{entry} 
-sollen die Tageseinträge angezeigt werden.
-Mit dem Argument \osuearg{offset} wird der zu bearbeitende Tag relativ zum heutigen
-angegeben, beispielsweise würde \osuearg{-d 1} den morgigen Tag auswählen. Mit 
-\osuearg{-r idx} wird am ausgewählten Tag der Eintrag an Stelle \osuearg{idx} entfernt 
+Server und Client sollen über Shared Memory miteinander kommunizieren. Der
+Server verwaltet hierbei die Kalenderdaten; mit der Option \osuearg{-v} gibt er
+Auskunft über die Aktionen, die er dabei durchführt.
+
+Der Client fungiert gleichzeitig als Eingabe- und als Ausgabeapplikation. Soll
+ein neuer Eintrag eingefügt werden, so wird \osueprog{calclient} mit
+\osuearg{entry} als Text für diesen Eintrag aufgerufen. Ohne Angabe von
+\osuearg{entry} sollen die Tageseinträge angezeigt werden. Mit dem Argument
+\osuearg{offset} wird der zu bearbeitende Tag relativ zum heutigen angegeben;
+beispielsweise würde \osuearg{-d 1} den morgigen Tag auswählen. Mit \osuearg{-r
+idx} wird am ausgewählten Tag der Eintrag an Stelle \osuearg{idx} entfernt
 oder, falls \osuearg{entry} mitangegeben wird, damit überschrieben.
 
 \subsection*{Beispiele}
 
-\begin{verbatim} calclient 
-Output: 
+\begin{osuefmtcode}
+$ \osueinput{./calclient}
+Output:
 1: Prf BSys
 2: Abgabe Beispiel 1
-\end{verbatim}
+\end{osuefmtcode}
+
 Zeigt heutige Termine an.
 
-\begin{verbatim} calclient -d 3 "VO BSys" 
-\end{verbatim}
-Legt den Eintrag \emph{VO BSys} in drei Tagen an.
+\begin{osuefmtcode}
+$ \osueinput{calclient -d 3 "VO BSys"}
+\end{osuefmtcode}
 
-\begin{verbatim} calclient -r 2 "Prf BSys" 
-\end{verbatim}
+Legt den Eintrag \osueinput{VO BSys} in drei Tagen an.
+
+\begin{osuefmtcode}
+$ \osueinput{./calclient -r 2 "Prf BSys"}
+\end{osuefmtcode}
+
 Ersetzt den zweiten Eintrag am heutigen Tag durch \emph{Prf BSys}.
 
 \subsection*{Hinweise}
-Überlegen Sie sich eine geeignete Datenstruktur zum Speichern der Einträge. Als 
-Schlüssel eignen sich u.a. UNIX-Timestamps (siehe dazu \osuefunc{time(7)} im Abschnitt \emph{The Epoch}
-bzw.\\ \emph{http://de.wikipedia.org/wiki/Unixzeit}), wobei sie dazu pro Tag einen geeigneten
-Repräsentanten finden sollten. Sinnvolle Funktionen um damit umzugehen sind \osuefunc{time(2)} und,
-falls notwendig, \osuefunc{mktime(3)}.
+Überlegen Sie sich eine geeignete Datenstruktur zum Speichern der Einträge. Als
+Schlüssel eignen sich u.a.\ UNIX-Timestamps (siehe dazu den Abschnitt \emph{The
+Epoch} in der Manpage \osuefunc{time(7)}
+bzw.\ \url{http://de.wikipedia.org/wiki/Unixzeit}), wobei sie dazu pro Tag einen
+geeigneten Repräsentanten finden sollten. Sinnvolle Funktionen um damit
+umzugehen sind \osuefunc{time(2)} und, falls notwendig, \osuefunc{mktime(3)}.
 
 Vergessen Sie keinesfalls auf sprechende Fehlermeldungen.
 

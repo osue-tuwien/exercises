@@ -8,77 +8,91 @@
 
 Um sich die Zeit während besonders langweiliger Vorlesungen bestmöglich
 zu vertreiben, beschließen Sie eine einfache Tic-Tac-Toe-Implementierung
-mit 'künstlicher Intelligenz' zu schreiben. Die Regeln des Spiels sind
-primitiv und bedürfen keiner weiteren Erklärung (diejenigen, die es wirklich nicht
-kennen, mögen einen Blick auf \textit{http://de.wikipedia.org/wiki/Tic\_Tac\_Toe}
-werfen). Das Augenmerk sollte auf den Einsatz von Interprozesskommunikation, in dem Fall 
-mittels Shared Memory und Synchronisation mittels Semaphoren, gelegt werden. \\
-Es sind also zwei Programme, \textit{Server} und \textit{Client} zu programmieren.
+mit "`künstlicher Intelligenz"' zu schreiben. Die Regeln des Spiels bedürfen
+wohl keiner weiteren Erklärung (diejenigen, die es nicht kennen, mögen einen
+Blick auf \url{http://de.wikipedia.org/wiki/Tic_Tac_Toe} werfen). Das Augenmerk
+sollte auf den Einsatz von Interprozesskommunikation, in dem Fall
+mittels Shared Memory und Synchronisation mittels Semaphoren, gelegt werden.
+Es sind also zwei Programme, \textit{Server} und \textit{Client}, zu
+programmieren.
 
-Die gesamte Spiellogik (und der einfache CPU-Gegner) sollen dabei auf Seite des 
-Serverprozesses implementiert werden - der Client bietet dem Benutzer nur
+Die gesamte Spiellogik (und der einfache CPU-Gegner) sollen dabei auf Seite des
+Serverprozesses implementiert werden -- der Client bietet dem Benutzer nur
 ein praktisches Interface an und muss ledliglich das Setzen von Symbolen auf
-bereits belegten Felder verbieten; um die Gewinnchancen etwas zu erhöhen bietet
+bereits belegte Felder verbieten; um die Gewinnchancen etwas zu erhöhen, bietet
 er auch die Möglichkeit, gleich zwei Symbole auf einmal zu platzieren (wovon
 aber beide Plätze wieder frei sein müssen). Der Server sollte diesen Betrug
 natürlich feststellen und dies unmittelbar als verloren für den Client werten!
 Die Cheat-Erkennung kann auf Wunsch auch mit der Option \osuearg{-c} deaktiviert
-werden:
+werden.
 
 \begin{verbatim}
     SYNOPSIS
         ttt-server [-c]
-        ttt-client 
+        ttt-client
 \end{verbatim}
 
 \subsection*{Details}
 \subsubsection*{Server-Prozess}
+
 Die Aufgaben des Servers nochmal zusammengefasst:
+
 \begin{itemize}
 \item Shared Memory und Semaphoren anlegen (und am Ende wieder freigeben!)
-\item nach jedem Zug des Clients mittels einer lokalen Kopie des Spielfelds auf Cheating überprüfen (wenn
-  dieser Modus nicht deaktiviert wurde!)
-\item selbst ein Symbol an einer zufälligen freien Position tätigen - jedes der freien Felder soll dabei
-      mit der selben Wahrscheinlichkeit gewählt werden!
-\item auf Sieg/Verlust/Unentschieden prüfen und dies im Falle dem Client mitteilen
+\item nach jedem Zug des Clients mittels einer lokalen Kopie des Spielfelds aufs
+  Schummeln überprüfen (wenn dieser Modus nicht deaktiviert wurde!)
+\item selbst ein Symbol an eine zufällige freie Position legen -- jedes der
+  freien Felder soll dabei mit der selben Wahrscheinlichkeit gewählt werden!
+\item auf Sieg/Verlust/Unentschieden prüfen und dies gegebenenfalls dem Client
+  mitteilen
 \end{itemize}
-Der Server läuft in einer Endlosschleife und läßt sich lediglich per
-\osuekeystroke{Ctrl+C} (\osueconst{SIGINT}) beenden. Achten Sie darauf dass in diesem Fall
-alle angelegten Ressourcen ordnungsgemäß wieder freigegeben werden!
+
+Der Server läuft in einer Endlosschleife und lässt sich lediglich per
+\osuekeystroke{Ctrl+C} (\osueconst{SIGINT}) beenden. Achten Sie darauf, dass in
+diesem Fall alle angelegten Ressourcen ordnungsgemäß wieder freigegeben werden!
 
 \subsubsection*{Client-Prozess}
-Der Client soll beim Starten zunächst versuchen zum Server zu verbinden
-('verbinden' heißt in dem Fall, einfach zu überprüfen ob die Semaphore
-die der Server angelegen sollte schon existieren - falls sie nicht existieren,
-wird mit einer aussagekräftigen Fehlermeldung abgebrochen). Bei Erfolg wird die aktuelle
-Spielposition sowie eine
-Begrüßungsnachricht ausgegeben, mit dem Hinweis dass mit dem Befehl \texttt{h}
+Der Client soll beim Starten zunächst versuchen, sich zum Server zu verbinden
+(\emph{verbinden} heißt in dem Fall einfach zu überprüfen, ob die das Shared
+Memory und die Semaphore, die der Server angelegen sollte, schon existieren --
+falls sie nicht existieren, wird mit einer aussagekräftigen Fehlermeldung
+abgebrochen). Bei Erfolg wird die aktuelle Spielposition sowie eine
+Begrüßungsnachricht ausgegeben, mit dem Hinweis, dass mit dem Befehl \osuecmd{h}
 weitere Hilfe zur Steuerung angefordert werden kann.
 
 Dem Spieler stehen folgende Befehle zur Verfügung:
+
 \begin{itemize}
-	\item \osuecmd{s} - Spielfeld anzeigen (dies wird nach jedem Zug automatisch gemacht)
-	\item \osuecmd{p <xy>} - Symbol platzieren auf Position xy ($ x,y \in \{1,2,3\} $ - wobei (1,1) die Ecke links oben bezeichnet)
-	\item \osuecmd{c <xy> <xy>} - zwei Symbole platzieren (Cheat-Modus)
-	\item \osuecmd{n} - Neues Spiel starten
-	\item \osuecmd{q} - Spiel/Client beenden (aktueller Spielstand bleibt weiterhin bestehen, der Client kann nach erneutem Aufruf das alte Spiel fortsetzen)
+	\item \osuecmd{s} -- Spielfeld anzeigen (dies wird außerdem nach jedem
+	                     Zug automatisch gemacht)
+	\item \osuecmd{p <xy>} -- Symbol platzieren auf Position \(xy\)
+	                          (\(x, y \in \{1, 2, 3\}\) -- wobei $(1, 1)$
+	                          die Ecke links oben bezeichnet)
+	\item \osuecmd{c <xy> <xy>} -- zwei Symbole platzieren (Cheat-Modus)
+	\item \osuecmd{n} -- Neues Spiel starten
+	\item \osuecmd{q} -- Spiel/Client beenden (aktueller Spielstand bleibt
+	                     weiterhin bestehen; der Client kann nach erneutem
+	                     Aufruf das alte Spiel fortsetzen)
 \end{itemize}
+
 Falls ein nicht existierender Befehl eingegeben wurde, sollte eine entsprechende
-Fehlermeldung ausgegeben werden und zusätzlich nochmal die Liste aller möglichen
-Kommandos angezeigt werden. Falls der Befehl existiert, aber falsch verwendet wurde
-(z.B. \osuecmd{p 45} oder \osuecmd{c 13}), sollte der Benutzer auch auf den Fehler
-aufmerksam gemacht werden (z.B. \osueoutput{"Error: field coordinates out of bounds!"}).
+Fehlermeldung ausgegeben und zusätzlich nochmal die Liste aller möglichen
+Kommandos angezeigt werden. Falls der Befehl existiert, aber falsch verwendet
+wurde (z.B.\ \osuecmd{p 45} oder \osuecmd{c 13}), sollte der Benutzer auch auf
+den Fehler aufmerksam gemacht werden (z.B.\ \osueoutput{Error: field coordinates
+out of bounds!}).
 
-Beim Empfang eines besonderen Ereignisses vom Server (Gewinn, Verlust, Verlust wegen
-Cheaten etc.) soll eine entsprechende Nachricht ausgegeben werden und nach einem
-Tastendruck fortgesetzt werden. Der erste Zug pro Spiel soll immer vom Client ausgeführt werden.
-
+Beim Empfang eines besonderen Ereignisses vom Server (Gewinn, Verlust, Verlust
+wegen Schummelns etc.) soll eine entsprechende Nachricht ausgegeben und nach
+einem Tastendruck fortgesetzt werden. Der erste Zug pro Spiel soll immer vom
+Client ausgeführt werden.
 
 \subsection*{Hinweise}
-Um eine Kommunikation zwischen Server und Client abseits des Spielfelds zu ermöglichen
-(der Server muss den Client z.B. benachrichtigen falls er verloren oder gewonnen hat),
-ist es ratsam, außer dem Array noch eine Variable im Shared Memory zu definieren um sich
-mit Statusnachrichten auszutauschen.
+Um eine Kommunikation zwischen Server und Client abseits des Spielfelds zu
+ermöglichen (der Server muss den Client z.B.\ benachrichtigen, falls er verloren
+oder gewonnen hat), ist es ratsam, außer dem Array noch eine Variable im Shared
+Memory zu definieren, um Statusnachrichten auszutauschen. Dafür sind
+\osuekeyword{struct}s ganz nützlich.
 
 \osueguidelinesthree
 

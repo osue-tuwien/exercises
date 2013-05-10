@@ -21,10 +21,10 @@ folgendermaßen verhalten:
 \item Der Benutzer des Programms überlegt sich einen beliebigen
 String.
 \item Er ruft das Programm (also den Mutterprozess) mit dem String als
-Parameter auf. Beispiel:
-\verb@stillepost "OSUE macht Spass."@
+Parameter auf. Beispiel: \osuecmd{stillepost \char`"OSUE macht
+Spass.\char`"}
 \item Der Mutterprozess sagt den String an sein erstes Kind weiter,
-jedoch nicht ohne eine kleine Veränderung einzubauen – wie beim
+jedoch nicht ohne eine kleine Veränderung einzubauen -- wie beim
 Stille-Post-Spiel üblich.
 \item Das erste Kind erhält diesen String, verändert ihn wieder
 geringfügig und gibt ihn an das zweite Kind weiter.
@@ -33,25 +33,22 @@ von ihm veränderten String nicht an einen anderen Prozess weiter,
 sondern sagt ihn laut (gibt ihn auf \osueprog{stdout} aus).
 \end{itemize}
 
-
-
-
-
 \subsection*{Anleitung}
 
 Das Programm soll folgende Synopsis befolgen:
 \begin{verbatim}
-SYNOPSIS:
-     stillepost [-v] <string>
+    SYNOPSIS:
+        stillepost [-v] <string>
 \end{verbatim}
 
 Beachten Sie: Wenn Sie einen String übergeben wollen, der Leerzeichen
 enthält, müssen Sie ihn in Hochkommata einschließen, damit er als
-nur ein Argument behandelt wird: \verb_"String mit Leerzeichen"_
+nur ein Argument behandelt wird: \osuearg{\char`"String mit
+Leerzeichen\char`"}
 
-Der Mutterprozess soll seine Kinder mittels \osuefunc{fork(2)} erzeugen,
-die Kommunikation zwischen den Prozessen soll über Unnamed Pipes
-erfolgen, welche mit \osuefunc{pipe(2)} erzeugt werden.
+Der Mutterprozess soll seine Kinder mittels \osuefunc{fork(2)}
+erzeugen, die Kommunikation zwischen den Prozessen soll über Unnamed
+Pipes erfolgen, welche mit \osuefunc{pipe(2)} erzeugt werden.
 
 Die Veränderungen eines jeden Mitspielers (Prozesses) sollen so
 vorgenommen werden, dass mittels \osuefunc{rand(3)} eine zufällige
@@ -78,8 +75,9 @@ Testen Sie ihr Programm vor allem mit der Option \osuearg{-v}, da dann
 deutlich sichtbarer ist, was jeder einzelne Prozess tut.
 
 Beispielrunde:
-\begin{verbatim}
-bash$ ./stillepost -v "OSUE macht Spass."
+
+\begin{osuefmtcode}
+$ \osueinput{./stillepost -v "OSUE macht Spass."}
 Mutter: erhalten: OSUE macht Spass.
 Mutter: weiter  : OSUE macht Xpass.
 Kind1 : erhalten: OSUE macht Xpass.
@@ -87,7 +85,7 @@ Kind1 : weiter  : OSkE macht Xpass.
 Kind2 : erhalten: OSkE macht Xpass.
 Kind2 : weiter  : OSkE macAt Xpass.
 Kind2 : Ende    : OSkE macAt Xpass.
-\end{verbatim}
+\end{osuefmtcode}
 
 Die Ausgabe ihres Programms muss nicht genau wie in dem Beispiel
 formatiert sein. Natürlich wird der String umso unkenntlicher, je

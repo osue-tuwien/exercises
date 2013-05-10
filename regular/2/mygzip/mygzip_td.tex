@@ -5,6 +5,7 @@
 \osuetitle{2}
 
 \section*{Aufgabenstellung}
+
 Schreiben Sie ein Programm, das Eingaben mit \osueprog{gzip(1)} komprimiert.
 
 \begin{verbatim}
@@ -12,12 +13,19 @@ Schreiben Sie ein Programm, das Eingaben mit \osueprog{gzip(1)} komprimiert.
         mygzip [file]
 \end{verbatim}
 
-
 \subsection*{Anleitung}
-Das Programm erstellt zwei Pipes und führt zwei mal \osuefunc{fork(2)} aus (und erzeugt damit zwei Kinder – nicht Kind und Enkelkind).
-Das erste Kind biegt \osueglvar{stdin} auf die erste und \osueglvar{stdout} auf die zweite Pipe um und startet mit \osuefunc{execlp(3)} das Programm \osueprog{gzip(1)} mit dem Parametern \osuearg{-cf}.
-Der Vater liest die zu komprimierenden Daten von \osueglvar{stdin} ein und schreibt sie über die erste Pipe zum \osueprog{gzip}-Prozess.
-Das zweite Kind liest über die zweite Pipe vom \osueprog{gzip}-Prozess und schreibt die gelesenen Daten in die Datei \osuefilename{file} bzw.\ auf \osueglvar{stdout} wenn keine Datei angegeben wurde.
+
+Das Programm erstellt zwei Pipes und führt zwei mal \osuefunc{fork(2)} aus (und
+erzeugt damit zwei Kinder -- nicht Kind und Enkelkind). Das erste Kind biegt
+\osueglvar{stdin} auf die erste und \osueglvar{stdout} auf die zweite Pipe um
+und startet mit \osuefunc{execlp(3)} das Programm \osueprog{gzip(1)} mit dem
+Parametern \osuearg{-cf}. Der Vater liest die zu komprimierenden Daten von
+\osueglvar{stdin} ein und schreibt sie über die erste Pipe zum
+\osueprog{gzip}-Prozess. Das zweite Kind liest über die zweite Pipe vom
+\osueprog{gzip}-Prozess und schreibt die gelesenen Daten in die Datei
+\osuefilename{file} bzw.\ auf \osueglvar{stdout}, wenn keine Datei angegeben
+wurde.
+
 Achten Sie darauf, das Sie die Dateien binär öffnen.
 
 \osueguidelinestwo

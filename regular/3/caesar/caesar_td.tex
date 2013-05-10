@@ -11,59 +11,60 @@
 \section*{Aufgabenstellung}
 
 \begin{verbatim}
-SYNOPSIS:
-     readin <filename>
-     caesar <key>
-\end{verbatim} 
+    SYNOPSIS:
+        readin <filename>
+        caesar <key>
+\end{verbatim}
 
 Implementieren Sie zwei Programme \osueprog{readin} und \osueprog{caesar}, die
-einen einfachen (und leicht zu knackenden!)
-Verschl"usselungsalgorithmus anwenden.
+einen einfachen (und leicht zu knackenden!) Verschlüsselungsalgorithmus
+anwenden.
 
-Das Programm \osueprog{readin} liest zeilenweise aus einem als Argument
-"ubergebenen Textfile, und schreibt jede Zeile nacheinander auf
-folgende Weise modifiziert in ein Shared Memory:
+Das Programm \osueprog{readin} liest zeilenweise aus einer als Argument
+übergebenen Textdatei und schreibt jede Zeile nacheinander auf folgende Weise
+modifiziert in ein Shared Memory:
+
 \begin{itemize}
-\item Alle Gro"sbuchstaben (alle Zeichen in \osueregex{[A-Z]}) werden
-unver"andert beibehalten.
+\item Alle Großbuchstaben (alle Zeichen in \osueregex{[A-Z]}) werden
+unverändert beibehalten.
 \item Alle Kleinbuchstaben (alle Zeichen in \osueregex{[a-z]}) werden in
-Gro"sbuchstaben konvertiert.
+Großbuchstaben konvertiert.
 \item Alle anderen Zeichen fallen weg.
 \end{itemize}
+
 Das Programm \osueprog{caesar} erwartet als Argument eine Zahl zwischen 1
 und 25. Es liest jede Zeile aus dem Shared Memory und ersetzt jeden
 Buchstaben durch den im Alphabet um \osuearg{key} weiter rechts stehenden
 Buchstaben (wobei sich rechts neben dem Z wieder das A befinden
-soll). Bei einem \osuearg{key} von 3 wird also z.B. A zu D, B zu E, C zu
-F, W zu Z, X zu A und Y zu B. Die so verschl"usselte Zeile wird dann
-auf \osueglvar{stdout} ausgegeben, und die n"achste Zeile wird gelesen.
+soll). Bei einem \osuearg{key} von 3 wird also z.B.\ A zu D, B zu E, C zu
+F, W zu Z, X zu A und Y zu B. Die so verschlüsselte Zeile wird dann
+auf \osueglvar{stdout} ausgegeben, und die nächste Zeile wird gelesen.
 
-\osueprog{caesar} soll die n"achste Zeile erst dann lesen, wenn
-\osueprog{readin} sie vollst"andig ins Shared Memory geschrieben hat und
-\osueprog{readin} soll erst dann die n"achste Zeile ins Shared Memory schreiben,
-wenn die vorherige schon von \osueprog{caesar} gelesen wurde.
+\osueprog{caesar} soll die nächste Zeile erst dann lesen, wenn \osueprog{readin}
+sie vollständig ins Shared Memory geschrieben hat, und \osueprog{readin} soll
+erst dann die nächste Zeile ins Shared Memory schreiben, wenn die vorherige
+schon von \osueprog{caesar} gelesen wurde.
 
-Sobald \osueprog{readin} die letzte Zeile des Eingabefiles verarbeitet hat,
-schreibt es einen frei w"ahlbaren String in das Shared Memory, der
-\osueprog{caesar} anzeigt, dass alle Arbeit getan ist. Darauf sollen beide
+Sobald \osueprog{readin} die letzte Zeile der Eingabedatei verarbeitet hat,
+schreibt es einen frei wählbaren String in das Shared Memory, der
+\osueprog{caesar} anzeigt, dass alle Arbeit getan ist. Daraufhin sollen beide
 Programme terminieren.
 
-
-
 \subsection*{Anleitung}
-Folgende vereinfachenden Einschr"ankungen gelten:
+
+Folgende vereinfachenden Einschränkungen gelten:
+
 \begin{itemize}
-\item Im Eingabefile stehen nur ASCII-Zeichen. Umlaute und dergleichen
-m"ussen also nicht behandelt werden.
-\item Keine Zeile ist l"anger als 1022 Zeichen (inklusive Newline).
+\item In der Eingabedatei stehen nur \textsc{ascii}-Zeichen. Umlaute und
+dergleichen müssen also nicht behandelt werden.
+\item Keine Zeile ist länger als 1022 Zeichen (inklusive Newline).
 \end{itemize}
 
-
-
-
 \subsection*{Testen}
-Testen Sie Ihr Programm mit mehreren Eingabefiles. 
-Erstellen Sie z.B. ein Testfile \osuefilename{t1} mit folgendem Inhalt: 
+
+Testen Sie Ihr Programm mit mehreren Eingabedateien.
+
+Erstellen Sie z.B.\ eine Testdatei \osuefilename{t1} mit folgendem Inhalt:
 \begin{verbatim}
 Ich habe das dritte Sysprog-Beispiel,
 das gar nicht schwer war,
@@ -75,14 +76,15 @@ Implementierung):
   readin t1 &
   caesar 15 > t2
 \end{verbatim}
-Dann haben Sie in \osuefilename{t2} die verschl"usselte Version von \osuefilename{t1}.
+Dann haben Sie in \osuefilename{t2} die verschlüsselte Version von
+\osuefilename{t1}.
 
 Mit
 \begin{verbatim}
   readin t2 &
   caesar 11
 \end{verbatim}
-k"onnen Sie diese wieder entschl"usseln, und sollten folgende Ausgabe
+können Sie diese wieder entschlüsseln, und sollten folgende Ausgabe
 erhalten:
 \begin{verbatim}
 ICHHABEDASZWEITESYSPROGBEISPIEL

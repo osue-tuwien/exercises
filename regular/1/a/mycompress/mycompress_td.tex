@@ -11,57 +11,56 @@
       Wird kein Argument angegeben, so ist von
       \osueglvar{stdin} zu lesen.
 \begin{verbatim}
-	 SYNOPSIS
+    SYNOPSIS:
         mycompress [file1] [file2] ...
 \end{verbatim}
 
 \subsection*{Anleitung}
-      Das Programm soll den Inhalt des übergebenen Files
-      auslesen, komprimieren und nach der Komprimierung in ein
-      File mit dem Namen \osuefilename{[ursprüngliches File].comp}
-      ausgeben. Wird kein File übergeben, so ist von stdin zu
-      lesen und in das File \osuefilename{Stdin.comp} auszugeben. Die
+      Das Programm soll den Inhalt der übergebenen Datei
+      auslesen, komprimieren, und nach der Komprimierung in ein
+      File mit dem Namen \osuefilename{[ursprünglicher Name].comp}
+      ausgeben. Wird keine Datei übergeben, so ist von \osueglvar{stdin} zu
+      lesen und in die Datei \osuefilename{Stdin.comp} auszugeben. Die
       Komprimierung soll so erfolgen, dass die Zeichen durch
-      \verb|Zeichen + Anzahl| ersetzt werden - z.B.: \verb|aaa| durch \verb|a3|
-      und \verb|b| durch \verb|b1|. 
-	Newline ist auch ein Zeichen und soll ebenfalls mit [zeichen][anzahl] komprimiert werden.
-      
-      Geben Sie die Anzahl der Zeichen - auch \emph{newline}
-      sowohl des unkomprimierten, als auch des komprimierten Files
-      auf dem Bildschirm aus (Sie werden feststellen, dass die
-      Komprimierung nur bei vielen gleichen Zeichen effizient ist).
+      \verb|Zeichen + Anzahl| ersetzt werden -- z.B.: \verb|aaa| durch \verb|a3|
+      und \verb|b| durch \verb|b1|.
 
- 	
-      
+      Das Newline ist auch ein Zeichen und soll ebenfalls komprimiert werden.
+
+      Geben Sie die Anzahl der Zeichen -- auch Newlines --
+      sowohl der unkomprimierten, als auch der komprimierten Datei
+      auf dem Bildschirm aus. (Sie werden feststellen, dass die
+      Komprimierung nur bei vielen gleichen Zeichen effizient ist.)
+
       Definieren Sie für die maximale Anzahl an Zeichen in einer
       Zeile eine Konstante, wobei Sie annehmen dürfen, dass keine
       Zeile mehr Zeichen enthält.
 
-      
 \subsection*{Testen}
-      Testen Sie Ihr Programm mit verschiedenen Textfiles, z.B
-      soll eine Testdatei \osuefilename{Test.txt} mit folgenden Inhalt:
-\subsubsection*{File: Test.txt}
-\begin{verbatim}
+      Testen Sie Ihr Programm mit verschiedenen Textdateien; z.B.\ soll
+      eine Testdatei \osuefilename{Test.txt} mit folgenden Inhalt:
+
+\begin{osuefmtcode}
       aaabbbbbc
       dddddddde
       ggghhhhha
-\end{verbatim}
+\end{osuefmtcode}
+
 die Bildschirmausgabe:
-\begin{verbatim}
+
+\begin{osuefmtcode}
       Test.txt:        30 Zeichen
       Test.txt.comp:   22 Zeichen
-\end{verbatim}
+\end{osuefmtcode}
 
-und die Outputdatei:
+und die Outputdatei \osuefilename{Test.txt.comp} mit dem Inhalt:
 
-\subsubsection*{File: Test.txt.comp}
-\begin{verbatim}
+\begin{osuefmtcode}
       a3b5c1
       1d8e1
       1g3h5a1
       1
-\end{verbatim}
+\end{osuefmtcode}
 
 liefern.
 

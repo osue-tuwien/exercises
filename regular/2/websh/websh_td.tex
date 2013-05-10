@@ -14,11 +14,9 @@ Schreiben Sie ein Programm, welches beliebige Programme aufruft und
 deren Ausgaben für das Web formatiert.
 
 \begin{verbatim}
-SYNOPSIS:
+    SYNOPSIS:
         websh [-e] [-h] [-s WORD:TAG]
 \end{verbatim}
-
-
 
 \subsection*{Anleitung}
 
@@ -32,16 +30,16 @@ Der zweite Kindprozess soll also die Ausgabe des ersten bekommen und
 diese verarbeiten, um das Ergebnis in einem Webbrowser darstellbar auf
 der Standardausgabe auszugeben. Primär sind daher Zeilenumbrüche zu
 behandeln. Mit dem Parameter \osuearg{-e} soll die gesamte Ausgabe in ein
-vollständiges HTML-Dokument eingebettet werden, also mit
-umschließenden HTML- und BODY-Tags. Die Option \osuearg{-h} fügt den
-Programmaufruf als Überschrift zwischen den jeweiligen
+vollständiges \textsc{html}-Dokument eingebettet werden, also mit
+umschließenden \verb_html_- und \verb_body_-Tags. Die Option \osuearg{-h}
+fügt den Programmaufruf als Überschrift zwischen den jeweiligen
 Programmausgaben ein, und \osuearg{-s} sucht nach Zeilen mit \osuearg{WORD}
 und setzt sie in den angegebenen \osuearg{TAG}.
 
 Sie dürfen eine sinnvolle Länge der Zeilen annehmen, als Konstante
 definieren und damit arbeiten.
 
-Ein Aufruf mit folgenden Eingaben: 
+Ein Aufruf mit folgenden Eingaben:
 
 \begin{verbatim}
 $ ./websh -e -h -s Linux:h2
@@ -52,12 +50,12 @@ ls /dev/null
 sollte folgende Ausgabe produzieren:
 
 \begin{verbatim}
-<HTML><HEAD></HEAD><BODY>
+<html><head></head><body>
 <h1>uname -sm</h1>
 <h2>Linux x86_64</h2><br />
 <h1>ls /dev/null</h1>
 /dev/null<br />
-</BODY></HTML> 
+</body></html>
 \end{verbatim}
 
 \osueguidelinestwo

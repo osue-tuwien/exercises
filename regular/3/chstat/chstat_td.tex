@@ -14,30 +14,26 @@ Implementieren Sie zwei Programme \osueprog{readin} und \osueprog{chstat}, die
 zu einem Eingabetext eine Buchstabenstatistik erstellen.
 
 \begin{verbatim}
-SYNOPSIS:
-     readin
-     chstat [-v]
-\end{verbatim} 
-
-
-
+    SYNOPSIS:
+        readin
+        chstat [-v]
+\end{verbatim}
 
 \subsection*{Anleitung}
 
-Das Programm \osueprog{readin} liest von \osueglvar{stdin} und "ubergibt jede
-gelesene Zeile "uber ein Shared Memory an das Programm \osueprog{chstat},
-welches die Zeile liest und zu jedem Buchstaben speichert, wie oft er
-vorgekommen ist. Gro"s-/Kleinschreibung soll dabei nicht beachtet
-werden, es wird also zwischen A und a nicht unterschieden. Weiters
-k"onnen Sie davon ausgehen, dass nur ASCII-Zeichen vorkommen, Umlaute
-und dergleichen m"ussen Sie also nicht behandeln.
+Das Programm \osueprog{readin} liest von \osueglvar{stdin} und übergibt jede
+gelesene Zeile über ein Shared Memory an das Programm \osueprog{chstat}, welches
+die Zeile liest und zu jedem Buchstaben speichert, wie oft er vorgekommen ist.
+Groß-/Kleinschreibung soll dabei nicht beachtet werden, es wird also zwischen
+\osueinput{A} und \osueinput{a} nicht unterschieden. Weiters können Sie davon
+ausgehen, dass nur \textsc{ascii}-Zeichen vorkommen, Umlaute und dergleichen
+müssen Sie also nicht behandeln.
 
-\osueprog{chstat} gibt dann eine Liste der Buchstaben A bis Z aus, jeweils
-mit der Anzahl der Vorkommnisse sowie einer prozentuellen Angabe der
-H"aufigkeit des Buchstabens (abgerundet auf ganze Prozent). Alle
-anderen Zeichen werden in einer Kategorie ``andere''
-zusammengefasst. Zus"atzlich wird die Gesamtanzahl der gelesenen
-Zeichen ausgegeben.
+\osueprog{chstat} gibt dann eine Liste der Buchstaben A bis Z aus, jeweils mit
+der Anzahl der Vorkommnisse sowie einer prozentuellen Angabe der Häufigkeit des
+Buchstabens (abgerundet auf ganze Prozent). Alle anderen Zeichen werden in einer
+Kategorie "`andere"' zusammengefasst. Zusätzlich wird die Gesamtanzahl der
+gelesenen Zeichen ausgegeben.
 
 Beispiel:
 \begin{verbatim}
@@ -53,24 +49,23 @@ Beispiel:
 \end{verbatim}
 
 Wird \osueprog{chstat} mit der Option \osuearg{-v} aufgerufen, gibt es nach
-jeder gelesenen Zeile die aktualisierte Statistik aus, ohne \osuearg{-v}
-wird nur die endg"ultige Statistik "uber alle Zeilen ausgegeben.
+jeder gelesenen Zeile die aktualisierte Statistik aus, ohne \osuearg{-v} wird
+nur die endgültige Statistik über alle Zeilen ausgegeben.
 
-\osueprog{chstat} soll die n"achste Zeile erst dann lesen, wenn \osueprog{readin}
-sie vollst"andig ins Shared Memory geschrieben hat und \osueprog{readin} soll
-erst dann die n"achste Zeile ins Shared Memory schreiben,
-wenn die vorherige schon von \osueprog{chstat} gelesen wurde.
+\osueprog{chstat} soll die nächste Zeile erst dann lesen, wenn \osueprog{readin}
+sie vollständig ins Shared Memory geschrieben hat und \osueprog{readin} soll
+erst dann die nächste Zeile ins Shared Memory schreiben, wenn die vorherige
+schon von \osueprog{chstat} gelesen wurde.
 
-Durch die Eingabe von \osueconst{EOF} (also durch Dr"ucken von \osuekeystroke{Ctrl-D})
-wird das Ende des Textes angezeigt und beide Programme terminieren.
-
-
+Durch die Eingabe von \osueconst{EOF} (also durch Drücken von
+\osuekeystroke{Ctrl+D}) wird das Ende des Textes angezeigt und beide Programme
+terminieren.
 
 \subsection*{Testen}
 
 Die Option \osuearg{-v} von \osueprog{chstat} eignet sich gut zum interaktiven
 Testen, da die Auswirkungen einer neuen Zeile auf die Statistik sofort
-sichtbar sind, das Testen ohne \osuearg{-v} ist f"ur die Umleitung von
+sichtbar sind; das Testen ohne \osuearg{-v} ist für die Umleitung von
 \osueglvar{stdin} auf ein Testfile vielleicht sinnvoller:
 \begin{verbatim}
   readin < mytestfile

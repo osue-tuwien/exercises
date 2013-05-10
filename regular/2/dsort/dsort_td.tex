@@ -7,9 +7,8 @@
 
 \section*{Aufgabenstellung}
 
-
 \begin{verbatim}
-SYNOPSIS:
+    SYNOPSIS:
         dsort "command1" "command2"
 \end{verbatim}
 
@@ -32,9 +31,9 @@ command2}:
 Das Programm soll für die beiden Kommandos jeweils mittels Pipes die
 Ausgabe der Kindprozesse zeilenweise einlesen und in ein Array
 speichern. Die Kindprozesse werden mit \osuefunc{fork(2)} erzeugt und
-sollen die Bourne-Shell mit dem Parameter -c ausführen (also
+sollen die Bourne-Shell mit dem Parameter \osuearg{-c} ausführen (also
 \osuecmd{/bin/sh -c}). Dadurch ist es möglich dem Programm mittels
-Anführungszeichen ein Shellkommando zu übergeben – die Shell kümmert
+Anführungszeichen ein Shellkommando zu übergeben -- die Shell kümmert
 sich um alles Weitere.
 
 Das vom Programm erzeugte Array mit den Ausgaben der Kommandos soll
@@ -46,8 +45,9 @@ Pipe geschrieben wird.
 
 Der \osuecmd{uniq}-Prozess sucht im \osuearg{-d}-Modus alle mehrmals
 nacheinander vorkommenden Zeilen heraus und gibt sie auf die
-Standardausgabe aus. \osuecmd{uniq} ist ein UNIX-Standardprogramm und
-muss von Ihnen nicht programmiert werden.
+Standardausgabe aus. \osuecmd{uniq} ist ein
+\textsc{Unix}-Standardprogramm und muss von Ihnen nicht programmiert
+werden.
 
 Beispiel:
 \begin{verbatim}
@@ -55,8 +55,8 @@ Beispiel:
 \end{verbatim}
 
 Dieser Befehl würde die beiden Dateien /etc/passwd und /etc/passwd.tmp
-vergleichen und alle Zeilen die in beiden Dateien (oder in einer Datei
-mehrmals) vorhanden sind auf die Standardausgabe ausgeben.
+vergleichen und alle Zeilen, die in beiden Dateien (oder in einer Datei
+mehrmals) vorhanden sind, auf die Standardausgabe ausgeben.
 
 Beispiel:
 \begin{verbatim}
@@ -68,7 +68,7 @@ Dieser Befehl gibt alle gemeinsamen Teiler von 3 und 11, die zwischen
 
 \subsection*{Hinweise}
 
-Beachten Sie insbesondere folgende Punkte:
+Beachten Sie insbesonders folgende Punkte:
 
 \begin{itemize}
 \item Sie müssen sowohl das Array als auch die Strings des Arrays
@@ -84,8 +84,7 @@ als 1023 echte Zeichen ist.
 \item Achten Sie darauf, dass der Elternprozess sich erst beendet,
 nachdem alle Kindprozesse terminiert haben.
 \item Gewisse Nicht-ANSI-Funktionen (wie etwa \osuefunc{strdup(3)}) werden
-erst sichtbar, wenn mit\\
-\verb,-D_XOPEN_SOURCE=500, kompiliert wird.
+erst sichtbar, wenn mit\\\osuearg{-D\_XOPEN\_SOURCE=500} kompiliert wird.
 \item Achten Sie unbedingt darauf, dass alle Ressourcen auch wieder
 freigegeben werden (besonders im Fehlerfall)!
 \end{itemize}

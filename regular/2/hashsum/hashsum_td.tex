@@ -17,45 +17,44 @@ Dateityp ausgibt. Dafür sollen die Standardtools \osueprog{ls} (mit Parameter
 diese als Kindprozesse per \osuefunc{fork()}/\osuefunc{exec()} aufgerufen
 werden.
 
-
 \begin{verbatim}
-SYNOPSIS:
-	hashes [-i ignorepraefix] <directory>
+    SYNOPSIS:
+        hashes [-i ignorepraefix] <directory>
 \end{verbatim}
 
-Mit dem Parameter \verb_-i_ (“ignore”) werden Dateien, die mit dem
+Mit dem Parameter \osuearg{-i} (``ignore'') werden Dateien, die mit dem
 darauffolgenden Muster (nicht case-sensitive!) beginnen, ausgenommen;
-so führt ein Aufruf \verb_hashes -i . ~_ dazu, dass alle versteckten
+so führt ein Aufruf \osuecmd{hashes -i . \~} dazu, dass alle versteckten
 Dateien im Home-Verzeichnis nicht behandelt werden.
-
 
 \subsection*{Anleitung}
 Nachdem mit dem Kindprozess \osueprog{ls} der gesamte Inhalt des angegebenen
 Verzeichnisses ermittelt und an den Vaterprozess zurückgeben wird, erzeugt man
-in einer Schleife jeweils für jede der von \osueprog{ls} empfangenen Dateinamen
-einen Kindprozess der \osueprog{md5sum} mit diesem Namen als Argument ausführt,
+in einer Schleife für jede der von \osueprog{ls} empfangenen Dateinamen jeweils
+einen Kindprozess, der \osueprog{md5sum} mit diesem Namen als Argument ausführt,
 gleiches danach für \osueprog{file}. Weiters werden die gewonnenen Informationen
 jeweils in einer Zeile (Format: \osueoutform{Dateiname md5summe dateityp})
 ausgegeben. Beachten Sie, dass es sich nicht bei allen von \osueprog{ls}
-gelisteten Einträgen um Dateien handelt (z.B.\ \osuefilename{.} und \osuefilename{..}); in dem Fall liefert dann
-\osueprog{md5sum} einen nicht-erfolgreichen Return-Code zurück (welcher
-mittels \osuefunc{wait()}\osuefunc{waitpid()} ermittelt werden kann) und der Eintrag soll in
-diesem Fall ignoriert werden.
+gelisteten Einträgen um Dateien handelt (z.B.\ \osuefilename{.} und
+\osuefilename{..}); in dem Fall liefert dann \osueprog{md5sum} einen
+nicht-erfolgreichen Return-Code zurück (welcher mittels
+\osuefunc{wait()}\osuefunc{waitpid()} ermittelt werden kann) und der Eintrag
+soll in diesem Fall ignoriert werden.
 
 \subsection*{Beispielaufruf}
-\begin{verbatim}
-[~]$ mkdir hashtests
-[~]$ cd hashtests
-[hashtests]$ touch emptyfile
-[hashtests]$ echo "das ist das haus vom nikolaus" > textfile
-[hashtests]$ echo "compressme" | gzip -cf > compressed.gz
-[hashtests]$ cd ..
-[~]$ ./hashsum ./hashtests
-compressed.gz: 35a0ec3087535c23863a774497881ada gzip compressed data, from Unix, [...]
-emptyfile: d41d8cd98f00b204e9800998ecf8427e empty
-textfile: 536b30bbea5ee48aca04807038e25875 ASCII text
-[~]$
-\end{verbatim}
+
+\begin{osuefmtcode}
+~ $ \osueinput{mkdir hashtests}
+~/hashtests $ \osueinput{cd hashtests}
+~/hashtests $ \osueinput{touch emptyfile}
+~/hashtests $ \osueinput{echo "das ist das haus vom nikolaus" > textfile}
+~/hashtests $ \osueinput{echo "compressme" \textup{|} gzip -cf > compressed.gz}
+~ $ \osueinput{cd ..}
+~ $ \osueinput{./hashsum ./hashtests}
+compressed.gz 35a0ec3087535c23863a774497881ada gzip compressed data, from Unix, [...]
+emptyfile d41d8cd98f00b204e9800998ecf8427e empty
+textfile 536b30bbea5ee48aca04807038e25875 ASCII text
+\end{osuefmtcode}
 
 \osueguidelinestwo
 

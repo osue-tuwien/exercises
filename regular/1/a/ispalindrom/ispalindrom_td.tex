@@ -16,9 +16,9 @@ eingegebene Strings auf Palindromeigenschaften überprüft.
 
 Das Programm \osueprog{ispalindrom} soll zeilenweise Strings mit einer
 Länge von bis zu 40 echten Zeichen von der Standardeingabe lesen;
-prüfen, ob ein Palindrom vorliegt, d.h. der Text rückwärts gelesen
-mit sich selbst ident ist; und den Text gefolgt von "`ist ein
-Palindrom"' bzw. "`ist kein Palindrom"' auf die Standardausgabe
+prüfen, ob ein Palindrom vorliegt, d.h.\ ob der Text rückwärts gelesen
+mit sich selbst ident ist; und den Text gefolgt von \osueoutput{ist ein
+Palindrom} bzw. \osueoutput{ist kein Palindrom} auf die Standardausgabe
 ausgeben. Die Option \osuearg{-s} soll bewirken, dass Leerzeichen
 ignoriert werden; die Option \osuearg{-i} soll bewirken, dass nicht
 zwischen Groß- und Kleinschreibung unterschieden wird.
@@ -27,20 +27,21 @@ zwischen Groß- und Kleinschreibung unterschieden wird.
 
 Testen Sie Ihr Programm mit verschiedenen Eingaben, wie z.B.:
 
-\begin{verbatim}
-      % ispalindrom
-      Reliefpfeiler
+\begin{osuefmtcode}
+      $ \osueinput{./ispalindrom}
+      \osueinput{Reliefpfeiler}
       Reliefpfeiler ist kein Palindrom
-      reliefpfeiler
+      \osueinput{reliefpfeiler}
       reliefpfeiler ist ein Palindrom
-      % ispalindrom -i -s
-      Reliefpfeiler
+
+      $ \osueinput{./ispalindrom -i -s}
+      \osueinput{Reliefpfeiler}
       Reliefpfeiler ist ein Palindrom
-      O Genie der Herr ehre Dein Ego
+      \osueinput{O Genie der Herr ehre Dein Ego}
       O Genie der Herr ehre Dein Ego ist ein Palindrom
-      xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      \osueinput{aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa}
       ispalindrom: Eingabe zu lang, max 40 Zeichen!
-\end{verbatim}
+\end{osuefmtcode}
 
 \osueguidelinesone
 

@@ -6,7 +6,8 @@
 
 \section*{Aufgabenstellung}
 
-Schreiben sie eine Store-Tool Anwendung. Diese Anwendung besteht aus zwei Prozessen.
+Schreiben sie eine Store-Tool-Anwendung. Diese Anwendung besteht aus zwei
+Prozessen.
 
 \begin{verbatim}
     SYNOPSIS
@@ -14,33 +15,60 @@ Schreiben sie eine Store-Tool Anwendung. Diese Anwendung besteht aus zwei Prozes
         storetool  <-s key data | -g key | -r key | -q>
 \end{verbatim}
 
-Die beiden Prozesse kommunizieren über ein {\em Shared-Memory}. Das Store-Tool schickt Kommandos an den Server. Danach wartet es bis der Server das Kommando abgearbeitet hat, überprüft das Ergebnis und terminiert.
-Gespeichert wird ein String, den sie auf 64 Zeichen inklusive terminierendes '$\backslash$0' (Konstante definieren!) begrenzen können. Dieser String wird mit einem Schlüssel (\osuearg{key}) assoziiert und soll ein positiver, ganzzahliger Wert sein.
+Die beiden Prozesse kommunizieren über ein Shared Memory. Das Store-Tool
+schickt Kommandos an den Server. Danach wartet es, bis der Server das Kommando
+abgearbeitet hat, überprüft das Ergebnis und terminiert.
+Gespeichert wird ein String, den sie auf 64 Zeichen inklusive terminierendem
+\verb_'\0'_ (Konstante definieren!) begrenzen können. Dieser String wird mit
+einem Schlüssel (\osuearg{key}) assoziiert und soll ein positiver, ganzzahliger
+Wert sein.
 
 \subsection*{Kommandos}
 \begin{center}
-\begin{tabular}{llp{10cm}}
-\hline
-store & \osuearg{-s key data} & Der Server soll die Daten \osuearg{'data'} assoziiert mit \osuearg{key} speichern. Existiert \osuearg{key} bereits dann meldet der Server einen Fehler der vom Store-Tool abfangen soll. 
+\begin{tabular}{@{}llp{10cm}@{}}
+\toprule
+store  & \osuearg{-s key data} & Der Server soll die Daten (\osuearg{data})
+                                 assoziiert mit \osuearg{key} speichern.
+                                 Existiert \osuearg{key} bereits, meldet der
+                                 Server einen Fehler, der vom Store-Tool
+                                 abgefangen werden soll.
 
-Verwenden sie zum Speichern eine einfach verkettete Liste. \\ 
-\hline
-get & \osuearg{-g key} & Das Store-Tool fordert vom Server die mit \osuearg{key} assoziierten Daten an. Wenn keine Daten gespeichert sind soll der Server einen Fehler an das Store-Tool melden. Tritt kein Fehler auf, dann soll das Store-Tool die Daten auf \osueglvar{stdout} ausgeben. \\
-\hline
-remove & \osuearg{-r key} & Der Server soll einen Wert aus der Liste löschen. Existiert \osuearg{key} nicht, dann soll das Store-Tool einen Fehler ausgeben \\
-\hline
-quit & \osuearg{-q} & Erhält der Server dieses Kommando, dann soll er sich beenden. \\
-\hline
+                                 Verwenden Sie zum Speichern eine einfach
+                                 verkettete Liste. \\
+\midrule
+get    & \osuearg{-g key}      & Das Store-Tool fordert vom Server die mit
+                                 \osuearg{key} assoziierten Daten an. Wenn keine
+                                 Daten gespeichert sind, soll der Server einen
+                                 Fehler an das Store-Tool melden. Tritt kein
+                                 Fehler auf, soll das Store-Tool die Daten auf
+                                 \osueglvar{stdout} ausgeben. \\
+\midrule
+remove & \osuearg{-r key}      & Der Server soll einen Wert aus der Liste
+                                 löschen. Existiert \osuearg{key} nicht, soll
+                                 das Store-Tool einen Fehler ausgeben. \\
+\midrule
+quit   & \osuearg{-q}          & Erhält der Server dieses Kommando, soll er sich
+                                 beenden. \\
+\bottomrule
 \end{tabular}
 \end{center}
- 
-\subsection*{Hinweis}
-Nicht kritische Fehlermeldungen (jene die sich auf die Liste beziehen) sollen vom Store-Tool auf \osueglvar{stderr} ausgegeben werden. Es ist darauf zu achten, daß mehrere Store-Tools gleichzeitig gestartet werden können. Das Zweite muss in diesem Fall so lange warten bis das Erste das Ergebnis vom Server gelesen hat.
 
-Bei dem Kommando \emph{quit} dürfen schon wartende Store-Tools mit einem Fehler terminieren. Nicht aber der Server und jenes Store-Tool das das Kommando sendet.
+\subsection*{Hinweis}
+
+Nicht-kritische Fehlermeldungen (jene, die sich auf die Liste beziehen) sollen
+vom Store-Tool auf \osueglvar{stderr} ausgegeben werden. Es ist darauf zu
+achten, dass mehrere Store-Tools gleichzeitig gestartet werden können. Das
+zweite muss in diesem Fall so lange warten, bis das erste das Ergebnis vom
+Server gelesen hat.
+
+Bei dem Kommando \osueinput{quit} dürfen schon wartende Store-Tools mit einem
+Fehler terminieren, nicht aber der Server und jenes Store-Tool, das das Kommando
+sendet.
 
 \subsection*{Anleitung}
-Schreiben sie zwei Programme, die die Prozesse mittels einer Client/Server-Struktur realisieren. Achten sie auf eine saubere Terminierung.
+
+Schreiben Sie zwei Programme, die die Prozesse mittels einer
+Client/Server-Struktur realisieren. Achten Sie auf eine saubere Terminierung.
 
 \osueguidelinesthree
 

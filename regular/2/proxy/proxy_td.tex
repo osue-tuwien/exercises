@@ -11,43 +11,41 @@
 \section*{Aufgabenstellung}
 
 Implementieren Sie ein Programm, welches ein auf der Kommandozeile angegebenes
-Programm in einem Kindprozess ausführt und je nach angegebenen Optionen 
-\osueglvar{stdin}, \osueglvar{stdout} und \osueglvar{stderr} in files umlenkt.
+Programm in einem Kindprozess ausführt und je nach angegebenen Optionen
+\osueglvar{stdin}, \osueglvar{stdout} und \osueglvar{stderr} in Dateien umlenkt.
 
 \begin{verbatim}
     SYNOPSIS:
-       proxy [-i infile] [-o outfile] [-e errfile] <cmd> [options]
+        proxy [-i infile] [-o outfile] [-e errfile] <cmd> [options]
 \end{verbatim}
 
-Wird ein Ziel nicht angegeben (eine oder mehrere der Optionen \verb_-i_,
-\verb_-o_ oder \verb_-e_ fehlt) oder wurde \verb_-_ als Filename angegeben, soll
-der entsprechende Ein-/Ausgabekanal unverändert bleiben. Der Rückgabewert des
-\verb_proxy_-Programms soll dem Rückgabewert des ausgeführten Programms
-entsprechen.
+Wird ein Ziel nicht angegeben (eine oder mehrere der Optionen \osuearg{-i},
+\osuearg{-o} oder \osuearg{-e} fehlt) oder wurde \osuearg{-} als Dateiname
+angegeben, soll der entsprechende Ein-/Ausgabekanal unverändert bleiben. Der
+Rückgabewert des \osueprog{proxy}-Programms soll dem Rückgabewert des
+ausgeführten Programms entsprechen.
 
 \subsection*{Anleitung}
 
 Verwenden Sie \osuefunc{getopt(3)} zur Argumentbehandlung. Benötigt das
 auszuführende Programm eine oder mehrere Optionen, können Sie durch Voranstellen
-von \verb|--| eine Fehlermeldung von \osuefunc{getopt} vermeiden – das Parsen der
-Parameter endet dann an dieser Stelle.\\
-(Beispiel: \verb|./proxy -o outfile -- ls -o *|)
+von \osuearg{--} eine Fehlermeldung von \osuefunc{getopt} vermeiden -- das
+Parsen der Parameter endet dann an dieser Stelle.\\
+(Beispiel: \osuecmd{./proxy -o outfile -- ls -o *})
 
 Erzeugen Sie anschließend mit \osuefunc{fork(2)} einen Kindprozess. Lenken Sie
-mittels \osuefunc{dup(2)} oder \osuefunc{dup2(2)} die entsprechenden Filedeskriptoren um
-(vergessen Sie nicht, den ursprünglichen Deskriptor gegebenenfalls vorher zu
-schließen) und führen Sie zuletzt das Programm samt Optionen mithilfe von
-\osuefunc{execvp(2)} aus. Vergessen Sie im Vaterprozess nicht, den Exitstatus des
-Kindprozesses abzuholen (und so die Entstehung eines Zombieprozesses zu
-vermeiden).
+mittels \osuefunc{dup2(2)} die entsprechenden Filedeskriptoren um und führen Sie
+zuletzt das Programm samt Optionen mit Hilfe von \osuefunc{execvp(2)} aus.
+Vergessen Sie im Vaterprozess nicht, den Exit-Status des Kindprozesses abzuholen
+(und so die Entstehung eines Zombieprozesses zu vermeiden).
 
 \subsection*{Testen}
 
-Verwenden Sie \verb_proxy_, um mehrere Programme auszuführen:
+Verwenden Sie \osuecmd{proxy}, um mehrere Programme auszuführen:
 
 \begin{verbatim}
 	./proxy cat
-	
+
 	./proxy -i Makefile -o Makefile.cat cat
 
 	./proxy -i - -o - -- grep -ni
