@@ -29,7 +29,7 @@ so führt ein Aufruf \verb_hashes -i . ~_ dazu, dass alle versteckten
 Dateien im Home-Verzeichnis nicht behandelt werden.
 
 
-\section*{Anleitung}
+\subsection*{Anleitung}
 Nachdem mit dem Kindprozess \texttt{ls} der gesamte Inhalt des angegebenen
 Verzeichnisses ermittelt und an den Vaterprozess zurückgeben wird, erzeugt man
 in einer Schleife jeweils für jede der von \texttt{ls} empfangenen Dateinamen
@@ -42,7 +42,7 @@ gelisteten Einträgen um Dateien handelt (z.B.\ \texttt{.} und \texttt{..}); in 
 mittels \texttt{wait()/waitpid()} ermittelt werden kann) und der Eintrag soll in
 diesem Fall ignoriert werden.
 
-\section*{Beispielaufruf}
+\subsection*{Beispielaufruf}
 \begin{verbatim}
 [~]$ mkdir hashtests
 [~]$ cd hashtests
