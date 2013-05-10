@@ -32,7 +32,7 @@ neues. Es kann also durchaus weniger als \emph{numpackets} Integrier-Prozesse
 geben. Wenn das letzte Teilergebnis eingesammelt wurde, gibt der Server das
 Ergebnis auf \emph{stdout} aus.
 
-\section*{Beispiel}
+\subsection*{Beispiel}
 
 $n\_per\_packet = 10, numpackets = 3$
 
@@ -45,7 +45,7 @@ berechnet wird.
 \includegraphics[height=6cm]{integfigure.pdf}
 \end{center}
 
-\section*{Hinweis}
+\subsection*{Hinweis}
 Die Kommunikation zwischen dem Server-Prozess und den Integrier-Prozessen soll
 über einen Shared-Memory-Bereich stattfinden. Die Anzahl der Clients ist nicht
 beschränkt; sie können zu beliebigen Zeitpunkten gestartet werden und
@@ -53,7 +53,7 @@ terminieren jeweils wenn kein neues Paket verfügbar ist. Das Integrieren soll
 beginnen, sobald der erste Integrier-Prozess verfügbar ist. Überlegen Sie sich
 ein geeignetes Synchronisations-Schema für diese Aufgabe.
 
-\section*{Anleitung}
+\subsection*{Anleitung}
 Schreiben Sie zwei Programme, die die Prozesse mittels einer
 Client/Server-Struktur realisieren. Achten Sie auf saubere Terminierung.
 
