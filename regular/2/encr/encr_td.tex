@@ -27,7 +27,7 @@ eine längere (pseudozufällige) Verarbeitungsdauer simulieren, um das
 nichtblockierende Einlesen des Vaterprozesses zu demonstrieren, und
 schließlich das verschlüsselte Passwort auf \emph{stdout} ausgeben.
 
-\section*{Anleitung}
+\subsection*{Anleitung}
 
 Lesen Sie in einer Schleife zeilenweise Strings von \emph{stdin} ein
 und entfernen Sie das abschließende Newline (\verb+\n+). Erzeugen Sie
@@ -43,7 +43,7 @@ Achten Sie darauf, dass {\em fgets(3)} den Fehlercode {\em EINTR}
 liefert, wenn es durch ein Signal unterbrochen wird. In diesem Fall
 muss {\em fgets(3)} erneut aufgerufen werden.
 
-\section*{Testen}
+\subsection*{Testen}
 
 Testen Sie ihr Programm z.B.\ wie folgt
 \begin{verbatim}
