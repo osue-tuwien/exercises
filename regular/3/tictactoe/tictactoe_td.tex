@@ -22,7 +22,7 @@ bereits belegten Felder verbieten; um die Gewinnchancen etwas zu erhöhen bietet
 er auch die Möglichkeit, gleich zwei Symbole auf einmal zu platzieren (wovon
 aber beide Plätze wieder frei sein müssen). Der Server sollte diesen Betrug
 natürlich feststellen und dies unmittelbar als verloren für den Client werten!
-Die Cheat-Erkennung kann auf Wunsch auch mit der Option \texttt{c} deaktiviert
+Die Cheat-Erkennung kann auf Wunsch auch mit der Option \osuearg{-c} deaktiviert
 werden:
 
 \begin{verbatim}
@@ -43,7 +43,7 @@ Die Aufgaben des Servers nochmal zusammengefasst:
 \item auf Sieg/Verlust/Unentschieden prüfen und dies im Falle dem Client mitteilen
 \end{itemize}
 Der Server läuft in einer Endlosschleife und läßt sich lediglich per
-Ctrl+C (\textit{SIGINT}) beenden. Achten Sie darauf dass in diesem Fall
+\osuekeystroke{Ctrl+C} (\osueconst{SIGINT}) beenden. Achten Sie darauf dass in diesem Fall
 alle angelegten Ressourcen ordnungsgemäß wieder freigegeben werden!
 
 \subsubsection*{Client-Prozess}
@@ -57,17 +57,17 @@ weitere Hilfe zur Steuerung angefordert werden kann.
 
 Dem Spieler stehen folgende Befehle zur Verfügung:
 \begin{itemize}
-	\item \texttt{s} - Spielfeld anzeigen (dies wird nach jedem Zug automatisch gemacht)
-	\item \texttt{p <xy>} - Symbol platzieren auf Position xy ($ x,y \in \{1,2,3\} $ - wobei (1,1) die Ecke links oben bezeichnet)
-	\item \texttt{c <xy> <xy>} - zwei Symbole platzieren (Cheat-Modus)
-	\item \texttt{n} - Neues Spiel starten
-	\item \texttt{q} - Spiel/Client beenden (aktueller Spielstand bleibt weiterhin bestehen, der Client kann nach erneutem Aufruf das alte Spiel fortsetzen)
+	\item \osuecmd{s} - Spielfeld anzeigen (dies wird nach jedem Zug automatisch gemacht)
+	\item \osuecmd{p <xy>} - Symbol platzieren auf Position xy ($ x,y \in \{1,2,3\} $ - wobei (1,1) die Ecke links oben bezeichnet)
+	\item \osuecmd{c <xy> <xy>} - zwei Symbole platzieren (Cheat-Modus)
+	\item \osuecmd{n} - Neues Spiel starten
+	\item \osuecmd{q} - Spiel/Client beenden (aktueller Spielstand bleibt weiterhin bestehen, der Client kann nach erneutem Aufruf das alte Spiel fortsetzen)
 \end{itemize}
 Falls ein nicht existierender Befehl eingegeben wurde, sollte eine entsprechende
 Fehlermeldung ausgegeben werden und zusätzlich nochmal die Liste aller möglichen
 Kommandos angezeigt werden. Falls der Befehl existiert, aber falsch verwendet wurde
-(z.B. \texttt{p 45} oder \texttt{c 13}), sollte der Benutzer auch auf den Fehler
-aufmerksam gemacht werden (z.B. \textit{"Error: field coordinates out of bounds!"}).
+(z.B. \osuecmd{p 45} oder \osuecmd{c 13}), sollte der Benutzer auch auf den Fehler
+aufmerksam gemacht werden (z.B. \osueoutput{"Error: field coordinates out of bounds!"}).
 
 Beim Empfang eines besonderen Ereignisses vom Server (Gewinn, Verlust, Verlust wegen
 Cheaten etc.) soll eine entsprechende Nachricht ausgegeben werden und nach einem

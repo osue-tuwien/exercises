@@ -5,7 +5,6 @@
 \osuetitle{3}
 
 \section*{Aufgabenstellung}
-\textbf{4 Gewinnt}
 
 Wieder einmal wissen Sie nichts mit Ihrer Zeit anzufangen, wollen aber auch nicht aus purer Langeweile eine Partie ''4 Gewinnt'' gegen sich selbst verlieren. So implementieren Sie es, kurz entschlossen, einfach in C; und zwar so, dass auch Sie eine Chance haben zu gewinnen.
 
@@ -18,7 +17,7 @@ Schreiben Sie 2 Programme(\emph{Server/Client}), die miteinander, "uber ein \emp
 \end{itemize}
 Wird ein Sieg, Unentschieden oder Schummeln erkannt, gibt das der \emph{Server} dem \emph{Client} bekannt, der \emph{Client} zeigt bei einem Sieg oder Unentschieden nochmals das Spielbrett an und startet das Spiel dann, nach Bet"atigung der Entertaste, neu. Beim Schummeln soll das Spiel gleich neu gestartet werden, ohne dass das Spielfeld nochmals angezeigt wird.
 
-Der \emph{Client} soll das Spielfeld anzeigen und "uber \emph{STDIN} in einer Endlosschleife Kommandos entgegen nehmen. Nach jedem Kommando, das sich auf das Spielfeld auswirkt, soll das Spielfeld erneut angezeigt werden. Arbeiten Sie mit \emph{system(3)} und dem Shell-Befehl \emph{clear}, um den Bildschirm zu l"oschen.
+Der \emph{Client} soll das Spielfeld anzeigen und "uber \osueglvar{stdin} in einer Endlosschleife Kommandos entgegen nehmen. Nach jedem Kommando, das sich auf das Spielfeld auswirkt, soll das Spielfeld erneut angezeigt werden. Arbeiten Sie mit \osuefunc{system(3)} und dem Shell-Befehl \osueprog{clear}, um den Bildschirm zu l"oschen.
 \begin{verbatim}
 Kommandos:
 

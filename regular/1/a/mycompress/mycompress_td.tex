@@ -5,11 +5,11 @@
 \osuetitle{1}
 
 \section*{Aufgabenstellung A}
-       Schreiben Sie ein C-Programm \emph{mycompress},
+      Schreiben Sie ein C-Programm \osueprog{mycompress},
       das die als Argumente übergebenen Dateien mittels
       eines einfachen Algorithmus komprimiert.
       Wird kein Argument angegeben, so ist von
-      \emph{stdin} zu lesen.
+      \osueglvar{stdin} zu lesen.
 \begin{verbatim}
 	 SYNOPSIS
         mycompress [file1] [file2] ...
@@ -18,9 +18,9 @@
 \subsection*{Anleitung}
       Das Programm soll den Inhalt des übergebenen Files
       auslesen, komprimieren und nach der Komprimierung in ein
-      File mit dem Namen \emph{[ursprüngliches File].comp}
+      File mit dem Namen \osuefilename{[ursprüngliches File].comp}
       ausgeben. Wird kein File übergeben, so ist von stdin zu
-      lesen und in das File \emph{Stdin.comp} auszugeben. Die
+      lesen und in das File \osuefilename{Stdin.comp} auszugeben. Die
       Komprimierung soll so erfolgen, dass die Zeichen durch
       \verb|Zeichen + Anzahl| ersetzt werden - z.B.: \verb|aaa| durch \verb|a3|
       und \verb|b| durch \verb|b1|. 
@@ -40,7 +40,7 @@
       
 \subsection*{Testen}
       Testen Sie Ihr Programm mit verschiedenen Textfiles, z.B
-      soll eine Testdatei \emph{Test.txt} mit folgenden Inhalt:
+      soll eine Testdatei \osuefilename{Test.txt} mit folgenden Inhalt:
 \subsubsection*{File: Test.txt}
 \begin{verbatim}
       aaabbbbbc

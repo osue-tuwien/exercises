@@ -16,36 +16,36 @@ SYNOPSIS:
      caesar <key>
 \end{verbatim} 
 
-Implementieren Sie zwei Programme {\tt readin} und {\tt caesar}, die
+Implementieren Sie zwei Programme \osueprog{readin} und \osueprog{caesar}, die
 einen einfachen (und leicht zu knackenden!)
 Verschl"usselungsalgorithmus anwenden.
 
-Das Programm {\tt readin} liest zeilenweise aus einem als Argument
+Das Programm \osueprog{readin} liest zeilenweise aus einem als Argument
 "ubergebenen Textfile, und schreibt jede Zeile nacheinander auf
 folgende Weise modifiziert in ein Shared Memory:
 \begin{itemize}
-\item Alle Gro"sbuchstaben (alle Zeichen in {\tt [A-Z]}) werden
+\item Alle Gro"sbuchstaben (alle Zeichen in \osueregex{[A-Z]}) werden
 unver"andert beibehalten.
-\item Alle Kleinbuchstaben (alle Zeichen in {\tt [a-z]}) werden in
+\item Alle Kleinbuchstaben (alle Zeichen in \osueregex{[a-z]}) werden in
 Gro"sbuchstaben konvertiert.
 \item Alle anderen Zeichen fallen weg.
 \end{itemize}
-Das Programm {\tt caesar} erwartet als Argument eine Zahl zwischen 1
+Das Programm \osueprog{caesar} erwartet als Argument eine Zahl zwischen 1
 und 25. Es liest jede Zeile aus dem Shared Memory und ersetzt jeden
-Buchstaben durch den im Alphabet um {\tt key} weiter rechts stehenden
+Buchstaben durch den im Alphabet um \osuearg{key} weiter rechts stehenden
 Buchstaben (wobei sich rechts neben dem Z wieder das A befinden
-soll). Bei einem {\tt key} von 3 wird also z.B. A zu D, B zu E, C zu
+soll). Bei einem \osuearg{key} von 3 wird also z.B. A zu D, B zu E, C zu
 F, W zu Z, X zu A und Y zu B. Die so verschl"usselte Zeile wird dann
-auf {\tt stdout} ausgegeben, und die n"achste Zeile wird gelesen.
+auf \osueglvar{stdout} ausgegeben, und die n"achste Zeile wird gelesen.
 
-{\tt caesar} soll die n"achste Zeile erst dann lesen, wenn {\tt
-readin} sie vollst"andig ins Shared Memory geschrieben hat und {\tt
-readin} soll erst dann die n"achste Zeile ins Shared Memory schreiben,
-wenn die vorherige schon von {\tt caesar} gelesen wurde.
+\osueprog{caesar} soll die n"achste Zeile erst dann lesen, wenn
+\osueprog{readin} sie vollst"andig ins Shared Memory geschrieben hat und
+\osueprog{readin} soll erst dann die n"achste Zeile ins Shared Memory schreiben,
+wenn die vorherige schon von \osueprog{caesar} gelesen wurde.
 
-Sobald {\tt readin} die letzte Zeile des Eingabefiles verarbeitet hat,
+Sobald \osueprog{readin} die letzte Zeile des Eingabefiles verarbeitet hat,
 schreibt es einen frei w"ahlbaren String in das Shared Memory, der
-{\tt caesar} anzeigt, dass alle Arbeit getan ist. Darauf sollen beide
+\osueprog{caesar} anzeigt, dass alle Arbeit getan ist. Darauf sollen beide
 Programme terminieren.
 
 
@@ -63,7 +63,7 @@ m"ussen also nicht behandelt werden.
 
 \subsection*{Testen}
 Testen Sie Ihr Programm mit mehreren Eingabefiles. 
-Erstellen Sie z.B. ein Testfile \emph{t1} mit folgendem Inhalt: 
+Erstellen Sie z.B. ein Testfile \osuefilename{t1} mit folgendem Inhalt: 
 \begin{verbatim}
 Ich habe das dritte Sysprog-Beispiel,
 das gar nicht schwer war,
@@ -75,7 +75,7 @@ Implementierung):
   readin t1 &
   caesar 15 > t2
 \end{verbatim}
-Dann haben Sie in \emph{t2} die verschl"usselte Version von \emph{t1}.
+Dann haben Sie in \osuefilename{t2} die verschl"usselte Version von \osuefilename{t1}.
 
 Mit
 \begin{verbatim}

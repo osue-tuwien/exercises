@@ -20,17 +20,17 @@ $$\int^{\mathtt{max}}_{\mathtt{min}} \frac{x^2}{4}$$
 \end{verbatim}
 
 Es gibt einen Server-Prozess und beliebig viele Integrier-Prozesse. Der Server
-teilt den zu integrierenden Bereich in \emph{numpacket} Pakete auf. Die
+teilt den zu integrierenden Bereich in \osuearg{numpackets} Pakete auf. Die
 Integrier-Prozesse übernehmen jeweils einzelne Pakete, integrieren diese, und
 geben das Teilergebnis an den Server zurück. Jeder Integrier-Prozess teilt sein
-Paket wiederum in \emph{n\_per\_packet} Teile auf und verwendet zum Integrieren
+Paket wiederum in \osuearg{n\_per\_packet} Teile auf und verwendet zum Integrieren
 ein einfaches Riemannsummen-Integral:
 $$\int^b_a f(x) = \frac{b-a}n \cdot \sum_{i=1}^{n} f\left(a + i\cdot \frac{b-a}{n}\right)$$
 
 Ist ein Integrier-Prozess mit einem Paket fertig, holt er sich vom Server ein
-neues. Es kann also durchaus weniger als \emph{numpackets} Integrier-Prozesse
+neues. Es kann also durchaus weniger als \osuearg{numpackets} Integrier-Prozesse
 geben. Wenn das letzte Teilergebnis eingesammelt wurde, gibt der Server das
-Ergebnis auf \emph{stdout} aus.
+Ergebnis auf \osueconst{stdout} aus.
 
 \subsection*{Beispiel}
 

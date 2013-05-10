@@ -11,7 +11,7 @@
 \section*{Aufgabenstellung}
 
 Implementieren Sie ein Programm, welches kontinuierlich Strings
-(Passwörter) von \emph{stdin} einliest und diese von einem Kindprozess
+(Passwörter) von \osueglvar{stdin} einliest und diese von einem Kindprozess
 verschlüsseln lässt.
 
 \begin{verbatim}
@@ -21,27 +21,27 @@ SYNOPSIS:
 
 Jedes Mal, wenn der Vaterprozess eine Zeile eingelesen hat, wird ein
 eigener Kindprozess erzeugt, der das Passwort (exklusive des
-abschließenden Newline-Zeichens) mittels \emph{crypt(3)}
-verschlüsselt. Danach soll der Kindprozess mittels \emph{sleep(3)}
+abschließenden Newline-Zeichens) mittels \osuefunc{crypt(3)}
+verschlüsselt. Danach soll der Kindprozess mittels \osuefunc{sleep(3)}
 eine längere (pseudozufällige) Verarbeitungsdauer simulieren, um das
 nichtblockierende Einlesen des Vaterprozesses zu demonstrieren, und
-schließlich das verschlüsselte Passwort auf \emph{stdout} ausgeben.
+schließlich das verschlüsselte Passwort auf \osueglvar{stdout} ausgeben.
 
 \subsection*{Anleitung}
 
-Lesen Sie in einer Schleife zeilenweise Strings von \emph{stdin} ein
+Lesen Sie in einer Schleife zeilenweise Strings von \osueglvar{stdin} ein
 und entfernen Sie das abschließende Newline (\verb+\n+). Erzeugen Sie
-mittels \emph{fork(2)} einen Kindprozess und verschlüsseln Sie in
+mittels \osuefunc{fork(2)} einen Kindprozess und verschlüsseln Sie in
 diesem das Passwort; der Vaterprozess liest zu diesem Zeitpunkt
-bereits wieder von \emph{stdin} ein. Beachten Sie, dass in dieser
+bereits wieder von \osuefunc{stdin} ein. Beachten Sie, dass in dieser
 Situation mehrere Kindprozesse asynchron und in nicht vorhersehbarer
 Reihenfolge terminieren können!
 
 Der Exit-Status jedes Kindes muss so früh wie möglich abgeholt werden.
-Behandeln Sie das Signal {\em SIGCHLD}, um das zu gewährleisten.
-Achten Sie darauf, dass {\em fgets(3)} den Fehlercode {\em EINTR}
+Behandeln Sie das Signal \osueconst{SIGCHLD}, um das zu gewährleisten.
+Achten Sie darauf, dass \osuefunc{fgets(3)} den Fehlercode \osueconst{EINTR}
 liefert, wenn es durch ein Signal unterbrochen wird. In diesem Fall
-muss {\em fgets(3)} erneut aufgerufen werden.
+muss \osuefunc{fgets(3)} erneut aufgerufen werden.
 
 \subsection*{Testen}
 

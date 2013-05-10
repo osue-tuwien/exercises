@@ -22,16 +22,16 @@ Sie sie unterstützen und schreiben zu diesem Behufe eine simple Kalenderapplika
 
 Server und Client sollen über Shared Memory miteinander 
 kommunizieren. Der Server verwaltet hierbei die Kalenderdaten, 
-mit der Option \emph{-v} gibt er Auskunft über die Aktionen, 
+mit der Option \osuearg{-v} gibt er Auskunft über die Aktionen, 
 die er dabei durchführt.\\
 Der Client fungiert gleichzeitig als Eingabe- und als Ausgabeapplikation. 
-Soll ein neuer Eintrag eingefügt werden, so wird \emph{calclient} mit 
-\emph{entry} als Text für diesen Eintrag aufgerufen. Ohne Angabe von \emph{entry} 
+Soll ein neuer Eintrag eingefügt werden, so wird \osueprog{calclient} mit 
+\osuearg{entry} als Text für diesen Eintrag aufgerufen. Ohne Angabe von \osuearg{entry} 
 sollen die Tageseinträge angezeigt werden.
-Mit dem Argument \emph{offset} wird der zu bearbeitende Tag relativ zum heutigen
-angegeben, beispielsweise würde \emph{-d 1} den morgigen Tag auswählen. Mit 
-\emph{-r idx} wird am ausgewählten Tag der Eintrag an Stelle \emph{idx} entfernt 
-oder, falls \emph{entry} mitangegeben wird, damit überschrieben.
+Mit dem Argument \osuearg{offset} wird der zu bearbeitende Tag relativ zum heutigen
+angegeben, beispielsweise würde \osuearg{-d 1} den morgigen Tag auswählen. Mit 
+\osuearg{-r idx} wird am ausgewählten Tag der Eintrag an Stelle \osuearg{idx} entfernt 
+oder, falls \osuearg{entry} mitangegeben wird, damit überschrieben.
 
 \subsection*{Beispiele}
 
@@ -52,10 +52,10 @@ Ersetzt den zweiten Eintrag am heutigen Tag durch \emph{Prf BSys}.
 
 \subsection*{Hinweise}
 Überlegen Sie sich eine geeignete Datenstruktur zum Speichern der Einträge. Als 
-Schlüssel eignen sich u.a. UNIX-Timestamps (siehe dazu \emph{time(7)} im Abschnitt \emph{The Epoch}
+Schlüssel eignen sich u.a. UNIX-Timestamps (siehe dazu \osuefunc{time(7)} im Abschnitt \emph{The Epoch}
 bzw.\\ \emph{http://de.wikipedia.org/wiki/Unixzeit}), wobei sie dazu pro Tag einen geeigneten
-Repräsentanten finden sollten. Sinnvolle Funktionen um damit umzugehen sind \emph{time(2)} und,
-falls notwendig, \emph{mktime(3)}.
+Repräsentanten finden sollten. Sinnvolle Funktionen um damit umzugehen sind \osuefunc{time(2)} und,
+falls notwendig, \osuefunc{mktime(3)}.
 
 Vergessen Sie keinesfalls auf sprechende Fehlermeldungen.
 

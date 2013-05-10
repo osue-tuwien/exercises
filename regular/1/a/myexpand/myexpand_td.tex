@@ -5,17 +5,17 @@
 \osuetitle{1}
 
 \section*{Aufgabenstellung A}
-Implementieren Sie eine vereinfachte Variante des Unix-Kommandos {\tt
-expand}.
+Implementieren Sie eine vereinfachte Variante des Unix-Kommandos
+\osueprog{expand}.
 \begin{verbatim}
     SYNOPSIS:
         myexpand [-t tabstop] [file...]
 \end{verbatim}
 
-Das Programm {\tt myexpand} soll die als Argumente angegebenen Dateien
-lesen. Ist keine Datei angegeben, soll von {\it stdin} gelesen werden.
+Das Programm \osueprog{myexpand} soll die als Argumente angegebenen Dateien
+lesen. Ist keine Datei angegeben, soll von \osueglvar{stdin} gelesen werden.
 Dabei werden auftretende Tabs durch Leerzeichen ersetzt. Die Ausgabe
-soll auf {\it stdout} erfolgen. Der optionale Parameter \verb|tabstop|
+soll auf \osueglvar{stdout} erfolgen. Der optionale Parameter \verb|tabstop|
 gibt an, an welchen Positionen die Tabs enden sollen (fehlt dieser,
 ist der Wert 8 anzunehmen).
 

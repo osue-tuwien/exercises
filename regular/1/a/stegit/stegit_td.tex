@@ -14,7 +14,7 @@ bevor Sie überhaupt noch wissen, worum es geht. Der Absender behauptet wichtige
 Informationen für Sie zu haben, benötigt aber schnellstens ein Tool, um Ihnen
 die geheime, möglicherweise existenzverändernde Botschaft zuschicken zu können.
 Sie erkennen sofort die Wichtigkeit der Situation und machen sich aufgeregt an
-die Implementierung des Programms \emph{stegit}, um raschest die geheime
+die Implementierung des Programms \osueprog{stegit}, um raschest die geheime
 Botschaft lesen zu können.
 
 \begin{verbatim}
@@ -28,15 +28,16 @@ Botschaft lesen zu können.
 Dieses Programm soll in zwei Modi ausgeführt werden können: \emph{Verstecken}
 und \emph{Finden}.
 
-Im Modus \emph{Verstecken} wird solange von \emph{stdin} gelesen, bis \emph{EOF}
-auftritt oder die Enter-Taste betätigt wird. Dann wird die eingelesene Botschaft
-in einem Text versteckt und auf \emph{stdout} oder in die Ausgabedatei
-ausgegeben. Im Modus \emph{Finden} soll wiederum von \emph{stdin} so lange
-gelesen werden, bis \emph{EOF} auftritt. Aus dem eingelesenen Text soll die
-geheime Botschaft ermittelt werden und entweder auf \emph{stdout} angezeigt oder
-in die Ausgabedatei geschrieben werden. Falls eine Ausgabedatei angegeben wurde,
-muss dafür gesorgt werden, dass sie überschrieben wird, wenn sie schon vorhanden
-war; ansonsten soll sie neu angelegt werden.
+Im Modus \emph{Verstecken} wird solange von \osueglvar{stdin} gelesen, bis
+\osueconst{EOF} auftritt oder die Enter-Taste betätigt wird. Dann wird die
+eingelesene Botschaft in einem Text versteckt und auf \osueglvar{stdout}
+oder in die Ausgabedatei ausgegeben. Im Modus \emph{Finden} soll wiederum von
+\osueglvar{stdin} so lange gelesen werden, bis \osueconst{EOF} auftritt.
+Aus dem eingelesenen Text soll die geheime Botschaft ermittelt werden und
+entweder auf \osueglvar{stdout} angezeigt oder in die Ausgabedatei
+geschrieben werden. Falls eine Ausgabedatei angegeben wurde, muss dafür gesorgt
+werden, dass sie überschrieben wird, wenn sie schon vorhanden war; ansonsten
+soll sie neu angelegt werden.
 
 \subsection*{Anleitung}
 Suchen Sie sich 28 beliebige Wörter und initialisieren Sie damit ein

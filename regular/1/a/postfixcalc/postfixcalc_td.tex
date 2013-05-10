@@ -7,7 +7,7 @@
 \section*{Aufgabenstellung A}
 Schreiben Sie einen Rechner, der die Postfix-Notation versteht. 
 Implementieren Sie die vier Grundrechenarten (+,-,*,/) sowie die Winkelfunktionen Sinus und Cosinus. 
-Die Option \emph{-i} erzwingt eine ganzzahlige Ausgabe. Wird \emph{-a} angegeben, 
+Die Option \osuearg{-i} erzwingt eine ganzzahlige Ausgabe. Wird \osuearg{-a} angegeben, 
 dann ist nach der Berechnung der Absolutwert auszugeben. Die maximale Zeilenlänge ist auf 1024 Zeichen beschränkt.
 
 \begin{verbatim}
@@ -28,15 +28,15 @@ $(1+2)*(3+4)$ & $1\:2 + 3\:4 + *$ \\
 \end{tabular}
 
 \subsection*{Anleitung}
-Lesen Sie aus der bzw. den Dateien zeilenweise bis zum Erreichen von EOF. Wenn keine Datei angegeben ist dann ist \emph{stdin} zu wählen.
+Lesen Sie aus der bzw. den Dateien zeilenweise bis zum Erreichen von EOF. Wenn keine Datei angegeben ist dann ist \osueglvar{stdin} zu wählen.
 Da jede Zeile einer Rechnung entsprechen soll, können Sie die Berechnung sofort ausführen.
 
 Verwenden Sie einen Stack um die Ergebnisse zu berechnen. 
-Extrahieren Sie wiederholt mit \emph{strtod(3)} eine Zahl aus der Zeile und kopieren sie diese oben auf den Stack. Konnte keine Zahl konvertiert werden, überprüfen Sie ob ein korrekter Operator angegeben wurde. In diesen Fall nehmen Sie zwei Zahlen (für die binären Operatoren \emph{+,-,/,*}) bzw. eine Zahl (für die unären Operatoren \emph{s,c}) vom Stack und führen die entsprechende Berechnung durch. Das Ergebnis soll dann wiederum auf den Stack kopiert werden.
+Extrahieren Sie wiederholt mit \osuefunc{strtod(3)} eine Zahl aus der Zeile und kopieren sie diese oben auf den Stack. Konnte keine Zahl konvertiert werden, überprüfen Sie ob ein korrekter Operator angegeben wurde. In diesen Fall nehmen Sie zwei Zahlen (für die binären Operatoren \osueinput{+}, \osueinput{-}, \osueinput{/}, \osueinput{*}) bzw. eine Zahl (für die unären Operatoren \osueinput{s}, \osueinput{c}) vom Stack und führen die entsprechende Berechnung durch. Das Ergebnis soll dann wiederum auf den Stack kopiert werden.
 Wenn das Zeilenende erreicht wurde, darf sich nur noch ein Element -- das Ergebnis -- am Stack befinden.   
 
 \subsection*{Testen}
-Testen sie ihr Programm mit verschieden Eingaben. Erstellen sie zum Beispiel ein Test-File \emph{t1} mit folgenden Zeilen.
+Testen sie ihr Programm mit verschieden Eingaben. Erstellen sie zum Beispiel ein Test-File \osuefilename{t1} mit folgenden Zeilen.
 
 \subsubsection*{File: t1}
 \begin{verbatim}
@@ -45,7 +45,7 @@ Testen sie ihr Programm mit verschieden Eingaben. Erstellen sie zum Beispiel ein
   3 2 s* -4.5 + 
   1.3E-2 100 *
 \end{verbatim}
-Eingabe: {\bf calc t1} oder {\bf calc $<$ t1}
+Eingabe: \osuecmd{calc t1} oder \osuecmd{calc $<$ t1}
 Ausgabe: 
 \begin{verbatim}
   5.000000
@@ -54,7 +54,7 @@ Ausgabe:
   1.300000
 \end{verbatim}
 oder
-Eingabe: {\bf calc -i -a t1}
+Eingabe: \osuecmd{calc -i -a t1}
 Ausgabe: 
 \begin{verbatim}
   5
@@ -64,8 +64,8 @@ Ausgabe:
 \end{verbatim}
 
 \subsection*{Hinweis}
-Leerzeichen zwischen Operatoren und Zahlen sind erlaubt, aber nicht notwendig. \verb|1 2 -3 + | ist nicht gültig, da das Minus zur \verb|3| gehört und von \emph{strtod(3)} konsumiert wird. \verb|1 2 *3 + | oder \verb|1 2 - 3 + | hingegen ist in Ordnung.
-Für die Winkelfunktionen müssen Sie \emph{math.h} einbinden, sowie beim Linken den Parameter \emph{-lm} verwenden.
+Leerzeichen zwischen Operatoren und Zahlen sind erlaubt, aber nicht notwendig. \verb|1 2 -3 + | ist nicht gültig, da das Minus zur \verb|3| gehört und von \osuefunc{strtod(3)} konsumiert wird. \verb|1 2 *3 + | oder \verb|1 2 - 3 + | hingegen ist in Ordnung.
+Für die Winkelfunktionen müssen Sie \osuefilename{math.h} einbinden, sowie beim Linken den Parameter \osuearg{-lm} verwenden.
 
 \osueguidelinesone
 

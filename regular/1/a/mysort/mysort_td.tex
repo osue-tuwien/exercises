@@ -5,7 +5,7 @@
 \osuetitle{1}
 
 \section*{Aufgabenstellung A}
-Schreiben Sie eine abgewandelte Version des UNIX-Kommandos {\bf sort} als C-Programm. Es soll nur die Option \verb|-r| (absteigend sortieren) implementiert werden. Alle anderen Optionen können ignoriert werden. Wird keine Datei angegeben so sollen die Daten \"uber \emph{stdin} eingelesen werden.
+Schreiben Sie eine abgewandelte Version des UNIX-Kommandos \osueprog{sort} als C-Programm. Es soll nur die Option \verb|-r| (absteigend sortieren) implementiert werden. Alle anderen Optionen können ignoriert werden. Wird keine Datei angegeben so sollen die Daten \"uber \osueglvar{stdin} eingelesen werden.
 
 \begin{verbatim}
 	SYNOPSIS
@@ -14,10 +14,10 @@ Schreiben Sie eine abgewandelte Version des UNIX-Kommandos {\bf sort} als C-Prog
 
 \subsection*{Anleitung}
 Lesen Sie alle Files zeilenweise in einen dafür geeigneten Puffer ein.
-Danach sortieren Sie die Daten mit Hilfe von \emph{qsort(3)}. Im Anschluss geben Sie die nun sortieren Daten auf \emph{stdout} aus. Es kann davon ausgegangen werden, daß keine Zeile länger als 1022 Zeichen ist (ohne Newline).
+Danach sortieren Sie die Daten mit Hilfe von \osuefunc{qsort(3)}. Im Anschluss geben Sie die nun sortieren Daten auf \osueglvar{stdout} aus. Es kann davon ausgegangen werden, daß keine Zeile länger als 1022 Zeichen ist (ohne Newline).
 
 \subsection*{Testen}
-Testen Sie Ihr Programm mit verschieden Eingaben. Erstellen Sie zum Beispiel ein Testfile \emph{t1} mit folgenden Zeilen.
+Testen Sie Ihr Programm mit verschieden Eingaben. Erstellen Sie zum Beispiel ein Testfile \osuefilename{t1} mit folgenden Zeilen.
 
 \subsubsection*{File: t1}
 \begin{verbatim}
@@ -25,7 +25,7 @@ Testen Sie Ihr Programm mit verschieden Eingaben. Erstellen Sie zum Beispiel ein
   Priority2 ls
   Priority7 cat mysort.h
 \end{verbatim}
-Aufruf: {\bf cat t1 $|$ mysort} oder {\bf mysort $<$ t1} \\
+Aufruf: \osuecmd{cat t1 $|$ mysort} oder \osuecmd{mysort $<$ t1} \\
 Ausgabe: 
 \begin{verbatim}
   Priority2 ls
@@ -34,7 +34,7 @@ Ausgabe:
 \end{verbatim}
 
 
-Aufruf: {\bf mysort -r t1 t1} \\
+Aufruf: \osuecmd{mysort -r t1 t1} \\
 Ausgabe: 
 \begin{verbatim}
   Priority9 cat
@@ -46,7 +46,7 @@ Ausgabe:
 \end{verbatim}
 
 \subsection*{Hinweis}
-{\bf { ( echo a ; echo B )} $|$ sort} sortiert B vor a, weil die Großbuchstaben im Zeichensatz vor den Kleinbuchstaben kommen. {\bf { ( echo a ; echo B )} $|$ sort -f} würde diese Eigenschaft ignorieren sein. Die Option \verb|-f| braucht aber {\bf nicht} implementiert werden.
+\osuecmd{{ ( echo a ; echo B )} $|$ sort} sortiert B vor a, weil die Großbuchstaben im Zeichensatz vor den Kleinbuchstaben kommen. \osuecmd{{ ( echo a ; echo B )} $|$ sort -f} würde diese Eigenschaft ignorieren sein. Die Option \verb|-f| braucht aber \textbf{nicht} implementiert werden.
 
 \osueguidelinesone
 

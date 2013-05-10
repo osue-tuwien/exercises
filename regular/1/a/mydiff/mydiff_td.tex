@@ -5,9 +5,9 @@
 \osuetitle{1}
 
 \section*{Aufgabenstellung A}
-Implementieren Sie eine Abwandlung des Unix-Kommandos \emph{diff}.
+Implementieren Sie eine Abwandlung des Unix-Kommandos \osueprog{diff}.
 Schreiben Sie zu diesem Zweck ein C-Programm
-\emph{mydiff}, dass 2 übergebene Dateien zeilenweise
+\osueprog{mydiff}, dass 2 übergebene Dateien zeilenweise
 miteinander vergleicht und, falls sich 2 Zeilen voneinander
 unterscheiden, die Zeilennummer und die Anzahl der
 verschiedenen Zeichen ausgibt.
@@ -22,7 +22,7 @@ verschiedenen Zeichen ausgibt.
       Das Programm soll jede Datei zeilenweise einlesen und die
       gelesenen Zeichen miteinander vergleichen. Sind die Zeilen
       ungleich lang, so soll nur bis zur Länge der kürzeren Zeile
-      verglichen werden - z.B.: \emph{,,Haus$\backslash$n''} und \emph{,,Haustor$\backslash$n''}
+      verglichen werden - z.B.: \osueinput{,,Haus$\backslash$n''} und \osueinput{,,Haustor$\backslash$n''}
       sind als gleich zu behandeln. Falls eine Datei mehr Zeilen enthält
       als die andere, sollen die restlichen Zeilen ebenfalls ignoriert
       werden. Pro Zeile soll gezählt werden, wieviele Zeichen an der
@@ -34,14 +34,14 @@ verschiedenen Zeichen ausgibt.
       Zeile mehr Zeichen enthält.
 
 \subsection*{Testen}
-Erstellen Sie eine Testdatei \emph{difftest1.txt} mit folgendem Inhalt:
+Erstellen Sie eine Testdatei \osuefilename{difftest1.txt} mit folgendem Inhalt:
 \subsubsection*{File: difftest1.txt}
 \begin{verbatim}
       abcdefg
       Garten
       abcdefg
 \end{verbatim}
-      und eine zweite Testdatei \emph{difftest2.txt} mit
+      und eine zweite Testdatei \osuefilename{difftest2.txt} mit
       folgendem Inhalt:
 \subsubsection*{File: difftest2.txt}
 \begin{verbatim}

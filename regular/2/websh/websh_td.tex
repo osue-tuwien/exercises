@@ -22,21 +22,21 @@ SYNOPSIS:
 
 \subsection*{Anleitung}
 
-Der Mutterprozess liest bis zum \textit{EOF} Zeilen ein und startet
+Der Mutterprozess liest bis zum \osueconst{EOF} Zeilen ein und startet
 jeweils zwei Kindprozesse. Der erste führt das in der Zeile angegebene
 Programm inklusive Argumente durch ein beliebiges Mitglied der
-\verb_exec_-Familie aus. Die Standardausgabe soll dabei an den zweiten
+\osuefunc{exec}-Familie aus. Die Standardausgabe soll dabei an den zweiten
 Prozess umgeleitet werden.
 
 Der zweite Kindprozess soll also die Ausgabe des ersten bekommen und
 diese verarbeiten, um das Ergebnis in einem Webbrowser darstellbar auf
 der Standardausgabe auszugeben. Primär sind daher Zeilenumbrüche zu
-behandeln. Mit dem Parameter \verb_-e_ soll die gesamte Ausgabe in ein
+behandeln. Mit dem Parameter \osuearg{-e} soll die gesamte Ausgabe in ein
 vollständiges HTML-Dokument eingebettet werden, also mit
-umschließenden HTML- und BODY-Tags. Die Option \verb_-h_ fügt den
+umschließenden HTML- und BODY-Tags. Die Option \osuearg{-h} fügt den
 Programmaufruf als Überschrift zwischen den jeweiligen
-Programmausgaben ein, und \verb_-s_ sucht nach Zeilen mit \verb_WORD_
-und setzt sie in den angegebenen \verb_TAG_.
+Programmausgaben ein, und \osuearg{-s} sucht nach Zeilen mit \osuearg{WORD}
+und setzt sie in den angegebenen \osuearg{TAG}.
 
 Sie dürfen eine sinnvolle Länge der Zeilen annehmen, als Konstante
 definieren und damit arbeiten.

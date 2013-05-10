@@ -10,7 +10,7 @@
 
 \section*{Aufgabenstellung}
 
-Implementieren Sie zwei Programme {\tt readin} und {\tt chstat}, die
+Implementieren Sie zwei Programme \osueprog{readin} und \osueprog{chstat}, die
 zu einem Eingabetext eine Buchstabenstatistik erstellen.
 
 \begin{verbatim}
@@ -24,15 +24,15 @@ SYNOPSIS:
 
 \subsection*{Anleitung}
 
-Das Programm {\tt readin} liest von {\tt stdin} und "ubergibt jede
-gelesene Zeile "uber ein Shared Memory an das Programm {\tt chstat},
+Das Programm \osueprog{readin} liest von \osueglvar{stdin} und "ubergibt jede
+gelesene Zeile "uber ein Shared Memory an das Programm \osueprog{chstat},
 welches die Zeile liest und zu jedem Buchstaben speichert, wie oft er
 vorgekommen ist. Gro"s-/Kleinschreibung soll dabei nicht beachtet
 werden, es wird also zwischen A und a nicht unterschieden. Weiters
 k"onnen Sie davon ausgehen, dass nur ASCII-Zeichen vorkommen, Umlaute
 und dergleichen m"ussen Sie also nicht behandeln.
 
-{\tt chstat} gibt dann eine Liste der Buchstaben A bis Z aus, jeweils
+\osueprog{chstat} gibt dann eine Liste der Buchstaben A bis Z aus, jeweils
 mit der Anzahl der Vorkommnisse sowie einer prozentuellen Angabe der
 H"aufigkeit des Buchstabens (abgerundet auf ganze Prozent). Alle
 anderen Zeichen werden in einer Kategorie ``andere''
@@ -52,26 +52,26 @@ Beispiel:
   gesamt: 80    100%
 \end{verbatim}
 
-Wird {\tt chstat} mit der Option {\tt -v} aufgerufen, gibt es nach
-jeder gelesenen Zeile die aktualisierte Statistik aus, ohne {\tt -v}
+Wird \osueprog{chstat} mit der Option \osuearg{-v} aufgerufen, gibt es nach
+jeder gelesenen Zeile die aktualisierte Statistik aus, ohne \osuearg{-v}
 wird nur die endg"ultige Statistik "uber alle Zeilen ausgegeben.
 
-{\tt chstat} soll die n"achste Zeile erst dann lesen, wenn {\tt
-readin} sie vollst"andig ins Shared Memory geschrieben hat und {\tt
-readin} soll erst dann die n"achste Zeile ins Shared Memory schreiben,
-wenn die vorherige schon von {\tt chstat} gelesen wurde.
+\osueprog{chstat} soll die n"achste Zeile erst dann lesen, wenn \osueprog{readin}
+sie vollst"andig ins Shared Memory geschrieben hat und \osueprog{readin} soll
+erst dann die n"achste Zeile ins Shared Memory schreiben,
+wenn die vorherige schon von \osueprog{chstat} gelesen wurde.
 
-Durch die Eingabe von {\tt EOF} (also durch Dr"ucken von {\tt Ctrl-D})
+Durch die Eingabe von \osueconst{EOF} (also durch Dr"ucken von \osuekeystroke{Ctrl-D})
 wird das Ende des Textes angezeigt und beide Programme terminieren.
 
 
 
 \subsection*{Testen}
 
-Die Option {\tt -v} von {\tt chstat} eignet sich gut zum interaktiven
+Die Option \osuearg{-v} von \osueprog{chstat} eignet sich gut zum interaktiven
 Testen, da die Auswirkungen einer neuen Zeile auf die Statistik sofort
-sichtbar sind, das Testen ohne {\tt -v} ist f"ur die Umleitung von
-{\tt stdin} auf ein Testfile vielleicht sinnvoller:
+sichtbar sind, das Testen ohne \osuearg{-v} ist f"ur die Umleitung von
+\osueglvar{stdin} auf ein Testfile vielleicht sinnvoller:
 \begin{verbatim}
   readin < mytestfile
 \end{verbatim}

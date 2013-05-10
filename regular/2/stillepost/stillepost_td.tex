@@ -14,7 +14,7 @@ Gründen Sie eine Prozessfamilie bestehend aus einem Mutterprozess und
 zwei Kindprozessen (nicht Kind und Enkelkind). Spielen Sie dann mit
 der Familie ein Stille-Post-Spiel.
 
-Das von Ihnen zu entwickelnde Programm {\tt stillepost} soll sich
+Das von Ihnen zu entwickelnde Programm \osueprog{stillepost} soll sich
 folgendermaßen verhalten:
 
 \begin{itemize}
@@ -30,7 +30,7 @@ Stille-Post-Spiel üblich.
 geringfügig und gibt ihn an das zweite Kind weiter.
 \item Das zweite Kind verfährt ebenso wie das erste, nur gibt es den
 von ihm veränderten String nicht an einen anderen Prozess weiter,
-sondern sagt ihn laut (gibt ihn auf {\tt stdout} aus).
+sondern sagt ihn laut (gibt ihn auf \osueprog{stdout} aus).
 \end{itemize}
 
 
@@ -49,32 +49,32 @@ Beachten Sie: Wenn Sie einen String übergeben wollen, der Leerzeichen
 enthält, müssen Sie ihn in Hochkommata einschließen, damit er als
 nur ein Argument behandelt wird: \verb_"String mit Leerzeichen"_
 
-Der Mutterprozess soll seine Kinder mittels \emph{fork(2)} erzeugen,
+Der Mutterprozess soll seine Kinder mittels \osuefunc{fork(2)} erzeugen,
 die Kommunikation zwischen den Prozessen soll über Unnamed Pipes
-erfolgen, welche mit \emph{pipe(2)} erzeugt werden.
+erfolgen, welche mit \osuefunc{pipe(2)} erzeugt werden.
 
 Die Veränderungen eines jeden Mitspielers (Prozesses) sollen so
-vorgenommen werden, dass mittels \emph{rand(3)} eine zufällige
+vorgenommen werden, dass mittels \osuefunc{rand(3)} eine zufällige
 Position innerhalb des Strings gewählt, und dann das Zeichen an
 dieser Stelle durch ein anderes, ebenfalls zufälliges Zeichen aus
-{\tt [a-zA-Z]} ersetzt wird.
+\osueregex{[a-zA-Z]} ersetzt wird.
 
-Stellen Sie mittels \emph{srand(3)} sicher, dass alle Prozesse eine
+Stellen Sie mittels \osuefunc{srand(3)} sicher, dass alle Prozesse eine
 unterschiedliche Random-Seed verwenden, damit nicht jeder Prozess die
 selben Änderungen vornimmt.
 
-Die Option {\tt -v} schließlich soll es ermöglichen, das Spiel aus
+Die Option \osuearg{-v} schließlich soll es ermöglichen, das Spiel aus
 der Sicht eines allwissenden Betrachters zu verfolgen. Wird die Option
 angegeben, gibt jeder Prozess den String zuerst unverändert und dann
 in der veränderten Form (wie er ihn weitergeben wird) auf
-\emph{stdout} aus.
+\osueglvar{stdout} aus.
 
 Führen Sie eine sinnvolle Beschränkung für die Länge des Strings
 ein.
 
 \subsection*{Testen}
 
-Testen Sie ihr Programm vor allem mit der Option {\tt -v}, da dann
+Testen Sie ihr Programm vor allem mit der Option \osuearg{-v}, da dann
 deutlich sichtbarer ist, was jeder einzelne Prozess tut.
 
 Beispielrunde:

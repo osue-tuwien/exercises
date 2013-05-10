@@ -12,9 +12,9 @@
 
 Schreiben Sie ein Programm, welches für alle Dateien in einem angegebenen
 Verzeichnis jeweils eine Zeile mit dem dazugehörigen MD5-Hashwert und dem
-Dateityp ausgibt. Dafür sollen die Standardtools \texttt{ls} (mit Parameter
-\texttt{-1a}), \texttt{md5sum}, und \texttt{file} verwendet werden, indem
-diese als Kindprozesse per \texttt{fork()}/\texttt{exec()} aufgerufen
+Dateityp ausgibt. Dafür sollen die Standardtools \osueprog{ls} (mit Parameter
+\osuearg{-1a}), \osueprog{md5sum}, und \osueprog{file} verwendet werden, indem
+diese als Kindprozesse per \osuefunc{fork()}/\osuefunc{exec()} aufgerufen
 werden.
 
 
@@ -30,16 +30,16 @@ Dateien im Home-Verzeichnis nicht behandelt werden.
 
 
 \subsection*{Anleitung}
-Nachdem mit dem Kindprozess \texttt{ls} der gesamte Inhalt des angegebenen
+Nachdem mit dem Kindprozess \osueprog{ls} der gesamte Inhalt des angegebenen
 Verzeichnisses ermittelt und an den Vaterprozess zurückgeben wird, erzeugt man
-in einer Schleife jeweils für jede der von \texttt{ls} empfangenen Dateinamen
-einen Kindprozess der \texttt{md5sum} mit diesem Namen als Argument ausführt,
-gleiches danach für \texttt{file}. Weiters werden die gewonnenen Informationen
-jeweils in einer Zeile (Format: \texttt{Dateiname md5summe dateityp})
-ausgegeben. Beachten Sie, dass es sich nicht bei allen von \texttt{ls}
-gelisteten Einträgen um Dateien handelt (z.B.\ \texttt{.} und \texttt{..}); in dem Fall liefert dann
-\texttt{md5sum} einen nicht-erfolgreichen Return-Code zurück (welcher
-mittels \texttt{wait()/waitpid()} ermittelt werden kann) und der Eintrag soll in
+in einer Schleife jeweils für jede der von \osueprog{ls} empfangenen Dateinamen
+einen Kindprozess der \osueprog{md5sum} mit diesem Namen als Argument ausführt,
+gleiches danach für \osueprog{file}. Weiters werden die gewonnenen Informationen
+jeweils in einer Zeile (Format: \osueoutform{Dateiname md5summe dateityp})
+ausgegeben. Beachten Sie, dass es sich nicht bei allen von \osueprog{ls}
+gelisteten Einträgen um Dateien handelt (z.B.\ \osuefilename{.} und \osuefilename{..}); in dem Fall liefert dann
+\osueprog{md5sum} einen nicht-erfolgreichen Return-Code zurück (welcher
+mittels \osuefunc{wait()}\osuefunc{waitpid()} ermittelt werden kann) und der Eintrag soll in
 diesem Fall ignoriert werden.
 
 \subsection*{Beispielaufruf}
