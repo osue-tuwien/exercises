@@ -5,17 +5,17 @@
 \osuetitle{1}
 
 \section*{Aufgabenstellung A}
-Implementieren Sie eine vereinfachte Variante des Unix-Kommandos {\tt
-expand}.
+Implementieren Sie eine vereinfachte Variante des Unix-Kommandos
+\osueprog{expand}.
 \begin{verbatim}
     SYNOPSIS:
         myexpand [-t tabstop] [file...]
 \end{verbatim}
 
-Das Programm {\tt myexpand} soll die als Argumente angegebenen Dateien
-lesen. Ist keine Datei angegeben, soll von {\it stdin} gelesen werden.
+Das Programm \osueprog{myexpand} soll die als Argumente angegebenen Dateien
+lesen. Ist keine Datei angegeben, soll von \osueglvar{stdin} gelesen werden.
 Dabei werden auftretende Tabs durch Leerzeichen ersetzt. Die Ausgabe
-soll auf {\it stdout} erfolgen. Der optionale Parameter \verb|tabstop|
+soll auf \osueglvar{stdout} erfolgen. Der optionale Parameter \osuearg{tabstop}
 gibt an, an welchen Positionen die Tabs enden sollen (fehlt dieser,
 ist der Wert 8 anzunehmen).
 
@@ -34,28 +34,29 @@ Nachkommastellen) beschreibt.
 
 \subsection*{Testen}
 Testen Sie Ihr Programm mit mehreren Eingabedateien. Erstellen Sie
-z.B. eine Testdatei t1 mit folgendem Inhalt (\verb|\t| steht für einen
-Tab-Character):
-\begin{verbatim}
+z.B. eine Testdatei \osuefilename{t1} mit folgendem Inhalt (\verb|\t| steht für
+ein Tab-Zeichen):
+
+\begin{osuefmtcode}
 	1234567890
-	123\t90
-\end{verbatim}
+	123\bslash{}t90
+\end{osuefmtcode}
 
-Befehl: \verb!myexpand t1! oder \verb!cat t1 | myexpand!
+Rufen Sie Ihr Programm dann wie folgt auf:
 
-Ausgabe:
-\begin{verbatim}
+\begin{osuefmtcode}
+$ \osueinput{./myexpand t1}
 	1234567890
 	123     90
-\end{verbatim}
 
-Befehl: \verb!myexpand -t 6 t1!
+$ \osueinput{cat t1 \textup{|} ./myexpand}
+	1234567890
+	123     90
 
-Ausgabe:
-\begin{verbatim}
+$ \osueinput{./myexpand -t 6 t1}
 	1234567890
 	123   90
-\end{verbatim}
+\end{osuefmtcode}
 
 \osueguidelinesone
 

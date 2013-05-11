@@ -18,60 +18,65 @@ diesen Vorgang möglichst transparent zu automatisieren.
 Implementieren Sie die folgenden Hilfsprogramme, um den Reaktor zu simulieren:
 
 \begin{verbatim}
-          SYNOPSIS:  rventgas
+    SYNOPSIS:
+        rventgas
 
-          SYNOPSIS:  rshutdown
+    SYNOPSIS:
+        rshutdown
 \end{verbatim}
 
-Das Programm \emph{rventgas} soll mit einer Wahrscheinlichkeit von 6/7
-erfolgreich mit der Meldung \verb_STATUS OK_ terminieren, sonst soll
-\verb_PRESSURE TOO HIGH - IMMEDIATE SHUTDOWN REQUIRED_ ausgegeben werden und die
-Terminierung erfolgt mit einem Fehlercode.
+Das Programm \osueprog{rventgas} soll mit einer Wahrscheinlichkeit von 6/7
+erfolgreich mit der Meldung \osueoutput{STATUS OK} terminieren, sonst soll
+\osueoutput{PRESSURE TOO HIGH - IMMEDIATE SHUTDOWN REQUIRED} ausgegeben werden
+und die Terminierung erfolgt mit einem Fehlercode.
 
-Das Programm \emph{rshutdown} schreibt mit einer Wahrscheinlichkeit von 1/3 die
-Meldung\\
-\verb_SHUTDOWN COMPLETED_ auf \emph{stdout} und terminiert, sonst soll
-\verb_KaBOOM!_ ausgegeben und ein Fehlercode zurückgegeben werden.
+Das Programm \osueprog{rshutdown} schreibt mit einer Wahrscheinlichkeit von 1/3
+die Meldung\\
+\osueoutput{SHUTDOWN COMPLETED} auf \osueglvar{stdout} und terminiert, sonst
+soll \osueoutput{KaBOOM!} ausgegeben und ein Fehlercode zurückgegeben werden.
 
 Nun zum eigentlichen Teil der Aufgabe: Implementieren Sie das folgende Programm:
 
 \begin{verbatim}
-SYNOPSIS:  schedule [-s <seconds>] [-f <seconds>] <program> <emergency> <logfile>
+    SYNOPSIS:
+        schedule [-s <seconds>] [-f <seconds>] <program> <emergency> <logfile>
 
--s <seconds>   Zeitfenster Anfang (Default: 1 Sekunde)
--f <seconds>   Zeitfenster Ende (Default: 0 Sekunden)
-<program>      Programm inkl. Pfad, das wiederholt ausgefuehrt werden soll
-<emergency>    Programm inkl. Pfad, das im Fehlerfall ausgefuehrt wird
-<logfile>      Pfad zu einer Datei, in der die Ausgabe von <program> sowie
-               Erfolg/Misserfolg von <emergency> protokolliert werden
+        -s <seconds>   Zeitfenster Anfang (Default: 1 Sekunde)
+        -f <seconds>   Zeitfenster Ende (Default: 0 Sekunden)
+        <program>      Programm inkl. Pfad, das wiederholt ausgefuehrt werden soll
+        <emergency>    Programm inkl. Pfad, das im Fehlerfall ausgefuehrt wird
+        <logfile>      Pfad zu einer Datei, in der die Ausgabe von <program> sowie
+                       Erfolg/Misserfolg von <emergency> protokolliert werden
 \end{verbatim}
 
-Das Programm \emph{schedule} erzeugt einen Kindprozess, der wiederholt zufällig
-irgendwann im spezifizierten Zeitfenster (in $s$ bis $s+f$ Sekunden, als
-Granularität genügt eine volle Sekunde) das Programm \emph{program} als
-Enkelkind startet und auf seine Beendigung wartet. Falls \emph{program} mit
-einem Fehlercode terminiert, wird einmalig \emph{emergency} ausgeführt und der
-Kindprozess beendet. Wird z.\,B.\ \emph{schedule} mit \verb_-s 5_ und
-\verb_-f 2_ aufgerufen, wartet der Kindprozess zunächst zwischen 5 und 7
-Sekunden und führt dann \emph{program} aus. Terminiert \emph{program}
+Das Programm \osueprog{schedule} erzeugt einen Kindprozess, der wiederholt
+zufällig irgendwann im spezifizierten Zeitfenster (in $s$ bis $s+f$ Sekunden,
+als Granularität genügt eine volle Sekunde) das Programm \osueprog{program} als
+Enkelkind startet und auf seine Beendigung wartet. Falls \osueprog{program} mit
+einem Fehlercode terminiert, wird einmalig \osueprog{emergency} ausgeführt und
+der Kindprozess beendet. Wird z.B.\ \osueprog{schedule} mit \osuearg{-s 5} und
+\osuearg{-f 2} aufgerufen, wartet der Kindprozess zunächst zwischen 5 und 7
+Sekunden und führt dann \osueprog{program} aus. Terminiert \osueprog{program}
 fehlerfrei, wartet der Kindprozess wieder zwischen 5 und 7 Sekunden, bevor er
-\emph{program} ein weiteres Mal ausführt.
+\osueprog{program} ein weiteres Mal ausführt.
 
-Weiters soll der Kindprozess alle Daten, die der \emph{program}-Enkelprozess auf
-\emph{stdout} ausgegeben hat, über eine Pipe an den Vaterprozess schicken.
-Dieser gibt das Gelesene auf (sein) \emph{stdout} aus und fügt es gleichzeitig
-an die angegebene \emph{logfile} an. Ausgaben von \emph{emergency} müssen nicht
-im Logfile aufscheinen; es genügt zu protokollieren, ob \emph{emergency} ohne
-Fehlercode terminiert hat. Nachdem \emph{emergency} beendet ist, soll auch
-\emph{schedule} terminieren. Implementieren Sie außerdem noch eine
-Signalbehandlung, um \emph{schedule} sauber beenden zu können, ohne auf eine
-Fehlfunktion des Reaktors hoffen zu müssen.
+Weiters soll der Kindprozess alle Daten, die der \osueprog{program}-Enkelprozess
+auf \osueglvar{stdout} ausgegeben hat, über eine Pipe an den Vaterprozess
+schicken. Dieser gibt das Gelesene auf (sein) \osueglvar{stdout} aus und fügt es
+gleichzeitig an die angegebene \osuefilename{logfile} an. Ausgaben von
+\osueprog{emergency} müssen nicht im Logfile aufscheinen; es genügt zu
+protokollieren, ob \osueprog{emergency} ohne Fehlercode terminiert hat. Nachdem
+\osueprog{emergency} beendet ist, soll auch \osueprog{schedule} terminieren.
+Implementieren Sie außerdem noch eine Signalbehandlung, um \osueprog{schedule}
+sauber beenden zu können, ohne auf eine Fehlfunktion des Reaktors hoffen zu
+müssen.
 
 \subsection*{Testen}
 
 Das typische Output sollte so ähnlich aussehen:
-\begin{verbatim}
-$# ./schedule -s 2 -f 5 ./rventgas ./rshutdown logfile
+
+\begin{osuefmtcode}
+$ \osueinput{./schedule -s 2 -f 5 ./rventgas ./rshutdown logfile}
 STATUS OK
 STATUS OK
 STATUS OK
@@ -81,7 +86,7 @@ PRESSURE TOO HIGH - IMMEDIATE SHUTDOWN REQUIRED
 SHUTDOWN COMPLETED.
 EMERGENCY SUCCESSFUL
 
-$# cat logfile
+$ \osueinput{cat logfile}
 STATUS OK
 STATUS OK
 STATUS OK
@@ -89,10 +94,12 @@ STATUS OK
 STATUS OK
 PRESSURE TOO HIGH - IMMEDIATE SHUTDOWN REQUIRED
 EMERGENCY SUCCESSFUL
-\end{verbatim}
-Die Meldung \verb_SHUTDOWN COMPLETED_ ist eigentlich von \emph{rshutdown} und
-scheint nicht im logfile auf, wo aber sehr wohl \verb_EMERGENCY SUCCESSFUL_
-anzeigt, dass der \emph{emergency}-Prozess erfolgreich war.
+\end{osuefmtcode}
+
+Die Meldung \osueoutput{SHUTDOWN COMPLETED} ist eigentlich von
+\osueprog{rshutdown} und scheint nicht in der Log-Datei auf, wo aber sehr wohl
+\osueoutput{EMERGENCY SUCCESSFUL} anzeigt, dass der \osueprog{emergency}-Prozess
+erfolgreich war.
 
 \osueguidelinestwo
 

@@ -5,67 +5,86 @@
 \osuetitle{1}
 
 \section*{Aufgabenstellung A}
-Schreiben Sie einen Rechner, der die Postfix-Notation versteht. 
-Implementieren Sie die vier Grundrechenarten (+,-,*,/) sowie die Winkelfunktionen Sinus und Cosinus. 
-Die Option \emph{-i} erzwingt eine ganzzahlige Ausgabe. Wird \emph{-a} angegeben, 
-dann ist nach der Berechnung der Absolutwert auszugeben. Die maximale Zeilenlänge ist auf 1024 Zeichen beschränkt.
+Schreiben Sie einen Rechner, der die Postfix-Notation versteht.
+Implementieren Sie die vier Grundrechenarten (\(+\), \(-\), \(*\), \(/\)) sowie
+die Winkelfunktionen Sinus und Cosinus. Die Option \osuearg{-i} erzwingt eine
+ganzzahlige Ausgabe. Wird \osuearg{-a} angegeben, ist nach der Berechnung der
+Betrag (Absolutwert) auszugeben. Die maximale Zeilenlänge ist auf 1024 Zeichen
+beschränkt.
 
 \begin{verbatim}
-	SYNOPSIS
-	  calc [-i] [-a] [file1 [file2 ...]]
+    SYNOPSIS
+        calc [-i] [-a] [file1 [file2 ...]]
 \end{verbatim}
 
-Postfix ist eine Notation, die ohne Klammerung auskommt und daher für Maschinen leicht lesbar ist. Im Gegensatz zur Infix Notation wird die Operation immer nach den Operanden angegeben. Dazu einige Beispiele.
+Postfix ist eine Notation, die ohne Klammerung auskommt und daher für Maschinen
+leicht lesbar ist. Im Gegensatz zur Infix-Notation wird die Operation immer nach
+den Operanden angegeben. Dazu einige Beispiele:
 
 \begin{tabular}{ll}
-\hline
-Infix & Postfix \\ \hline
-$1+2$ & $1\:2 + $ \\
-$2*(1+3)$ & $2\:1\:3 + * $ \\
-$sin(1/5)$ & $1\:5 / sin $ \\ 
-$(1+2)*(3+4)$ & $1\:2 + 3\:4 + *$ \\
-\hline
+\toprule
+Infix           & Postfix \\
+\midrule
+\(1+2\)         & \(1 \: 2 \: +\) \\
+\(2*(1+3)\)     & \(2 \: 1 \: 3 + *\) \\
+\(\sin(1/5)\)   & \(1 \: 5 \: / \sin\) \\
+\((1+2)*(3+4)\) & \(1\:2 + 3\:4 + *\) \\
+\bottomrule
 \end{tabular}
 
 \subsection*{Anleitung}
-Lesen Sie aus der bzw. den Dateien zeilenweise bis zum Erreichen von EOF. Wenn keine Datei angegeben ist dann ist \emph{stdin} zu wählen.
-Da jede Zeile einer Rechnung entsprechen soll, können Sie die Berechnung sofort ausführen.
+Lesen Sie aus der Datei bzw.\ den Dateien zeilenweise bis zum Erreichen von
+\osueglvar{EOF}. Wenn keine Datei angegeben ist, soll von \osueglvar{stdin}
+gelesen werden. Da jede Zeile einer Rechnung entsprechen soll, können Sie die
+Berechnung sofort ausführen.
 
-Verwenden Sie einen Stack um die Ergebnisse zu berechnen. 
-Extrahieren Sie wiederholt mit \emph{strtod(3)} eine Zahl aus der Zeile und kopieren sie diese oben auf den Stack. Konnte keine Zahl konvertiert werden, überprüfen Sie ob ein korrekter Operator angegeben wurde. In diesen Fall nehmen Sie zwei Zahlen (für die binären Operatoren \emph{+,-,/,*}) bzw. eine Zahl (für die unären Operatoren \emph{s,c}) vom Stack und führen die entsprechende Berechnung durch. Das Ergebnis soll dann wiederum auf den Stack kopiert werden.
-Wenn das Zeilenende erreicht wurde, darf sich nur noch ein Element -- das Ergebnis -- am Stack befinden.   
+Verwenden Sie einen Stack um die Ergebnisse zu berechnen. Extrahieren Sie
+wiederholt mit \osuefunc{strtod(3)} eine Zahl aus der Zeile und legen Sie
+diese oben auf den Stack. Konnte keine Zahl konvertiert werden, überprüfen Sie,
+ob ein korrekter Operator angegeben wurde. In diesen Fall nehmen Sie zwei Zahlen
+(für die binären Operatoren \osueinput{+}, \osueinput{-}, \osueinput{/} und
+\osueinput{*}) bzw.\ eine Zahl (für die unären Operatoren \osueinput{s} und
+\osueinput{c}) vom Stack und führen die entsprechende Berechnung durch. Das
+Ergebnis soll dann wiederum auf den Stack gelegt werden.
+Wenn das Zeilenende erreicht wurde, darf sich nur noch ein Element -- das
+Ergebnis -- am Stack befinden.
 
 \subsection*{Testen}
-Testen sie ihr Programm mit verschieden Eingaben. Erstellen sie zum Beispiel ein Test-File \emph{t1} mit folgenden Zeilen.
+Testen Sie Ihr Programm mit verschieden Eingaben. Erstellen sie zum Beispiel
+eine Testdatei \osuefilename{t1} mit folgenden Zeilen:
 
-\subsubsection*{File: t1}
-\begin{verbatim}
+\begin{osuefmtcode}
   2 3 +
   2 3 * 4 -
-  3 2 s* -4.5 + 
+  3 2 s* -4.5 +
   1.3E-2 100 *
-\end{verbatim}
-Eingabe: {\bf calc t1} oder {\bf calc $<$ t1}
-Ausgabe: 
-\begin{verbatim}
+\end{osuefmtcode}
+
+Rufen Sie Ihr Programm dann wie folgt auf:
+
+\begin{osuefmtcode}
+$ \osueinput{./calc t1}
   5.000000
   2.000000
  -1.772108
   1.300000
-\end{verbatim}
-oder
-Eingabe: {\bf calc -i -a t1}
-Ausgabe: 
-\begin{verbatim}
+
+$ \osueinput{./calc < t1}
+  5.000000
+  2.000000
+ -1.772108
+  1.300000
+
+$ \osueinput{./calc -i -a t1}
   5
   2
   1
   1
-\end{verbatim}
+\end{osuefmtcode}
 
 \subsection*{Hinweis}
-Leerzeichen zwischen Operatoren und Zahlen sind erlaubt, aber nicht notwendig. \verb|1 2 -3 + | ist nicht gültig, da das Minus zur \verb|3| gehört und von \emph{strtod(3)} konsumiert wird. \verb|1 2 *3 + | oder \verb|1 2 - 3 + | hingegen ist in Ordnung.
-Für die Winkelfunktionen müssen Sie \emph{math.h} einbinden, sowie beim Linken den Parameter \emph{-lm} verwenden.
+Leerzeichen zwischen Operatoren und Zahlen sind erlaubt, aber nicht notwendig. \verb|1 2 -3 + | ist nicht gültig, da das Minus zur \verb|3| gehört und von \osuefunc{strtod(3)} konsumiert wird. \verb|1 2 *3 + | oder \verb|1 2 - 3 + | hingegen ist in Ordnung.
+Für die Winkelfunktionen müssen Sie \osuefilename{math.h} einbinden, sowie beim Linken den Parameter \osuearg{-lm} verwenden.
 
 \osueguidelinesone
 
