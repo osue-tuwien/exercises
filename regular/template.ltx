@@ -4,11 +4,14 @@
 \usepackage{a4wide}
 \usepackage{url}
 \usepackage{lmodern}
+\usepackage{alltt}
+\usepackage{booktabs}
 \usepackage{nameref}
 \pagestyle{empty}
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{10pt}
 
+% place the title
 \newcommand\osuetitle[1]{
 \begin{center}
 \begin{Large}
@@ -17,6 +20,21 @@ OPERATING SYSTEMS BEISPIEL #1
 \end{center}
 }
 
+% place a code block that accepts formatting
+% (the minipage suppresses additional spacing, the \hfill suppresses
+% underfull hbox warnings)
+\newenvironment{osuefmtcode}{%
+\begin{minipage}[c]{\textwidth}
+\begin{alltt}
+}{%
+\end{alltt}
+\end{minipage}\hfill
+}
+
+% backslash.
+\newcommand\bslash{\char`\\}
+
+% quick commands to insert guideline notices
 \newcommand\osueguidelinesone{
 \subsection*{Richtlinien}
 
@@ -32,15 +50,15 @@ C-Programmen} sowie die \textit{Allgemeinen Hinweise zur Beispielgruppe 2} auf
 der Übungswebsite.
 
 Insbesondere ist es ab dieser Beispielgruppe notwendig, die Dokumentation in
-Doxygen zu führen. Es muss zumindest das HTML-Output generierbar sein. Bitte
-dokumentieren Sie ausnahmslos alle Funktionen (auch \texttt{static}-Funktionen;
-siehe \texttt{EXTRACT\_STATIC} in der \texttt{Doxyfile}). Eine kurze Einführung
-haben wir Ihnen auf \url{http://wiki.vmars.tuwien.ac.at/index.php/Doxygen_Primer}
-bereitgestellt. Achten Sie weiters darauf, dass nach außen hin sichtbare
-Funktionen (exportierte Funktionen) in der Header-Datei und lokale
-(\texttt{static}) Funktionen nur in der C-Datei dokumentiert werden. Sie sollten
-auch Ihre Typen (insbesondere \texttt{struct}s), Konstanten und globale
-Variablen dokumentieren.
+Doxygen zu führen. Es muss zumindest das \textsc{html}-Output generierbar sein.
+Bitte dokumentieren Sie ausnahmslos alle Funktionen (auch
+\texttt{static}-Funktionen; siehe \texttt{EXTRACT\_STATIC} in der
+\texttt{Doxyfile}). Eine kurze Einführung haben wir Ihnen auf
+\url{http://wiki.vmars.tuwien.ac.at/index.php/Doxygen_Primer} bereitgestellt.
+Achten Sie weiters darauf, dass nach außen hin sichtbare Funktionen (exportierte
+Funktionen) in der Header-Datei und lokale (\texttt{static}) Funktionen nur in
+der C-Datei dokumentiert werden. Sie sollten auch Ihre Typen (insbesondere
+\texttt{struct}s), Konstanten und globale Variablen dokumentieren.
 }
 
 \newcommand\osueguidelinesthree{
@@ -50,3 +68,32 @@ Bitte beachten Sie auch die \textit{Richtlinien für die Erstellung von
 C-Programmen} sowie die \textit{Allgemeinen Hinweise zur Beispielgruppe 3} auf
 der Übungswebsite.
 }
+
+% semantic markup formatting commands:
+
+% C keywords (if, int, return, ...)
+\newcommand\osuekeyword[1]{\texttt{#1}}
+% C functions (printf, open, seminit, ...)
+\newcommand\osuefunc[1]{\emph{#1}}
+% C global variables (stdin, stderr, errno, ...) and constants (EOF, ...)
+\newcommand\osueglvar[1]{\emph{#1}}
+% C global constants
+\newcommand\osueconst[1]{\emph{#1}}
+% program names (diff, grep, ...)
+\newcommand\osueprog[1]{\texttt{#1}}
+% command-line arguments (-s, FILENAME, ...)
+\newcommand\osuearg[1]{\texttt{#1}}
+% filenames which aren't program names (test.txt, ...)
+\newcommand\osuefilename[1]{\texttt{#1}}
+% command to run
+\newcommand\osuecmd[1]{\texttt{#1}}
+% text to be input on stdin
+\newcommand\osueinput[1]{\emph{#1}}
+% text output on stdout
+\newcommand\osueoutput[1]{\emph{#1}}
+% output format
+\newcommand\osueoutform[1]{\emph{#1}}
+% regular expressions
+\newcommand\osueregex[1]{\texttt{#1}}
+% keystrokes (e.g. Ctrl+D)
+\newcommand\osuekeystroke[1]{\texttt{#1}}

@@ -11,18 +11,17 @@
 \section*{Aufgabenstellung}
 
 \begin{verbatim}
-SYNOPSIS:
+    SYNOPSIS:
         calculator
         $> <zahl1> <zahl2> <operator>
 
-BNF:
+    BNF:
         <zahl>     ::= -?[0-9]+
         <operator> ::= +|-|*|/
-
 \end{verbatim}
 
 Schreiben Sie einen Taschenrechner als Vaterprozess, der seinen Input
-von \emph{stdin} als String einliest und den String an einen
+von \osueglvar{stdin} als String einliest und den String an einen
 Kindprozess weiterleitet. Dieser extrahiert aus dem String die
 Operanden und die Operation, berechnet das Ergebnis und gibt dieses
 als String wieder zurück. Das Ergebnis wird vom Vaterprozess
@@ -30,33 +29,30 @@ anschließend am Bildschirm wieder ausgegeben. Da als Zahlen
 Integerwerte (maximal 65535) angenommen werden sollen, kann die
 Eingabezeichenkette auf 15 Zeichen beschränkt werden.
 
-
 Beispielsweise soll die Eingabe \verb_10 15 +_ das Ergebnis \verb_25_
 liefern.
 
 \subsection*{Anleitung}
 
 Das Programm soll nach dem Starten in einer Schleife wiederholt
-Rechnungen von der Tastatur (\emph{stdin}) einlesen. Zur
+Rechnungen von der Tastatur (\osueglvar{stdin}) einlesen. Zur
 Berechnung soll Ihr Programm einen Kindprozess erzeugen, an den
 es die Eingabe über eine Pipe weiterleitet. Dieser Kindprozess
 leitet nach der Umwandlung und Berechnung das Ergebnis über eine
 zweite Pipe an den Vaterprozess zurück. Der Vaterprozess
-gibt dieses Ergebnis wieder am Bildschirm (\emph{stdout}) aus.
-
+gibt dieses Ergebnis wieder am Bildschirm (\osueglvar{stdout}) aus.
 
 Dieser Vorgang soll solange wiederholt werden, bis der Vaterprozess
-EOF (Ctrl-D von der Tastatur) liest. In diesem Fall ist die Pipe zum
-Kindprozess zu schließen. Der Kindprozess erhält dadurch beim Lesen
-ebenfalls EOF und terminiert. Der Vaterprozess soll auf die
-Terminierung des Kindprozesses warten, alle benötigten Ressourcen
-(Pipes) an das System zurückgeben (schließen) und dann ebenfalls
-terminieren.
-
+\osueconst{EOF} (\osuekeystroke{Ctrl+D} von der Tastatur) liest.
+In diesem Fall ist die Pipe zum Kindprozess zu schließen. Der
+Kindprozess erhält dadurch beim Lesen ebenfalls \osueconst{EOF}
+und terminiert. Der Vaterprozess soll auf die Terminierung des
+Kindprozesses warten, alle benötigten Ressourcen (Pipes) an das
+System zurückgeben (schließen) und dann ebenfalls terminieren.
 
 Sie können davon ausgehen, dass alle die Rechnungen richtig eingegeben
-werden – es ist also keine Syntaxüberprüfung notwendig. Auch können
-Sie die Ergebnisse abrunden (Kommastellen abschneiden) – die Eingabe
+werden -- es ist also keine Syntaxüberprüfung notwendig. Auch können
+Sie die Ergebnisse abrunden (Kommastellen abschneiden) -- die Eingabe
 \verb_5 2 /_ ergibt als Ergebnis einfach \verb_2_ anstelle von
 \verb_2.5_.
 

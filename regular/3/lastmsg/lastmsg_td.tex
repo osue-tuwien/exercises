@@ -6,42 +6,44 @@
 
 \section*{Aufgabenstellung}
 
-
-Man implentiere ein Programm dass den String eines Shared Memorys ausliest und
+Man implentiere ein Programm, das den String eines Shared Memorys ausliest und
 eventuell durch einen neuen ersetzt.
+
 \begin{verbatim}
     SYNOPSIS
         lastmsg [-i id] [-c|-d] ["Message"]
 \end{verbatim}
 
-Die id (-i) steht für die ID des Shared Memory Segments (per default: die eigene Matrikelnummer).
-Die ID des Semaphore ist die um eins erhöhte (default: Matrikelnummer+1).
+Die \osuearg{id} (\osuearg{-i}) steht für die ID des Shared-Memory-Segments (per
+default: die eigene Matrikelnummer). Die ID des Semaphores ist die um eins
+erhöhte (default: Matrikelnummer + 1).
 
-Mit -c wird ein neues Shared Memory Segment und eine Semaphore angelegt.
+Mit \osuearg{-c} wird ein neues Shared-Memory-Segment und eine Semaphore
+angelegt. Mit \osuearg{-d} werden diese wieder gelöscht.
 
-Mit -d werden diese wieder gelöscht.
-
-Das optionale Argument ''Message'' ist der in das Shared Memory zu schreibende String.
+Das optionale Argument \osuearg{\char`"Message\char`"} ist der in das Shared
+Memory zu schreibende String.
 
 \subsection*{Anleitung}
 
-Wird die Option -c übergeben, so soll ein neues Shared Memory Segment angelegt
-werden - entweder mit der Default id (Matrikelnummer), oder mit einer über die Option -i
-übergebenen id. Ausserdem soll eine Semaphore mit der um eins erhöhten id des
-Shared Memory Segments angelegt werden (Matrikelnummer+1).
+Wird die Option \osuearg{-c} übergeben, so soll ein neues Shared Memory Segment
+angelegt werden -- entweder mit der voreingestellten \osuearg{id}
+(Matrikelnummer), oder mit einer über die Option \osuearg{-i} übergebenen
+\osuearg{id}. Außerdem soll eine Semaphore mit der um eins erhöhten \osuearg{id}
+des Shared-Memory-Segments angelegt werden (Matrikelnummer + 1).
 
-Die Option -d löscht Shared Memory und Semaphore wieder (auch hier ist die mit
--i übergebene id zu beachten).
+Die Option \osuearg{-d} löscht Shared Memory und Semaphore wieder (auch hier ist
+die mit \osuearg{-i} übergebene \osuearg{id} zu beachten).
 
 Das Programm soll den im Shared Memory befindlichen String auf die Konsole
-ausgeben (ausser -c wurde angegeben).
+ausgeben (außer \osuearg{-c} wurde angegeben).
 
-Wird eine ''Message'' übergeben, so soll das Programm diese in den Shared
-Memory schreiben (ausser -d wurde angegeben).
+Wird eine \osuearg{\char`"Message\char`"} übergeben, so soll das Programm diese
+in den Shared Memory schreiben (ausser \osuearg{-d} wurde angegeben).
 
 \subsection*{Testen}
 
-Mit folgendem Shell-Skript lässt sich testen ob sich das Programm korrekt
+Mit folgendem Shell-Skript lässt sich testen, ob sich das Programm korrekt
 verhält:
 
 \begin{verbatim}
@@ -49,7 +51,7 @@ verhält:
 
 	./lastmsg -c 1234
 	 ( for i in `seq 1000`;do ./lastmsg foo & ./lastmsg bar & ./lastmsg blah & done; wait
-	  ./lastmsg -d 1234 
+	  ./lastmsg -d 1234
 	) > foo.tmp;
 	grep -c foo foo.tmp
 	grep -c bar foo.tmp
@@ -57,12 +59,12 @@ verhält:
 	rm -f foo.tmp
 \end{verbatim}
 
-Als Ergebnis soll drei mal ''1000'' ausgegeben werden. Weichen diese Werte
+Als Ergebnis soll drei mal "`1000"' ausgegeben werden. Weichen diese Werte
 ab, so liegt vermutlich ein Synchronisierungsproblem vor.
 
 \subsection*{Hinweise}
 
-Die Optionen -c und -d schliessen sich wechselseitig aus.
+Die Optionen \osuearg{-c} und \osuearg{-d} schließen sich wechselseitig aus.
 
 \osueguidelinesthree
 

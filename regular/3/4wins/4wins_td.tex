@@ -5,31 +5,65 @@
 \osuetitle{3}
 
 \section*{Aufgabenstellung}
-\textbf{4 Gewinnt}
 
-Wieder einmal wissen Sie nichts mit Ihrer Zeit anzufangen, wollen aber auch nicht aus purer Langeweile eine Partie ''4 Gewinnt'' gegen sich selbst verlieren. So implementieren Sie es, kurz entschlossen, einfach in C; und zwar so, dass auch Sie eine Chance haben zu gewinnen.
+Wieder einmal wissen Sie nichts mit Ihrer Zeit anzufangen, wollen aber auch
+nicht aus purer Langeweile eine Partie "`4 Gewinnt"' gegen sich selbst
+verlieren. So implementieren Sie es, kurz entschlossen, einfach in C; und zwar
+so, dass auch Sie eine Chance haben zu gewinnen.
 
 \subsection*{Anleitung}
-Schreiben Sie 2 Programme(\emph{Server/Client}), die miteinander, "uber ein \emph{Shared Memory} kommunizieren und sich mit Hilfe von Semaphoren synchronisieren. Das Spiel besteht aus einem \emph{Server} und einem \emph{Client}, der \emph{Server} muss also nicht mehrere \emph{Client}s gleichzeitig unterst"utzen. Das (virtuelle) Spielfeld soll eine Gr"o{\ss}e von 7x6 haben, und nur von oben ''bef"ullbar'' sein (genau wie das Originalspiel). Der \emph{Server} erzeugt das \emph{Shared Memory} und verwaltet eine interne Kopie vom enthaltenen Spielbrett, damit ein Schummeln(mehrere Einw"urfe oder unerlaubte Spielfeldver"anderungen) erkennbar ist. Ausserdem soll der \emph{Server}, als Computergegner, nach jedem g"ultigen Einwurf des \emph{Clients}, selbst einwerfen; dabei sollen folgende Regeln ber"ucksichtig werden:
-\begin{itemize}
-\item Mit einer Wahrscheinlichkeit von 1/3 soll dort eingeworfen werden, wo der menschliche Gegner zuletzt eingeworfen hat.
-\item Mit einer Wahrscheinlichkeit von 2/3 soll zuf"allig eingeworfen werden.
-\item Ist die ausgew"ahlte Spalte bereits voll, soll eine gefunden werden, die noch Platz hat - gibt es keine mehr, und keinen Gewinner, steht es unentschieden.
-\end{itemize}
-Wird ein Sieg, Unentschieden oder Schummeln erkannt, gibt das der \emph{Server} dem \emph{Client} bekannt, der \emph{Client} zeigt bei einem Sieg oder Unentschieden nochmals das Spielbrett an und startet das Spiel dann, nach Bet"atigung der Entertaste, neu. Beim Schummeln soll das Spiel gleich neu gestartet werden, ohne dass das Spielfeld nochmals angezeigt wird.
 
-Der \emph{Client} soll das Spielfeld anzeigen und "uber \emph{STDIN} in einer Endlosschleife Kommandos entgegen nehmen. Nach jedem Kommando, das sich auf das Spielfeld auswirkt, soll das Spielfeld erneut angezeigt werden. Arbeiten Sie mit \emph{system(3)} und dem Shell-Befehl \emph{clear}, um den Bildschirm zu l"oschen.
+\begin{verbatim}
+    SYNOPSIS:
+        4wserver
+        4wclient
+\end{verbatim}
+
+Schreiben Sie zwei Programme (\emph{Server} und \emph{Client}), die miteinander
+über ein Shared Memory kommunizieren und sich mit Hilfe von Semaphoren
+synchronisieren. Das Spiel besteht aus einem Server und nur einem Client, der
+Server muss also nicht mehrere Clients gleichzeitig unterstützen. Das
+(virtuelle) Spielfeld soll eine Größe von $7\times 6$ haben, und nur von oben
+"`befüllbar"' sein (genau wie das Originalspiel). Der Server erzeugt das Shared
+Memory und verwaltet eine interne Kopie vom enthaltenen Spielbrett, damit ein
+Schummeln (mehrere Einwürfe oder unerlaubte Spielfeldveränderungen) erkennbar
+ist. Außerdem soll der Server, als Computergegner, nach jedem gültigen Einwurf
+des Clients selbst einwerfen; dabei sollen folgende Regeln berücksichtigt
+werden:
+
+\begin{itemize}
+\item Mit einer Wahrscheinlichkeit von 1/3 soll dort eingeworfen werden, wo der
+menschliche Gegner zuletzt eingeworfen hat.
+\item Mit einer Wahrscheinlichkeit von 2/3 soll zufällig eingeworfen werden.
+\item Ist die ausgewählte Spalte bereits voll, soll eine gefunden werden, die
+noch Platz hat -- gibt es keine mehr, und keinen Gewinner, steht es
+unentschieden.
+\end{itemize}
+
+Wird ein Sieg, Unentschieden oder Schummeln erkannt, gibt das der Server dem
+Client bekannt; der Client zeigt bei einem Sieg oder Unentschieden nochmals das
+Spielbrett an und startet das Spiel dann, nach Betätigung der Entertaste, neu.
+Beim Schummeln soll das Spiel gleich neu gestartet werden, ohne dass das
+Spielfeld nochmals angezeigt wird.
+
+Der Client soll das Spielfeld anzeigen und über \osueglvar{stdin} in einer
+Endlosschleife Kommandos entgegen nehmen. Nach jedem Kommando, das sich auf das
+Spielfeld auswirkt, soll das Spielfeld erneut angezeigt werden. Arbeiten Sie mit
+\osuefunc{system(3)} und dem Shell-Befehl \osueprog{clear}, um den Bildschirm zu
+löschen.
+
 \begin{verbatim}
 Kommandos:
 
-d<spalte nr>   wirf bei <spalte nr> ein: z.B: d2 oder d5
-u<spalte nr>   nimm Zug bei <spalte nr> zurueck: z.B: u2 oder u5
+d<spalte nr>   wirf bei <spalte nr> ein, z.B. d2 oder d5
+u<spalte nr>   nimm Zug bei <spalte nr> zurueck, z.B. u2 oder u5
 c              beende Einwurf und gib das Spiel an den Computergegner zurueck
 n              Neustart des Spiels
 q              Beenden
 \end{verbatim}
 
-Beim Beenden des \emph{Client}s soll das Spiel erhalten bleiben, sodass es beim erneuten Start des \emph{Client}s weitergespielt werden kann.
+Beim Beenden des Clients soll das Spiel erhalten bleiben, sodass es beim
+erneuten Start des Clients weitergespielt werden kann.
 
 \osueguidelinesthree
 
