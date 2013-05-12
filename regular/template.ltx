@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass[a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[german]{babel}
 \usepackage{a4wide}
@@ -24,11 +24,15 @@ OPERATING SYSTEMS BEISPIEL #1
 % (the minipage suppresses additional spacing, the \hfill suppresses
 % underfull hbox warnings)
 \newenvironment{osuefmtcode}{%
+% begin with a paragraph break
+
 \begin{minipage}[c]{\textwidth}
 \begin{alltt}
 }{%
 \end{alltt}
 \end{minipage}\hfill
+
+% end with a paragraph break
 }
 
 % backslash.
