@@ -2,6 +2,12 @@
 
 \usepackage{bytefield}
 
+% for aligning the letters in the bytefield
+\newcommand{\baselinecenterit}[1]{%
+  \centering
+  \raisebox{0pt}[\heightof{W}][0pt]{\itshape #1}%
+}
+
 \begin{document}
 
 \osuetitle{1}
@@ -19,7 +25,7 @@ In der hier verwendeten Variante des Spiels besteht eine Folge aus 5 Farben,
 wobei folgende 8 Farben zur Verfügung stehen:
 \textbf{b}eige,
 \textbf{d}unkelblau,
-\textbf{g}r\"un,
+\textbf{g}rün,
 \textbf{o}range,
 \textbf{r}ot,
 \textbf{s}chwarz,
@@ -36,14 +42,14 @@ Stifte). Beachten Sie dabei, dass die Summe roter und weißer Stifte für eine
 Farbe die Kardinalität dieser Farbe in der korrekten Lösung nicht übersteigen
 kann.
 
-Hierzu ein Beispiel: Angenommen die korrekte Lösung ist die Folge 
-\begin{verbatim}
+Hierzu ein Beispiel: Angenommen die korrekte Lösung ist die Folge
+\begin{osuefmtcode}
   rot, rot, grün, grün, grün
-\end{verbatim}
+\end{osuefmtcode}
 und der Spieler vermutet bei der korrekten Folge handle es sich um
-\begin{verbatim}
+\begin{osuefmtcode}
   rot, grün, rot, beige, rot
-\end{verbatim}
+\end{osuefmtcode}
 Dann ist lediglich die erste Farbe der vermuteten Lösung an der korrekten
 Position (ein roter Stift), und \emph{zwei} weitere Elemente der Folge (einmal
 Farbe grün und \emph{einmal} Farbe rot) sind zusätzlich an einer anderen
@@ -58,10 +64,11 @@ Fehler ausgeben.
 \subsection*{Implementierungshinweise}
 \label{sec:implhints}
 \paragraph{Server:}
-Teile des Servers sind bereits vorgegeben. Bitte verwenden Sie dieses Template und erweitern Sie es entsprechend.
-Dem Server wird als erstes Argument der Port übergeben, auf dem er für die Clients
-erreichbar sein soll. Das zweite Argument ist ein String der Länge \textbf{5},
-bestehend aus den Anfangsbuchstaben der 5 Farben der geheimen Zahlenfolge.
+Teile des Servers sind bereits vorgegeben. Bitte verwenden Sie dieses Template
+und erweitern Sie es entsprechend.  Dem Server wird als erstes Argument der Port
+übergeben, auf dem er für die Clients erreichbar sein soll. Das zweite Argument
+ist ein String der Länge \textbf{5}, bestehend aus den Anfangsbuchstaben der 5
+Farben der geheimen Zahlenfolge.
 
 %  Erstellen Sie mittels \texttt{socket(AF\_INET,SOCK\_STREAM,0)} einen TCP/IP
 % Socket und binden sie diesen Socket and die übergeben Portnummer mittels
@@ -70,94 +77,103 @@ bestehend aus den Anfangsbuchstaben der 5 Farben der geheimen Zahlenfolge.
 % Endlosschleife \emph{accept} auf, um Verbindungsanfragen der Clients zu
 % akzeptieren.
 
-Der Server soll auf eine eingehende Verbindungen warten. Sobald eine
-Verbindung akzeptiert wurde, beginnt ein neues Spiel, und der Server
-beantwortet bis zum Ende des Spiels die Anfragen des Clients. Am Ende des
-Spiels werden entweder die Anzahl der gespielten Runden oder der zuletzt
-übermittelte Fehler ausgegeben, und das Serverprogramm wird mit einem
-dementsprechenden Rückgabewert (siehe weiter unten) beendet. Sobald der Server
-\texttt{SIGINT}, \texttt{SIGQUIT} oder \texttt{SIGTERM} empfängt, soll der
-Serversocket geschlossen, und das Programm verlassen werden (Rückgabewert 0).
+Der Server soll auf eingehende Verbindungen warten. Sobald eine Verbindung
+akzeptiert wurde, beginnt ein neues Spiel, und der Server beantwortet bis zum
+Ende des Spiels die Anfragen des Clients. Am Ende des Spiels werden entweder die
+Anzahl der gespielten Runden oder der zuletzt übermittelte Fehler ausgegeben,
+und das Serverprogramm wird mit einem entsprechenden Rückgabewert (siehe weiter
+unten) beendet. Sobald der Server eines der Signale \osueconst{SIGINT},
+\osueconst{SIGQUIT} oder \osueconst{SIGTERM} empfängt, soll der Serversocket
+geschlossen und das Programm mit Rückgabewert 0 beendet werden.
 
 \begin{verbatim}
-Server: SYNOPSIS
-   server <server-port>  <secret-sequence>
-        EXAMPLE
-   server 1280 wwrgb
+Server:
+    SYNOPSIS
+        server <server-port>  <secret-sequence>
+    EXAMPLE
+        server 1280 wwrgb
 \end{verbatim}
 
 \paragraph{Client:}
 
 Dem Client wird beim Aufruf der Hostname und die Portnummer des Servers
-übergeben (wenn der Client auf der selben Maschiene wie der Host ausgeführt
-wird, dann geben sie \emph{localhost} für den Hostnamen des Servers an). Legen
-sie zuerst einen TCP/IP Socket an. Stellen Sie dann die zum Hostnamen des
-Servers zugehörige IP-Adresse fest, und verbinden Sie sich mit dem Server.
-Danach wird sofort mit dem Spiel begonnen, und der Client übermittelt
-wiederholt die vermutete Farbfolge, bis der Server entweder kommuniziert, dass
-die Folge der Geheimfolge entspricht (Antwortfeld rot ist 5), oder einen
-Fehler übermittelt. Am Ende des Spiels werden entweder die Anzahl der
-gespielten Runden oder der zuletzt übermittelte Fehler ausgegeben. Danach soll
-der Socket geschlossen und das Programm beendet werden (Rückgabewert siehe
-nächster Absatz).
+übergeben (wenn der Client auf der selben Maschine wie der Server ausgeführt
+wird, dann geben Sie \emph{localhost} als Hostnamen an). Legen Sie zuerst einen
+TCP/IP-Socket an. Stellen Sie dann die zum Hostnamen des Servers zugehörige
+IP-Adresse fest, und verbinden Sie sich mit dem Server. Danach wird sofort mit
+dem Spiel begonnen, und der Client übermittelt wiederholt die vermutete
+Farbfolge, bis der Server entweder kommuniziert, dass die Folge der Geheimfolge
+entspricht (Antwortfeld rot ist 5), oder einen Fehler übermittelt. Am Ende des
+Spiels werden entweder die Anzahl der gespielten Runden oder der zuletzt
+übermittelte Fehler ausgegeben. Danach soll der Socket geschlossen und das
+Programm beendet werden (Rückgabewert siehe nächster Absatz).
 
 \begin{verbatim}
-Client: SYNOPSIS
-  client <server-hostname> <server-port>
-        EXAMPLE
-   client localhost 1280
+Client:
+    SYNOPSIS
+        client <server-hostname> <server-port>
+    EXAMPLE
+        client localhost 1280
 \end{verbatim}
 
 % Verbinden Sie den Socket mittels \emph{connect}. Senden Sie mittels \emph{write} die Anfragen an de Server, und empfangen Sie de Antwort des Servers mittels \emph{read} und schicken ihn mittels \emph{write} wieder zurück. 
 \paragraph{Fehlermeldungen und Rückgabewerte:} Ist eines der beiden
 Fehlerstatusbits (siehe Abschnitt~\nameref{sec:prot}) gesetzt, sollen sowohl der
-Client als auch der Server terminieren. Bei einem Parit\"atsfehler (Bit $6$
-der Serverantwort gesetzt) soll die Meldung ``Parity error'' ausgegeben
-werden (Rückgabewert 2). Bei einer Überschreitung der maximalen
+Client als auch der Server terminieren. Bei einem Paritätsfehler (Bit $6$ der
+Serverantwort gesetzt) soll die Meldung ``Parity error'' ausgegeben und beide
+Programme mit dem Wert 2 beendet werden. Bei einer Überschreitung der maximalen
 Rundenanzahl, wenn also der Spieler die Folge nicht erraten konnte (Bit 7
-gesetzt), geben Sie die Meldung ``Game lost'' aus (Rückgabewert 3). Sind beide Bits gesetzt, sind beide Meldungen auszugegeben und das
-Programm mit Rückgabewert 4 zu terminieren. Bei sonstigen Fehlern (z.B.
-ungültige Kommandozeilenargumente, Verbindungsfehler, \ldots) soll eine
-informative Fehlermeldung ausgegeben und mit Rückgabewert EXIT\_FAILURE (1)
-terminiert werden. Alle Fehlermeldungen müssen auf \emph{stderr} ausgegeben
-und von einem Zeilenumbruch gefolgt werden.
+gesetzt), geben Sie die Meldung ``Game lost'' aus und beenden Sie beide
+Programme mit dem Exit-Code 3. Sind beide Bits gesetzt, sind beide Meldungen
+auszugeben und die Programme mit Rückgabewert 4 zu terminieren. Bei sonstigen
+Fehlern (z.B.\ ungültige Kommandozeilenargumente, Verbindungsfehler, \ldots)
+soll eine informative Fehlermeldung ausgegeben und mit Rückgabewert
+\osueconst{EXIT\_FAILURE} (1) terminiert werden. Alle Fehlermeldungen müssen auf
+\osueglvar{stderr} ausgegeben und von einem Zeilenumbruch gefolgt werden.
 
 Endet das Spiel regulär (der Spieler errät die geheime Farbfolge), so soll die
-Anzahl gespielter Runden auf \texttt{stdout} ausgegeben werden (Rückgabewert
+Anzahl gespielter Runden auf \osueglvar{stdout} ausgegeben werden (Rückgabewert
 0).
 
 \subsection*{Protokoll}
 \label{sec:prot}
 \emph{Server} und \emph{Client} kommunizieren in Runden wie nachfolgend
-gezeigt. Der Client \"ubermittelt pro Runde genau zwei Bytes, der Server genau
+gezeigt. Der Client übermittelt pro Runde genau zwei Bytes, der Server genau
 ein Byte. Dabei muss im Falle des Clients stets zuerst das niedrigerwertige
-Byte (Bits 0-7), und dann das höherwertige Byte (Bits 8-15) übertragen werden,
+Byte (Bits 0--7), und dann das höherwertige Byte (Bits 8--15) übertragen werden,
 unabhängig von der Architektur der Zielplattform.
 
 \subsubsection*{Client}
 Der \emph{Client} schickt an den Server Nachrichten im folgenden Format:\\
 
-\begin{bytefield}[boxformatting={\centering\itshape},bitwidth=1.5em]{16}
-   \bitheader[b]{0-15} \\
-   \bitbox{1}{p} & \bitbox{3}{color R} & \bitbox{3}{color} & \bitbox{3}{color} & \bitbox{3}{color} & \bitbox{3}{color L} 
+\begin{bytefield}[boxformatting={\baselinecenterit},bitwidth=1.5em,endianness=big]{16}
+   \bitheader{0-15} \\
+   \bitbox{1}{p} & \bitbox{3}{color R} & \bitbox{3}{color} & \bitbox{3}{color} & \bitbox{3}{color} & \bitbox{3}{color L}
 \end{bytefield}
 
-Der Wert \verb|color L| entspricht der Farbe ganz links am Spielbrett, der Wert \verb|color_R| der Farbe ganz
-rechts. Den Farben werden die Werte entsprechend dem folgenden \verb|enum| zugeordnet: \verb|enum color {beige = 0, darkblue, green, orange, red, black, violet, white}|.
+Der Wert \verb|color L| entspricht der Farbe ganz links am Spielbrett, der Wert
+\verb|color_R| der Farbe ganz rechts. Den Farben werden die Werte entsprechend
+dem folgenden \verb|enum| zugeordnet:
+\verb|enum color {beige = 0, darkblue, green, orange, red, black, violet, white}|.
 
-Der Wert \verb|p| entspricht einem \emph{Parity Bit} \"{u}ber die einzelnen Bits der Farben (Bit~0 bis Bit~14). Um dieses zu Berechnen, werden die einzelnen Bits mit einer \emph{xor}-Operation verkn\"{u}pft.
+Der Wert \verb|p| entspricht einem \emph{Parity Bit} über die einzelnen Bits der
+Farben (Bit~0 bis Bit~14). Um dieses zu Berechnen, werden die einzelnen Bits mit
+einer \emph{xor}-Operation verknüpft.
 
 \subsubsection*{Server}
 
-Der \emph{Server} empf\"{a}ngt die Nachricht des Clients und wertet den aktuellen Versuch des Clients aus. Der Wert
-\verb|number red| entspricht der Anzahl an richtig erratenen Farben an der richtigen Position, \verb|number white| der
-Anzahl an richtig erratenen Farben an der falschen Position (siehe Abschnitt~\nameref{sec:aufgabenstellung}). Das Feld \verb|status| hat
-folgende Bedeutung: Ist Bit $6$ gesetzt, wurde das \emph{Parity Bit} vom Client nicht richtig berechnet. Ein gesetztes
-Bit an Position 7 bedeutet dass die maximale Anzahl an Versuchen \"{u}berschritten wurde (Sie haben verloren). \\
+Der \emph{Server} empfängt die Nachricht des Clients und wertet den aktuellen
+Versuch des Clients aus. Der Wert \verb|number red| entspricht der Anzahl an
+richtig erratenen Farben an der richtigen Position, \verb|number white| der
+Anzahl an richtig erratenen Farben an der falschen Position (siehe
+Abschnitt~\nameref{sec:aufgabenstellung}). Das Feld \verb|status| hat folgende
+Bedeutung: Ist Bit $6$ gesetzt, wurde das \emph{Parity Bit} vom Client nicht
+richtig berechnet. Ein gesetztes Bit an Position 7 bedeutet dass die maximale
+Anzahl an Versuchen überschritten wurde (Sie haben verloren). \\
 
-\begin{bytefield}[boxformatting={\centering\itshape},bitwidth=2.2em]{8}
+\begin{bytefield}[boxformatting={\baselinecenterit},bitwidth=2.2em,endianness=big]{8}
    %\settowidth{\bitwidth}{~number white~}
-   \bitheader[b]{0-7} \\
+   \bitheader{0-7} \\
    \bitbox{2}{status} & \bitbox{3}{number white} & \bitbox{3}{number red}
 \end{bytefield}
 
@@ -165,29 +181,31 @@ Bit an Position 7 bedeutet dass die maximale Anzahl an Versuchen \"{u}berschritt
 \subsection*{Bewertung}
 \label{sec:grading}
 Um das Beispiel erfolgreich zu lösen, müssen sowohl die Implementierung des
-Servers als auch des Clients korrekt funktionieren (siehe allgemeine Beispielanforderungen) und folgenden Anforderungen genügen:
+Servers als auch des Clients korrekt funktionieren (siehe allgemeine
+Beispielanforderungen) und folgenden Anforderungen genügen:
 
 \paragraph{Server:}
-Teile des Servers sind bereits vorgegeben. Bitte verwenden Sie dieses Template und erweitern Sie es entsprechend.
-Der Server muss die korrekte Antwort auf gültige Anfragen
-übermitteln. Entspricht bei der 35ten Anfrage die vermutete Folge nicht der
-Geheimfolge, so muss das Bit 7 der Serverantwort gesetzt werden. Genau dann
-wenn das Paritätsbit falsch berechnet wurde, ist das Bit 6 der Antwort zu
-setzten. Schließlich muss der Server korrekt auf die in Abschnitt
+Teile des Servers sind bereits vorgegeben. Bitte verwenden Sie dieses Template
+und erweitern Sie es entsprechend. Der Server muss die korrekte Antwort auf
+gültige Anfragen übermitteln. Entspricht bei der 35ten Anfrage die vermutete
+Folge nicht der Geheimfolge, so muss das Bit 7 der Serverantwort gesetzt werden.
+Genau dann, wenn das Paritätsbit falsch berechnet wurde, ist das Bit 6 der
+Antwort zu setzten. Schließlich muss der Server korrekt auf die in Abschnitt
 \nameref{sec:implhints} beschriebenen Signale reagieren.
 
 \paragraph{Client:} Der Client muss jeweils innerhalb von einer Sekunde (auf
-dem Abgaberechner im TI Labor) eine Anfrage an den Server generieren. 
+dem Abgaberechner im TI-Labor) eine Anfrage an den Server generieren.
 % Weiters muss jedes Spiel innerhalb von 35 Runden gewonnen werden.
 Sendet der Server einen Fehlercode, so muss der Client sofort mit der
 entsprechenden Fehlermeldung terminieren.
 
-\paragraph{Bonuspunkte:} Für gute und ausgezeichnete L\"osungen werden Bonuspunkte vergeben.
-Die Qualität einer Lösung wird dadurch bestimmt, wie viele Runden im Schnitt
-benötigt werden, um ein Spiel zu gewinnen (average rounds per game). 
-Ben\"otigt Ihre L\"osung im Durchschnitt weniger als 20 Runden, und verliert kein
-einziges Spiel, so erhalten Sie 5 Bonuspunkte. Weitere 5 Bonuspunkte werden vergeben,
-wenn der Client das Spiel in durchschnittlich 8 oder weniger Runden gewinnt.
+\paragraph{Bonuspunkte:} Für gute und ausgezeichnete Lösungen werden Bonuspunkte
+vergeben. Die Qualität einer Lösung wird dadurch bestimmt, wie viele Runden im
+Schnitt benötigt werden, um ein Spiel zu gewinnen (average rounds per game).
+Benötigt Ihre Lösung im Durchschnitt weniger als 20 Runden, und verliert kein
+einziges Spiel, so erhalten Sie 5 Bonuspunkte. Weitere 5 Bonuspunkte werden
+vergeben, wenn der Client zusätzlich jedes Spiel in durchschnittlich 8 oder
+weniger Runden gewinnt.
 
 \osueguidelinesone
 

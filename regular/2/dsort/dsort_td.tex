@@ -5,7 +5,7 @@
 
 \osuetitle{2}
 
-\section*{Aufgabenstellung}
+\section*{Aufgabenstellung -- dsort}
 
 \begin{verbatim}
     SYNOPSIS:
@@ -83,8 +83,8 @@ als 1023 echte Zeichen ist.
 \item Die Funktion \osuefunc{popen(3)} darf nicht verwendet werden.
 \item Achten Sie darauf, dass der Elternprozess sich erst beendet,
 nachdem alle Kindprozesse terminiert haben.
-\item Gewisse Nicht-ANSI-Funktionen (wie etwa \osuefunc{strdup(3)}) werden
-erst sichtbar, wenn mit\\\osuearg{-D\_XOPEN\_SOURCE=500} kompiliert wird.
+\item Gewisse Nicht-\textsc{ansi}-Funktionen (wie etwa \osuefunc{strdup(3)})
+werden erst sichtbar, wenn mit\\\osuearg{-D\_XOPEN\_SOURCE=500} kompiliert wird.
 \item Achten Sie unbedingt darauf, dass alle Ressourcen auch wieder
 freigegeben werden (besonders im Fehlerfall)!
 \end{itemize}
