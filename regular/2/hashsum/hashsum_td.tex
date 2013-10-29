@@ -19,12 +19,12 @@ werden.
 
 \begin{verbatim}
     SYNOPSIS:
-        hashes [-i ignorepraefix] <directory>
+        hashsum [-i ignorepraefix] <directory>
 \end{verbatim}
 
 Mit dem Parameter \osuearg{-i} (``ignore'') werden Dateien, die mit dem
 darauffolgenden Muster (nicht case-sensitive!) beginnen, ausgenommen;
-so führt ein Aufruf \osuecmd{hashes -i . \~} dazu, dass alle versteckten
+so führt ein Aufruf \osuecmd{hashsum -i . \~} dazu, dass alle versteckten
 Dateien im Home-Verzeichnis nicht behandelt werden.
 
 \subsection*{Anleitung}
@@ -45,7 +45,7 @@ soll in diesem Fall ignoriert werden.
 
 \begin{osuefmtcode}
 ~ $ \osueinput{mkdir hashtests}
-~/hashtests $ \osueinput{cd hashtests}
+~ $ \osueinput{cd hashtests}
 ~/hashtests $ \osueinput{touch emptyfile}
 ~/hashtests $ \osueinput{echo "das ist das haus vom nikolaus" > textfile}
 ~/hashtests $ \osueinput{echo "compressme" \textup{|} gzip -cf > compressed.gz}
