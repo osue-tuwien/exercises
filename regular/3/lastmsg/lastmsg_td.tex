@@ -6,8 +6,8 @@
 
 \section*{Aufgabenstellung -- lastmsg}
 
-Man implentiere ein Programm, das den String eines Shared Memorys ausliest und
-eventuell durch einen neuen ersetzt.
+Man implementiere ein Programm, das den Inhalt eines Shared-Memory-Segments als
+String ausliest und eventuell durch einen neuen String ersetzt.
 
 \begin{verbatim}
     SYNOPSIS
@@ -26,11 +26,11 @@ Memory zu schreibende String.
 
 \subsection*{Anleitung}
 
-Wird die Option \osuearg{-c} übergeben, so soll ein neues Shared Memory Segment
+Wird die Option \osuearg{-c} übergeben, so soll ein neues Shared-Memory-Segment
 angelegt werden -- entweder mit der voreingestellten \osuearg{id}
 (Matrikelnummer), oder mit einer über die Option \osuearg{-i} übergebenen
 \osuearg{id}. Außerdem soll eine Semaphore mit der um eins erhöhten \osuearg{id}
-des Shared-Memory-Segments angelegt werden (Matrikelnummer + 1).
+des Shared-Memory-Segments angelegt werden.
 
 Die Option \osuearg{-d} löscht Shared Memory und Semaphore wieder (auch hier ist
 die mit \osuearg{-i} übergebene \osuearg{id} zu beachten).
@@ -39,34 +39,47 @@ Das Programm soll den im Shared Memory befindlichen String auf die Konsole
 ausgeben (außer \osuearg{-c} wurde angegeben).
 
 Wird eine \osuearg{\char`"Message\char`"} übergeben, so soll das Programm diese
-in den Shared Memory schreiben (ausser \osuearg{-d} wurde angegeben).
+in den Shared Memory schreiben (außer \osuearg{-d} wurde angegeben).
+
+\subsection*{Hinweise}
+
+Die Optionen \osuearg{-c} und \osuearg{-d} schließen sich wechselseitig aus.
+Außerdem darf keine \osuearg{\char`"Message\char`"} angegeben werden, wenn die
+Option \osuearg{-d} gesetzt ist. Wird die Option \osuearg{-c} ohne
+\osuearg{\char`"Message\char`"} angegeben, soll das neu angelegte Shared Memory
+mit einem leeren String befüllt werden.
 
 \subsection*{Testen}
 
 Mit folgendem Shell-Skript lässt sich testen, ob sich das Programm korrekt
 verhält:
 
-\begin{verbatim}
-	#!/bin/sh
+\pagebreak[4]
 
-	./lastmsg -c 1234
-	 ( for i in `seq 1000`;do ./lastmsg foo & ./lastmsg bar & ./lastmsg blah & done; wait
-	  ./lastmsg -d 1234
-	) > foo.tmp;
-	grep -c foo foo.tmp
-	grep -c bar foo.tmp
-	grep -c blah foo.tmp
-	rm -f foo.tmp
+\begin{verbatim}
+#!/bin/sh
+./lastmsg -c 1234
+
+(
+    for i in $(seq 1000)
+    do
+        ./lastmsg foo &
+        ./lastmsg bar &
+        ./lastmsg blah &
+    done
+    wait
+    ./lastmsg -d
+) > foo.tmp
+
+grep -c foo foo.tmp
+grep -c bar foo.tmp
+grep -c blah foo.tmp
+rm -f foo.tmp
 \end{verbatim}
 
 Als Ergebnis soll drei mal "`1000"' ausgegeben werden. Weichen diese Werte
 ab, so liegt vermutlich ein Synchronisierungsproblem vor.
 
-\subsection*{Hinweise}
-
-Die Optionen \osuearg{-c} und \osuearg{-d} schließen sich wechselseitig aus.
-
 \osueguidelinesthree
 
 \end{document}
-
