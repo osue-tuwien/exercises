@@ -68,6 +68,12 @@ gültigen Kommandos ausgegeben werden.
 Beim Beenden des Clients soll das Spiel erhalten bleiben, sodass es beim
 erneuten Start des Clients weitergespielt werden kann.
 
+\subsection*{Hinweise}
+Um eine Kommunikation zwischen Server und Client abseits des Spielfelds zu
+ermöglichen (Spielstatus o.Ä.), ist es ratsam, außer dem Array noch eine Variable im Shared
+Memory zu definieren, um Statusnachrichten auszutauschen. Dafür sind
+\osuekeyword{struct}s ganz nützlich.
+
 \osueguidelinesthree
 
 \end{document}
