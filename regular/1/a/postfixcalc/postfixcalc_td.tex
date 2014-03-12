@@ -5,7 +5,8 @@
 \osuetitle{1}
 
 \section*{Aufgabenstellung A -- postfixcalc}
-Schreiben Sie einen Rechner, der die Postfix-Notation versteht.
+Schreiben Sie einen Rechner, der Ausdr{\"u}cke in Postfix-Notation interpr{\"a}tiert
+und auswertet.
 Implementieren Sie die vier Grundrechenarten (\(+\), \(-\), \(*\), \(/\)) sowie
 die Winkelfunktionen Sinus und Cosinus. Die Option \osuearg{-i} erzwingt eine
 ganzzahlige Ausgabe. Wird \osuearg{-a} angegeben, ist nach der Berechnung der
@@ -48,6 +49,29 @@ ob ein korrekter Operator angegeben wurde. In diesen Fall nehmen Sie zwei Zahlen
 Ergebnis soll dann wiederum auf den Stack gelegt werden.
 Wenn das Zeilenende erreicht wurde, darf sich nur noch ein Element -- das
 Ergebnis -- am Stack befinden.
+
+\subsubsection*{Stack}
+Wir empfehlen f{\"u}r dieses Beispiel eine simple, statische Stackimplementierung.
+Sie k{\"o}nnen sich beispielsweise an diesem Codesnippet orientieren:
+\begin{lstlisting}[language=c,basicstyle=\scriptsize]
+#define STACK_SIZE 1024
+
+static int stack[STACK_SIZE];
+static int stack_top;
+ 
+void stack_push(int a)
+{
+  stack[stack_top] = a;
+  ++stack_top;
+}
+  
+int stack_pop(void)
+{
+  --stack_top;
+  return stack[stack_top];
+}
+\end{lstlisting}
+Versuchen Sie eine m{\"o}glichst knappe maximale Stack Gr{\"o}{\ss}e \verb|STACK_SIZE| zu w{\"a}hlen.
 
 \subsection*{Testen}
 Testen Sie Ihr Programm mit verschieden Eingaben. Erstellen sie zum Beispiel
