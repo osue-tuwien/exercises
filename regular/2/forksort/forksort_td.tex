@@ -19,28 +19,34 @@ Strings auf je 62 echte Zeichen begrenzen. (Vergessen Sie nicht dafür eine
 Konstante zu definieren!)
 
 \subsection*{Arbeitsweise}
-Forksort funktioniert wie eine rekursive Merge-Sort-Variante.
+Forksort funktioniert wie eine rekursive Merge-Sort-Variante\footnote{Siehe insb. die graphisch aufbereitete Beispielausf{\"u}hrung auf: http://de.wikipedia.org/wiki/Mergesort}.
 \begin{enumerate}
 \item Lesen Sie die Anzahl der Strings ein.
 \item Ist die Anzahl gleich Eins, dann geben Sie das "`sortierte"' Ergebnis
-  aus. (Es ist einfach der eine String selbst.)
-\item Ist die Anzahl größer Eins, dann erstellen Sie vier Unnamed-Pipes (zwei
-  je Kind) und forken diese zwei Kindprozesse. Verwenden Sie \osuefunc{dup2(2)}
+  aus (d.h. den Eingabe-String selbst).
+\item Ist die Anzahl größer Eins, erstellen Sie zuerst vier Unnamed-Pipes (zwei
+  je Kind) und erzeugen dann zwei Kindprozesse (nicht Kind- und Enkelkind) mittels
+  \osuefunc{fork(2)}. Verwenden Sie \osuefunc{dup2(2)}
   und \osuefunc{execlp(3)} um \osueglvar{stdin}/\osueglvar{stdout} der neuen
-  Prozesse auf eigene Streams zu verbiegen und danach Forksort rekursiv
+  Prozesse auf eigene Streams umzuleiten und danach Forksort rekursiv
   aufzurufen.
-\item Schreiben Sie je die Hälfte der Strings auf die \osueglvar{stdin} der
-  beiden Kinder. Ist die Anzahl der Eingaben ungerade, dann wählen Sie
-  ein beliebiges Kind aus, das einen String mehr bekommt. Vergessen Sie nicht
-  auch die Anzahl der Strings an das jeweilige Kind zu übermitteln.
-\item Lesen Sie nun die Strings der Kinder ein, und geben Sie diese vereinigt
-  aus. (Dieser Vorgang nennt sich \emph{Merge}.) Vergessen Sie nicht, dass die
-  beiden Streams schon (für sich alleine) sortiert sind. Sie können also
+\item Schreiben Sie je die Hälfte der Strings auf \osueglvar{stdin} der
+  beiden Kinder im zuvor spezifiziertem Eingabeformat (d.h., Anzahl der Strings,
+  Newline, die Eingabestrings zeilenweise).
+  Ist die Anzahl der Strings ungerade, dann wählen Sie
+  ein beliebiges Kind aus, das einen String mehr bekommt.
+  %Vergessen Sie nicht
+  %auch die Anzahl der Strings an das jeweilige Kind zu übermitteln.
+\item Lesen Sie nun die Ausgabe der Kinder zeilenweise ein, und
+  geben Sie diese aber nun ''verschmolzen'', d.h. sortiert zeilenweise aus
+  (dieser Vorgang nennt sich \emph{Merge}).
+  Beachten Sie, dass die Ausgabe der Kinder bereits fuer
+  sich sortiert ist.  Sie können also
   solange die Strings des ersten Kindes ausgeben, bis der kleinste String des
   zweiten Kindes kleiner als der kleinste, noch nicht ausgegebene, String des
   ersten Kindes ist. Danach lesen Sie vom zweiten Kind, bis der String des
   ersten Kindes wiederum kleiner ist. Wiederholen Sie diesen Vorgang solange,
-  bis alle Strings ausgegeben sind.
+  bis alle Strings der Kinder abgearbeitet sind.
 
   Der Merge-Vorgang muss einen linearen Aufwand haben.
 \item Verwenden Sie \osuefunc{wait(2)} oder \osuefunc{waitpid(2)}, um den
@@ -48,24 +54,24 @@ Forksort funktioniert wie eine rekursive Merge-Sort-Variante.
 \end{enumerate}
 
 \subsection*{Hinweise}
-Achten Sie darauf, dass das rekursive Fork nicht zu einer Endlos-Schleife führt.
+Achten Sie auf korrekte Terminierungsbedingungen von forksort um ''Endlos-Rekursionen'' zu vermeiden\footnote{http://en.wikipedia.org/wiki/Fork\_bomb}.
 Dazu sind zwei Regeln zu beachten:
 \begin{enumerate}
-\item Forken Sie nur, wenn die Anzahl größer eins ist.
+\item Forken Sie nur, wenn die Anzahl der zu sortierenden Strings größer eins ist.
 \item Die an das jeweilige Kind übergebene Anzahl muss stets kleiner sein als
-  die des Vaters.
+  die des Elternprozesses.
 \end{enumerate}
 Beginnen Sie am besten, indem Sie eine Variante schreiben, die nur einen String
-sortieren kann. Erweitern Sie nun die Funktion für zwei Strings, indem Sie ein
-Fork implementieren und jeweils einen String an jedes Kind schreiben. Diese
-können ja schon einen einzelnen String sortieren. Ein einfaches
-\osuefunc{strcmp(3)} als Merge-Implementation sollte jetzt noch reichen. Wenn
+sortieren kann. Erweitern Sie nun Ihr Programm für zwei Strings, indem Sie den beschriebenen
+Fork-Vorgang implementieren und jeweils einen String an jedes der beiden Kinder schreiben. Diese
+können ja schon einen einzelnen String sortieren. Ein einziger Aufruf von
+\osuefunc{strcmp(3)} als Merge-Implementation gen{\"u}gt um zu entscheiden welche
+Ausgabe der Kinder zuerst vom Elternprozess ausgegeben werden soll. Wenn
 das funktioniert, können Sie Ihre Merge-Implementierung verallgemeinern, um auch
 mehr als zwei Strings sortieren zu können.
 
 Um Fehlermeldungen und Debug-Messages auszugeben, verwenden Sie stets
-\osueglvar{stderr}, da die \osueglvar{stdout} in den meisten Fällen verbogen
-ist.
+\osueglvar{stderr}, da die \osueglvar{stdout} in den meisten Fällen umgeleitet ist.
 
 Zum Testen der Merge-Implementierung können Sie mit \osuefunc{execlp(3)} statt
 Forksort auch \osuecmd{sort(1)} aufrufen. Für die endgültige Abgabe ist diese

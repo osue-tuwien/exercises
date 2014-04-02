@@ -20,11 +20,12 @@
         <operator> ::= +|-|*|/
 \end{verbatim}
 
-Schreiben Sie einen Taschenrechner als Vaterprozess, der seinen Input
+Implementieren Sie die Funktionalit{\"a}t eines Taschenrechners als
+Elternprozess, der seinen Input
 von \osueglvar{stdin} als String einliest und den String an einen
 Kindprozess weiterleitet. Dieser extrahiert aus dem String die
 Operanden und die Operation, berechnet das Ergebnis und gibt dieses
-als String wieder zurück. Das Ergebnis wird vom Vaterprozess
+als String wieder zurück. Das Ergebnis wird vom Elternprozess
 anschließend am Bildschirm wieder ausgegeben. Da als Zahlen
 Integerwerte (maximal 65535) angenommen werden sollen, kann die
 Eingabezeichenkette auf 15 Zeichen beschränkt werden.
@@ -39,14 +40,14 @@ Rechnungen von der Tastatur (\osueglvar{stdin}) einlesen. Zur
 Berechnung soll Ihr Programm einen Kindprozess erzeugen, an den
 es die Eingabe über eine Pipe weiterleitet. Dieser Kindprozess
 leitet nach der Umwandlung und Berechnung das Ergebnis über eine
-zweite Pipe an den Vaterprozess zurück. Der Vaterprozess
+zweite Pipe an den Elternprozess zurück. Der Elternprozess
 gibt dieses Ergebnis wieder am Bildschirm (\osueglvar{stdout}) aus.
 
-Dieser Vorgang soll solange wiederholt werden, bis der Vaterprozess
+Dieser Vorgang soll solange wiederholt werden, bis der Elternprozess
 \osueconst{EOF} (\osuekeystroke{Ctrl+D} von der Tastatur) liest.
 In diesem Fall ist die Pipe zum Kindprozess zu schließen. Der
 Kindprozess erhält dadurch beim Lesen ebenfalls \osueconst{EOF}
-und terminiert. Der Vaterprozess soll auf die Terminierung des
+und terminiert. Der Elternprozess soll auf die Terminierung des
 Kindprozesses warten, alle benötigten Ressourcen (Pipes) an das
 System zurückgeben (schließen) und dann ebenfalls terminieren.
 

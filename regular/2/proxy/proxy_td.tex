@@ -36,7 +36,7 @@ Parsen der Parameter endet dann an dieser Stelle.\\
 Erzeugen Sie anschließend mit \osuefunc{fork(2)} einen Kindprozess. Lenken Sie
 mittels \osuefunc{dup2(2)} die entsprechenden Filedeskriptoren um und führen Sie
 zuletzt das Programm samt Optionen mit Hilfe von \osuefunc{execvp(2)} aus.
-Vergessen Sie im Vaterprozess nicht, den Exit-Status des Kindprozesses abzuholen
+Vergessen Sie im Elternprozess nicht, den Exit-Status des Kindprozesses abzuholen
 (und so die Entstehung eines Zombieprozesses zu vermeiden).
 
 \subsection*{Testen}

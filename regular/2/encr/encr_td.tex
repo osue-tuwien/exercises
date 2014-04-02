@@ -19,12 +19,12 @@ verschlüsseln lässt.
         encr
 \end{verbatim}
 
-Jedes Mal, wenn der Vaterprozess eine Zeile eingelesen hat, wird ein
+Jedes Mal, wenn der Elternprozess eine Zeile eingelesen hat, wird ein
 eigener Kindprozess erzeugt, der das Passwort (exklusive des
 abschließenden Newline-Zeichens) mittels \osuefunc{crypt(3)}
 verschlüsselt. Danach soll der Kindprozess mittels \osuefunc{sleep(3)}
 eine längere (pseudozufällige) Verarbeitungsdauer simulieren, um das
-nichtblockierende Einlesen des Vaterprozesses zu demonstrieren, und
+nichtblockierende Einlesen des Elternprozesses zu demonstrieren, und
 schließlich das verschlüsselte Passwort auf \osueglvar{stdout} ausgeben.
 
 \subsection*{Anleitung}
@@ -32,7 +32,7 @@ schließlich das verschlüsselte Passwort auf \osueglvar{stdout} ausgeben.
 Lesen Sie in einer Schleife zeilenweise Strings von \osueglvar{stdin} ein
 und entfernen Sie das abschließende Newline (\verb+\n+). Erzeugen Sie
 mittels \osuefunc{fork(2)} einen Kindprozess und verschlüsseln Sie in
-diesem das Passwort; der Vaterprozess liest zu diesem Zeitpunkt
+diesem das Passwort; der Elternprozess liest zu diesem Zeitpunkt
 bereits wieder von \osuefunc{stdin} ein. Beachten Sie, dass in dieser
 Situation mehrere Kindprozesse asynchron und in nicht vorhersehbarer
 Reihenfolge terminieren können!
@@ -64,9 +64,9 @@ formatiert sein. Die Reihenfolge von Input und Output wird vermutlich
 anders sein, ebenso wie das verschlüsselte Wort je nach gewähltem Salt
 variiert.
 
-Beachten Sie beim Testen auch den Fall, in dem der Vaterprozess durch
+Beachten Sie beim Testen auch den Fall, in dem der Elternprozess durch
 ein Signal terminiert wird, während noch Kindprozesse aktiv sind. Auch
-in diesem Fall muss der Vaterprozess auf das Terminieren seiner Kinder
+in diesem Fall muss der Elternprozess auf das Terminieren seiner Kinder
 warten.
 
 \osueguidelinestwo

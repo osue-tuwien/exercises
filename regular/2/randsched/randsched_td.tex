@@ -12,7 +12,10 @@ aufgerufen werden muss, dessen Output in eine Protokolldatei abzutippen ist.
 Falls doch mal ein Fehler auftritt, muss aber von Ihnen der sofortige
 Reaktor-Shutdown eingeleitet werden. Sich Ihrer kritischen, dennoch gefährlichen
 und schlecht bezahlten Position bewusst, fassen Sie schnell den Entschluss,
-diesen Vorgang möglichst transparent zu automatisieren.
+diesen Vorgang mit einem einfachen Scheduler Programm zu automatisieren.
+Damit diese Automatisierung nicht gleich Ihren Arbeitsgebern auff{\"a}llt, soll Ihr
+Scheduler ebenfalls eine unregelm{\"a}{\ss}ige Ausf{\"u}hrung im Sinne von
+'nur alle paar Minuten' unterst{\"u}tzen.
 
 \subsection*{Anleitung}
 Implementieren Sie die folgenden Hilfsprogramme, um den Reaktor zu simulieren:
@@ -42,7 +45,7 @@ Nun zum eigentlichen Teil der Aufgabe: Implementieren Sie das folgende Programm:
         schedule [-s <seconds>] [-f <seconds>] <program> <emergency> <logfile>
 
         -s <seconds>   Zeitfenster Anfang (Default: 1 Sekunde)
-        -f <seconds>   Zeitfenster Ende (Default: 0 Sekunden)
+        -f <seconds>   max. Zeitfenster Dauer (Default: 0 Sekunden)
         <program>      Programm inkl. Pfad, das wiederholt ausgefuehrt werden soll
         <emergency>    Programm inkl. Pfad, das im Fehlerfall ausgefuehrt wird
         <logfile>      Pfad zu einer Datei, in der die Ausgabe von <program> sowie
@@ -61,13 +64,13 @@ fehlerfrei, wartet der Kindprozess wieder zwischen 5 und 7 Sekunden, bevor er
 \osueprog{program} ein weiteres Mal ausführt.
 
 Weiters soll der Kindprozess alle Daten, die der \osueprog{program}-Enkelprozess
-auf \osueglvar{stdout} ausgegeben hat, über eine Pipe an den Vaterprozess
+auf \osueglvar{stdout} ausgegeben hat, über eine Pipe an den Elternprozess
 schicken. Dieser gibt das Gelesene auf (sein) \osueglvar{stdout} aus und fügt es
-gleichzeitig an die angegebene \osuefilename{logfile} an. Ausgaben von
-\osueprog{emergency} müssen nicht im Logfile aufscheinen; es genügt zu
+gleichzeitig an das angegebene \osuefilename{logfile} an. Ausgaben von
+\osueprog{emergency} dürfen nicht im Logfile aufscheinen; es genügt zu
 protokollieren, ob \osueprog{emergency} ohne Fehlercode terminiert hat. Nachdem
 \osueprog{emergency} beendet ist, soll auch \osueprog{schedule} terminieren.
-Implementieren Sie außerdem noch eine Signalbehandlung, um \osueprog{schedule}
+Implementieren Sie außerdem eine Signalbehandlung, um \osueprog{schedule}
 sauber beenden zu können, ohne auf eine Fehlfunktion des Reaktors hoffen zu
 müssen.
 

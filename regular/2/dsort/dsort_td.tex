@@ -21,7 +21,7 @@ Shellskripts\footnote{Anmerkung: \$1 und \$2 stehen für command1 und
 command2}:
 
 \begin{verbatim}
-#!/bin/sh
+#!/bin/bash
 
 ( $1; $2 ) | sort | uniq -d
 \end{verbatim}
@@ -32,7 +32,7 @@ Das Programm soll für die beiden Kommandos jeweils mittels Pipes die
 Ausgabe der Kindprozesse zeilenweise einlesen und in ein Array
 speichern. Die Kindprozesse werden mit \osuefunc{fork(2)} erzeugt und
 sollen die Bourne-Shell mit dem Parameter \osuearg{-c} ausführen (also
-\osuecmd{/bin/sh -c}). Dadurch ist es möglich dem Programm mittels
+\osuecmd{/bin/bash -c}). Dadurch ist es möglich dem Programm mittels
 Anführungszeichen ein Shellkommando zu übergeben -- die Shell kümmert
 sich um alles Weitere.
 
