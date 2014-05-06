@@ -1,0 +1,105 @@
+\input{../../template.ltx}
+
+\begin{document}
+
+\osuetitle{3}
+
+\section*{Aufgabenstellung -- battleships}
+
+In dieser Aufgabe werden Sie eine Terminalversion des Spiels "`Battleships"'
+(auch bekannt als "`Schiffe versenken"') für 2 Spieler implementieren.
+
+Das Spielfeld besteht aus 16 Feldern die in einem 4x4 Quadrat angeordnet sind.
+
+Zu Beginn des Spiels müssen beide Spieler ein Schiff der Länge 3 auf seinem
+Spielfeld platzieren. Das Schiff kann horizontal, vertikal oder diagonal
+angeordnet werden.
+
+Nachdem beide Spieler ihr Schiff platziert haben, beginnt das Spiel. In jeder
+Runde versuchen die Spieler das Schiff ihres Gegners zu treffen. Dazu geben sie
+eine Position am Spielfeld an, auf die sie schießen wollen. Nach jedem Schuss
+erhalten sie eine Rückmeldung, ob das Schiff des Gegners getroffen oder
+verfehlt wurde.
+
+Ziel des Spiels ist es, das Schiff das Gegners so schnell wie möglich zu
+versenken.  Ein Schiff gilt als versenkt, wenn alle 3 Felder des Schiffs
+getroffen wurden.
+
+
+\subsection*{Anleitung}
+
+Das Spiel soll als Client/Server Programm realisiert werden, wobei ein Server
+immer nur ein Spiel zwischen 2 Clients unterstützen muss.
+Die Kommunikation zwischen Clients und Server soll per Shared Memory erfolgen.
+
+\subsubsection*{Server}
+
+\begin{verbatim}
+  USAGE: battleships-server
+\end{verbatim}
+
+Der Server soll ein Spiel zwischen 2 Spielern verwalten können.  Sobald ein
+Spiel gestartet wird sollen die benötigten Ressourcen vom Server angelegt
+werden.  Bei Beendigung eines Spiels müssen diese natürlich wieder freigegeben
+werden.
+
+
+Zu Beginn wartet der Server bis sich 2 Spieler verbinden. Anschließend wird ein
+neues Spiel gestartet. Die beiden Clients müssen dem Server die Position ihrer
+Schiffe bekannt gegeben. Der Server ist für die Verwaltung der Position der
+Schiffe verantwortlich.
+
+Danach beginnt das eigentliche Spiel, und der Server verarbeitet abwechselnd
+die Schüsse der Spieler. Stellen Sie sicher, dass der Server die Eingaben der
+Clients abwechselnd verarbeitet, also kein Spieler mehrere Züge direkt
+nacheinander durchführen kann. Nach jedem Schuss gibt der Server dem Client
+bekannt, ob das gegnerische Schiff getroffen oder verfehlt wurde. Sobald ein
+Spieler das Schiff des Gegners versenkt hat, teilt der Server das beiden
+Clients mit und beendet das Spiel.
+
+Anschließend wartet der Server, bis sich wieder 2 Clients verbinden.
+
+Falls der Server ein \verb|SIGTERM| oder \verb|SIGINT| Signal erhält, sollen
+alle angelegten Ressourcen (lokal angelegter Speicher, Shared Memory,
+Semaphoren, etc) korrekt freigegeben und terminiert werden.
+
+\subsubsection*{Client}
+
+\begin{verbatim}
+USAGE: battelships-client
+\end{verbatim}
+
+Der Client ist für die Darstellung des Spielfelds und die Behandlung von
+Benutzereingaben zuständig.
+
+Die Gestaltung der Oberfläche ist nicht weiter spezifiziert, außer dass
+mindestens das Spielfeld und eine kurze Anleitung mit den möglichen Aktionen
+angezeigt werden müssen.
+
+Sobald der Client gestartet ist, verbindet er sich mit dem Server und wartet
+bis der Server ein neues Spiel startet.
+
+Anschließend wird der Spieler aufgefordert, die Position seines Schiffs
+einzugeben.
+
+Haben beide Spieler ihre Schiffe platziert, beginnt das Spiel.
+
+Mögliche Aktionen sind:
+
+\begin{itemize}
+  \item \emph{Schuss auf Position am Spielfeld}: Angabe der Position am
+    Spielfeld, auf die geschossen werden soll.
+  \item \emph{Aufgeben}: Der Client teilt dem Server mit, dass er aufgibt
+    und terminiert.  Daraufhin soll das Spiel beendet werden.
+\end{itemize}
+
+Am Spielfeld sollen die bisherigen Schüsse des Spielers angezeigt werden und ob
+es sich um einen Treffer handelt.
+
+Der Client soll zusätzlich ordnungsgemäß terminieren sobald das Spiel gewonnen
+oder verloren ist, oder der Server (d.h.\ das Shared Memory oder die Semaphore)
+nicht mehr erreichbar ist.
+
+\osueguidelinesthree
+
+\end{document}
