@@ -1,12 +1,13 @@
 #!/bin/bash
 
 START=$(pwd)
+PDFLATEX="pdflatex -interaction=nonstopmode -halt-on-error"
 
 for file in $(find . -name "*.tex"); do
    cd $(dirname ${file})
    BASENAME=$(basename ${file})
 
-   for  (( i = 0 ; i < 3 ; ++i )); do pdflatex ${BASENAME}; done
+   for i in {1..3}; do ${PDFLATEX} ${BASENAME} || exit 1; done
    # or the cooler latexmk
    #latexmk -pdf ${BASENAME}
 
