@@ -6,29 +6,29 @@
 \section*{Aufgabenstellung -- hangman}
 
 
-In dieser Aufgabe implementieren Sie das Spiel ''Hangman'' in C. Die Implementierung soll aus
-zwei Programme bestehen: ein Server, der die Geheimwörter angibt sowie den Spielstand verwaltet,
-und ein Client, wo der Benutzer versuchen kann Geheimwörter zu ermitteln.
-Die Interprozesskommunikation soll über ein Shared Memory Segment realisiert werden und die
-Synchronisierung mittels Semaphoren erfolgen. 
+In dieser Aufgabe implementieren Sie das Spiel "`Hangman"' in C. Die
+Implementierung soll aus zwei Programme bestehen: ein Server, der die
+Geheimwörter angibt sowie den Spielstand verwaltet, und ein Client, wo der
+Benutzer versuchen kann Geheimwörter zu ermitteln.  Die
+Interprozesskommunikation soll über ein Shared Memory Segment realisiert werden
+und die Synchronisierung mittels Semaphoren erfolgen.
 
 
-Der Client soll dem Spieler ein Interface bieten, das den aktuellen Spielstand darstellt und
-dem Benutzer die Möglichkeit bietet Buchstaben des Gheimwortes zu erraten.
-Der Server soll angeben wie oft 
-und an welcher Stelle des Geheimwortes der geratene Buchstabe vorkommt. Falls der Buchstabe 
-im Geheimwort nicht enthalten ist, soll der Server einen weiteren Teil des Galgens mit
-einem Gehängten zeichnen. 
+Der Client soll dem Spieler ein Interface bieten, das den aktuellen Spielstand
+darstellt und dem Benutzer die Möglichkeit bietet Buchstaben des Geheimwortes
+zu erraten.  Der Server soll angeben wie oft und an welcher Stelle des
+Geheimwortes der geratene Buchstabe vorkommt. Falls der Buchstabe im Geheimwort
+nicht enthalten ist, soll der Server einen weiteren Teil des Galgens mit einem
+Gehängten zeichnen.
 
-Es soll nicht zwischen Groß- und Kleinbuchstaben unterschieden werden. Wenn der Spieler (Client) nach 
-9 Fehlern das Geheimwort noch nicht erraten hat, soll der Galgen mit dem Gehängten komplett gezeichnet
-sein und der Spieler verliert.
+Es soll nicht zwischen Groß- und Kleinbuchstaben unterschieden werden. Wenn der
+Spieler (Client) nach 9 Fehlern das Geheimwort noch nicht erraten hat, soll der
+Galgen mit dem Gehängten komplett gezeichnet sein und der Spieler verliert.
 
-\subsection*{Anleitung}
-Der Server muss eine beliebige Anzahl von Clients, die gleichzeitig und unabhängig 
-voneinander spielen k{\"o}nnen, unterstützen. Die Kommunikation soll
-durch ein einziges Shared Memory Segment erfolgen (\textbf{nicht} einem Shared Memory Segment
-pro Client).
+\subsection*{Anleitung} Der Server muss eine beliebige Anzahl von Clients, die
+gleichzeitig und unabhängig voneinander spielen können, unterstützen. Die
+Kommunikation soll durch ein einziges Shared Memory Segment erfolgen
+(\textbf{nicht} einem Shared Memory Segment pro Client).
 
 
 \subsection*{Server}
@@ -37,32 +37,32 @@ pro Client).
 USAGE: hangman-server [input_file]
 \end{verbatim}
 
-Der Server legt zu Beginn die benötigten Ressourcen an. Falls eine Eingabedatei als Argument übergeben
-wird, liest der Server die Geheimwörter aus der Datei \verb|input_file| ein. Beim Einlesen wird
-jede Zeile als ein Geheimwort interpretiert, wobei alle Zeichen außer ASCII Buchstaben und
-Leerzeichen ignoriert werden. Falls keine 
-Eingabedatei angegeben wird, soll analog von der Standardeingabe \verb|stdin| eingelesen werden,
-bis \verb|EOF| (\verb|Ctrl+D|) auftritt.
+Der Server legt zu Beginn die benötigten Ressourcen an. Falls eine Eingabedatei
+als Argument übergeben wird, liest der Server die Geheimwörter aus der Datei
+\verb|input_file| ein. Beim Einlesen wird jede Zeile als ein Geheimwort
+interpretiert, wobei alle Zeichen außer ASCII Buchstaben und Leerzeichen
+ignoriert werden. Falls keine Eingabedatei angegeben wird, soll analog von der
+Standardeingabe \verb|stdin| eingelesen werden, bis \verb|EOF| (\verb|Ctrl+D|)
+auftritt.
 
-Danach verwaltet der Server die Spiele der Clients und bedient auch deren Anfragen. 
-Der Server muss dazu alle notwendige Informationen
-für jeden Client verwalten. Insbesondere muss der Server alle Vorkommnisse der bisher korrekt 
-geratenen Buchstaben und die Anzahl an Fehlern den Clients in jeder Runde bekannt geben.
+Danach verwaltet der Server die Spiele der Clients und bedient auch deren
+Anfragen.  Der Server muss dazu alle notwendige Informationen für jeden Client
+verwalten. Insbesondere muss der Server alle Vorkommnisse der bisher korrekt
+geratenen Buchstaben und die Anzahl an Fehlern den Clients in jeder Runde
+bekannt geben.
 
 Wenn das Spiel endet, soll der Server dem Client das Ergebnis übermitteln.
-Wenn ein Client ein neues Spiel starten will, soll der Server das Spiel mit einem
-bisher (für diesen Client) nicht verwendeten
-Geheimwort starten.
-Falls der Client ein Spiel mit allen Geheimwörtern gespielt hat, muss der Server den 
+Wenn ein Client ein neues Spiel starten will, soll der Server das Spiel mit
+einem bisher (für diesen Client) nicht verwendeten Geheimwort starten.  Falls
+der Client ein Spiel mit allen Geheimwörtern gespielt hat, muss der Server den
 entsprechenden Client darüber informieren.
 
-Wenn ein registrierter Client aus irgendwelchen Gründen (inklusive Signale) terminiert,
-soll der Server die entsprechenden Ressourcen aufräumen und freigeben.
-Zusatzlich muss der Server vor seiner eigenen Terminierung alle 
-verwendeten Ressourcen
-(z.B., dynamisch reservierter Speicher, Semaphoren, Shared Memory, usw.) freigeben.
-Der Server selbst soll durch 
-die Signale \verb|SIGINT| und \verb|SIGKILL| 'sauber' terminierbar sein.
+Wenn ein registrierter Client aus irgendwelchen Gründen (inklusive Signale)
+terminiert, soll der Server die entsprechenden Ressourcen aufräumen und
+freigeben.  Zusatzlich muss der Server vor seiner eigenen Terminierung alle
+verwendeten Ressourcen (z.B., dynamisch reservierter Speicher, Semaphoren,
+Shared Memory, usw.) freigeben.  Der Server selbst soll durch die Signale
+\verb|SIGINT| und \verb|SIGTERM| "`sauber"' terminierbar sein.
 
 
 
@@ -72,39 +72,49 @@ die Signale \verb|SIGINT| und \verb|SIGKILL| 'sauber' terminierbar sein.
 USAGE: hangman-client
 \end{verbatim}
 
-Der Client soll beim Starten zunächst versuchen sich zum Server zu verbinden ('verbinden' heißt hier zu
-überprüfen, ob die Semaphoren die der Server anlegen sollte schon existieren).
-Nach einem erfolgreichen Verbindungsaufbau registriert sich der Client beim Server und kann ein neues 
-Spiel beginnen. 
+Der Client soll beim Starten zunächst versuchen sich zum Server zu verbinden
+("`verbinden"' heißt hier zu überprüfen, ob die Semaphoren die der Server
+anlegen sollte schon existieren).  Nach einem erfolgreichen Verbindungsaufbau
+registriert sich der Client beim Server und kann ein neues Spiel beginnen.
 
-Der Client erlaubt nun dem Spieler in jedem Spielzug einen bisher nicht gewählten Buchstaben auswählen.
-Falls das eingegebe Zeichen kein Buchstabe ist oder schon einmal geraten wurde
-muss eine Fehlermeldung ausgegeben werden. Der Client schickt den ausgew{\"a}hlten Buchstaben
-an den Server der den Spielzug durchf{\"u}hrt und den Spielstand als Antwort bereit stellt. 
+Der Client erlaubt nun dem Spieler in jedem Spielzug einen bisher nicht
+gewählten Buchstaben auswählen.  Falls das eingegebe Zeichen kein Buchstabe ist
+oder schon einmal geraten wurde muss eine Fehlermeldung ausgegeben werden. Der
+Client schickt den ausgewählten Buchstaben an den Server der den Spielzug
+durchführt und den Spielstand als Antwort bereit stellt.
 
-Der nach jedem Spielzug ausgegebene Spielstand muss mindestens die folgenden Elemente enthalten:
+Der nach jedem Spielzug ausgegebene Spielstand muss mindestens die folgenden
+Elemente enthalten:
+
 \begin{itemize}
-  \item Das Geheimwort, wobei erratene Buchstaben auf ihren entsprechenden Positionen im Wort 
-        gro{\ss}geschrieben dargestellt werden, während die restlichen Buchstaben durch ''\_'' ersetzt werden. 
+  \item Das Geheimwort, wobei erratene Buchstaben auf ihren entsprechenden
+        Positionen im Wort großgeschrieben dargestellt werden, während die
+        restlichen Buchstaben durch '\_' ersetzt werden.
         Leerzeichen werden von Anfang an dargestellt.
-  \item Eine ASCII Zeichnung die ein anfaenglich unvollständiges Bild von einem Galgen mit Gehängten darstellt. Die Zeichnung 
-        muss nach jedem Fehler des Spielers erweitert und mit dem 9. Fehler vollständig werden.
-  \item Eine Liste aller Buchstaben die der Spieler bisher in diesem Spiel geraten hat.
+  \item Eine ASCII Zeichnung die ein anfaenglich unvollständiges Bild von einem
+        Galgen mit Gehängten darstellt. Die Zeichnung muss nach jedem Fehler
+        des Spielers erweitert und mit dem 9. Fehler vollständig werden.
+  \item Eine Liste aller Buchstaben die der Spieler bisher in diesem Spiel
+        geraten hat.
 \end{itemize}
 
-Nach Ende eines Spiels wird zuerst eine entsprechende Nachricht und der aktuelle Win/Loss Stand (Anzahl der gewonnen und verlorerenen Spiele) ausgegeben. Dann 
-wird der Spieler gefragt, ob er mit dem nächsten Spiel weitermachen will, worauf der Spieler mit ja/nein (y/n) 
-antworten soll. Falls er mit y antwortet, wird auf ein neues Spiel vom Server gewartet, sonst soll
+Nach Ende eines Spiels wird zuerst eine entsprechende Nachricht und der
+aktuelle Win/Loss Stand (Anzahl der gewonnen und verlorerenen Spiele)
+ausgegeben. Dann wird der Spieler gefragt, ob er mit dem nächsten Spiel
+weitermachen will, worauf der Spieler mit ja/nein (y/n) antworten soll. Falls
+er mit y antwortet, wird auf ein neues Spiel vom Server gewartet, sonst soll
 der Client terminieren.
 
-Falls der Server nach einem Spiel keine weiteren Spiele erstellen kann, also der Client ein 
-Spiel mit jedem Geheimwort des Servers gespielt hat, wird der endgültige Win/Loss Stand ausgegeben und der 
-Client beendet. Der Client kann jederzeit mit den Signalen \verb|SIGINT| oder \verb|SIGTERM| beendet 
-werden. Außerdem soll der Client terminieren, wenn der Server beendet wurde.
+Falls der Server nach einem Spiel keine weiteren Spiele erstellen kann, also
+der Client ein Spiel mit jedem Geheimwort des Servers gespielt hat, wird der
+endgültige Win/Loss Stand ausgegeben und der Client beendet. Der Client kann
+jederzeit mit den Signalen \verb|SIGINT| oder \verb|SIGTERM| beendet werden.
+Außerdem soll der Client terminieren, wenn der Server beendet wurde.
 
 
-Achten sie auf eine saubere Terminierung. Auch bei fehler- bzw. signalbezogener Terminierung sollen die 
-Clients und den Server sauber terminieren und alle Ressourcen freigegeben werden.
+Achten sie auf eine saubere Terminierung. Auch bei fehler- bzw. signalbezogener
+Terminierung sollen die Clients und den Server sauber terminieren und alle
+Ressourcen freigegeben werden.
 
 \osueguidelinesthree
 
