@@ -86,7 +86,7 @@ können.  Sobald ein Client ein Request für ein neues Spiel sendet, sollen loka
 benötigte Ressourcen angelegt werden. Bei Beendigung eines Spiels müssen Sie
 diese natürlich wieder freigeben.
 
-Clients kommunizieren mit dem Server über ein Shared Memory Segment. Zugriffe
+Clients kommunizieren mit dem Server über Shared Memory.  Zugriffe
 darauf sollen mit Semaphoren synchronisiert werden. Stellen Sie sicher, dass
 nach einem Request von Client $C_i$ die Antwort unbedingt nur $C_i$ (und nicht
 einen anderen Client $C_j, j \neq i$) erreicht.

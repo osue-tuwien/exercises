@@ -15,9 +15,9 @@ Programmen.
         storetool  <-s key data | -g key | -r key | -q>
 \end{verbatim}
 
-Die beiden Programme kommunizieren über ein Shared-Memory-Segment. Das
-Store-Tool schickt Kommandos an den Server. Danach wartet es, bis der Server das
-Kommando abgearbeitet hat, überprüft das Ergebnis und terminiert.
+Die beiden Programme kommunizieren über Shared Memory. Das
+Store-Tool schickt Kommandos an den Server. Danach wartet es, bis der Server
+das Kommando abgearbeitet hat, überprüft das Ergebnis und terminiert.
 
 Gespeichert werden Strings, die Sie jeweils auf 64 Zeichen inklusive
 terminierendem \verb_'\0'_ (Konstante definieren!) begrenzen können. Jeder
