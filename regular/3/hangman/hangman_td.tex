@@ -7,28 +7,28 @@
 
 
 In dieser Aufgabe implementieren Sie das Spiel "`Hangman"' in C. Die
-Implementierung soll aus zwei Programme bestehen: ein Server, der die
-Geheimwörter angibt sowie den Spielstand verwaltet, und ein Client, wo der
-Benutzer versuchen kann Geheimwörter zu ermitteln.  Die
-Interprozesskommunikation soll über ein Shared Memory Segment realisiert werden
-und die Synchronisierung mittels Semaphoren erfolgen.
+Implementierung soll aus zwei Programmen bestehen: einem Server, der die
+Geheimwörter angibt sowie den Spielstand verwaltet, und einem Client, mit
+welchem der Benutzer versuchen kann Geheimwörter zu ermitteln.  Die
+Interprozesskommunikation soll mittels Shared Memory realisiert werden
+und die Synchronisation mittels Semaphoren erfolgen.
 
 
 Der Client soll dem Spieler ein Interface bieten, das den aktuellen Spielstand
-darstellt und dem Benutzer die Möglichkeit bietet Buchstaben des Geheimwortes
-zu erraten.  Der Server soll angeben wie oft und an welcher Stelle des
+darstellt und dem Benutzer die Möglichkeit bietet, Buchstaben des Geheimwortes
+zu erraten.  Der Server soll angeben, wie oft und an welcher Stelle des
 Geheimwortes der geratene Buchstabe vorkommt. Falls der Buchstabe im Geheimwort
-nicht enthalten ist, soll der Server einen weiteren Teil des Galgens mit einem
-Gehängten zeichnen.
+nicht enthalten ist, soll der Server einen weiteren Teil eines Galgens mit
+einem Gehängten zeichnen.
 
 Es soll nicht zwischen Groß- und Kleinbuchstaben unterschieden werden. Wenn der
-Spieler (Client) nach 9 Fehlern das Geheimwort noch nicht erraten hat, soll der
-Galgen mit dem Gehängten komplett gezeichnet sein und der Spieler verliert.
+Spieler (Client) nach 9 Fehlern das Geheimwort noch nicht erraten hat, wird der
+Galgen mit dem Gehängten komplett gezeichnet und der Spieler verliert.
 
 \subsection*{Anleitung} Der Server muss eine beliebige Anzahl von Clients, die
 gleichzeitig und unabhängig voneinander spielen können, unterstützen. Die
-Kommunikation soll durch ein einziges Shared Memory Segment erfolgen
-(\textbf{nicht} einem Shared Memory Segment pro Client).
+Kommunikation soll mittels einem einzigen Shared Memory Objekt erfolgen
+(\textbf{nicht} einem pro Client).
 
 
 \subsection*{Server}
@@ -60,7 +60,7 @@ entsprechenden Client darüber informieren.
 Wenn ein registrierter Client aus irgendwelchen Gründen (inklusive Signale)
 terminiert, soll der Server die entsprechenden Ressourcen aufräumen und
 freigeben.  Zusatzlich muss der Server vor seiner eigenen Terminierung alle
-verwendeten Ressourcen (z.B., dynamisch reservierter Speicher, Semaphoren,
+verwendeten Ressourcen (z.B., dynamisch reservierter Speicher, Semaphore,
 Shared Memory, usw.) freigeben.  Der Server selbst soll durch die Signale
 \verb|SIGINT| und \verb|SIGTERM| "`sauber"' terminierbar sein.
 
@@ -73,14 +73,14 @@ USAGE: hangman-client
 \end{verbatim}
 
 Der Client soll beim Starten zunächst versuchen sich zum Server zu verbinden
-("`verbinden"' heißt hier zu überprüfen, ob die Semaphoren die der Server
-anlegen sollte schon existieren).  Nach einem erfolgreichen Verbindungsaufbau
+("`verbinden"' heißt hier zu überprüfen, ob die Semaphore, die der Server
+anlegt, tatsächlich existieren).  Nach einem erfolgreichen Verbindungsaufbau
 registriert sich der Client beim Server und kann ein neues Spiel beginnen.
 
-Der Client erlaubt nun dem Spieler in jedem Spielzug einen bisher nicht
+Der Client erlaubt nun dem Spieler in jedem Spielzug, einen bisher nicht
 gewählten Buchstaben auswählen.  Falls das eingegebe Zeichen kein Buchstabe ist
-oder schon einmal geraten wurde muss eine Fehlermeldung ausgegeben werden. Der
-Client schickt den ausgewählten Buchstaben an den Server der den Spielzug
+oder schon einmal geraten wurde, muss eine Fehlermeldung ausgegeben werden. Der
+Client schickt den ausgewählten Buchstaben an den Server, der den Spielzug
 durchführt und den Spielstand als Antwort bereit stellt.
 
 Der nach jedem Spielzug ausgegebene Spielstand muss mindestens die folgenden
@@ -94,15 +94,15 @@ Elemente enthalten:
   \item Eine ASCII Zeichnung die ein anfaenglich unvollständiges Bild von einem
         Galgen mit Gehängten darstellt. Die Zeichnung muss nach jedem Fehler
         des Spielers erweitert und mit dem 9. Fehler vollständig werden.
-  \item Eine Liste aller Buchstaben die der Spieler bisher in diesem Spiel
+  \item Eine Liste aller Buchstaben, die der Spieler bisher in diesem Spiel
         geraten hat.
 \end{itemize}
 
 Nach Ende eines Spiels wird zuerst eine entsprechende Nachricht und der
-aktuelle Win/Loss Stand (Anzahl der gewonnen und verlorerenen Spiele)
+aktuelle Win/Loss Stand (Anzahl der gewonnen und verlorenen Spiele)
 ausgegeben. Dann wird der Spieler gefragt, ob er mit dem nächsten Spiel
 weitermachen will, worauf der Spieler mit ja/nein (y/n) antworten soll. Falls
-er mit y antwortet, wird auf ein neues Spiel vom Server gewartet, sonst soll
+er mit 'y' antwortet, wird auf ein neues Spiel vom Server gewartet, sonst soll
 der Client terminieren.
 
 Falls der Server nach einem Spiel keine weiteren Spiele erstellen kann, also
@@ -112,9 +112,9 @@ jederzeit mit den Signalen \verb|SIGINT| oder \verb|SIGTERM| beendet werden.
 Außerdem soll der Client terminieren, wenn der Server beendet wurde.
 
 
-Achten sie auf eine saubere Terminierung. Auch bei fehler- bzw. signalbezogener
-Terminierung sollen die Clients und den Server sauber terminieren und alle
-Ressourcen freigegeben werden.
+Achten sie auf eine saubere Terminierung.
+Auch bei fehler- bzw.\ signalbezogener Terminierung sollen die Clients
+und den Server sauber terminieren und alle Ressourcen freigegeben werden.
 
 \osueguidelinesthree
 
