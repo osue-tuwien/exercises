@@ -82,9 +82,9 @@ akzeptiert wurde, beginnt ein neues Spiel, und der Server beantwortet bis zum
 Ende des Spiels die Anfragen des Clients. Am Ende des Spiels werden entweder die
 Anzahl der gespielten Runden oder der zuletzt übermittelte Fehler ausgegeben,
 und das Serverprogramm wird mit einem entsprechenden Rückgabewert (siehe weiter
-unten) beendet. Sobald der Server eines der Signale \osueconst{SIGINT},
-\osueconst{SIGQUIT} oder \osueconst{SIGTERM} empfängt, soll der Serversocket
-geschlossen und das Programm mit Rückgabewert 0 beendet werden.
+unten) beendet. Sobald der Server eines der Signale \osueconst{SIGINT} oder
+\osueconst{SIGTERM} empfängt, soll der Serversocket geschlossen und das
+Programm mit Rückgabewert 0 beendet werden.
 
 \begin{verbatim}
 Server:
