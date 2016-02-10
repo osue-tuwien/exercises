@@ -6,39 +6,42 @@
 
 \section*{Aufgabenstellung A -- mycompress}
       Schreiben Sie ein C-Programm \osueprog{mycompress},
-      das die als Argumente übergebenen Dateien mittels
+      das die als Argumente übergebenen Eingabedateien mittels
       eines einfachen Algorithmus komprimiert.
-      Wird kein Argument angegeben, so ist von
+      Wird keine Eingabedatei angegeben, so ist von
       \osueglvar{stdin} zu lesen.
 \begin{verbatim}
     SYNOPSIS:
-        mycompress [file1] [file2] ...
+        mycompress [-o outfile] [infile1] [infile2] ...
 \end{verbatim}
 
 \subsection*{Anleitung}
-      Das Programm soll den Inhalt der übergebenen Datei
-      auslesen, komprimieren, und nach der Komprimierung in ein
-      File mit dem Namen \osuefilename{[ursprünglicher Name].comp}
-      ausgeben. Wird keine Datei übergeben, so ist von \osueglvar{stdin} zu
-      lesen und in die Datei \osuefilename{Stdin.comp} auszugeben. Die
-      Komprimierung soll so erfolgen, dass die Zeichen durch
-      \verb|Zeichen + Anzahl| ersetzt werden -- z.B.: \verb|aaa| durch \verb|a3|
-      und \verb|b| durch \verb|b1|.
+      Das Programm soll den Inhalt der übergebenenen Eingabedateien
+      nacheinander auslesen, komprimieren, und die komprimierte Form in ein
+      File mit dem durch die Option \verb|-o| spezifizierten Namen
+      \osuefilename{outfile} ausgeben.
+      Werden keine Eingabedateien angegeben, so ist von \osueglvar{stdin} zu
+      lesen.
+      Fehlt die Option \verb|-o|, wird auf \osueglvar{stdout} ausgegeben.
 
+      Die Komprimierung soll so erfolgen, dass die Zeichen durch
+      \verb|Zeichen + Anzahl| ersetzt werden -- z.B.: \verb|aaa| durch
+      \verb|a3| und \verb|b| durch \verb|b1|.
       Das Newline ist auch ein Zeichen und soll ebenfalls komprimiert werden.
 
-      Geben Sie die Anzahl der Zeichen -- auch Newlines --
-      sowohl der unkomprimierten, als auch der komprimierten Datei
-      auf dem Bildschirm aus. (Sie werden feststellen, dass die
-      Komprimierung nur bei vielen gleichen Zeichen effizient ist.)
+      Geben Sie die Anzahl der gelesenen Zeichen, die Anzahl der geschriebenen
+      Zeichen und die daraus resultierende Komprimierungsrate
+      auf die Standardfehlerausgabe \osueglvar{stderr} aus.
+      (Sie werden feststellen, dass die Komprimierung nur bei vielen gleichen
+      Zeichen effizient ist.)
 
       Definieren Sie für die maximale Anzahl an Zeichen in einer
       Zeile eine Konstante, wobei Sie annehmen dürfen, dass keine
       Zeile mehr Zeichen enthält.
 
 \subsection*{Testen}
-      Testen Sie Ihr Programm mit verschiedenen Textdateien; z.B.\ soll
-      eine Testdatei \osuefilename{Test.txt} mit folgenden Inhalt:
+      Testen Sie Ihr Programm mit verschiedenen Eingaben; z.B.\ soll
+      die Eingabe
 
 \begin{osuefmtcode}
       aaabbbbbc
@@ -46,14 +49,7 @@
       ggghhhhha
 \end{osuefmtcode}
 
-die Bildschirmausgabe:
-
-\begin{osuefmtcode}
-      Test.txt:        30 Zeichen
-      Test.txt.comp:   22 Zeichen
-\end{osuefmtcode}
-
-und die Outputdatei \osuefilename{Test.txt.comp} mit dem Inhalt:
+die Ausgabe
 
 \begin{osuefmtcode}
       a3b5c1
@@ -62,7 +58,16 @@ und die Outputdatei \osuefilename{Test.txt.comp} mit dem Inhalt:
       1
 \end{osuefmtcode}
 
-liefern.
+auf \osueglvar{stdout} (bzw.\ der angegebenen Ausgabedatei) und die Ausgabe
+
+\begin{osuefmtcode}
+      Gelesen:          30 Zeichen
+      Geschrieben:      22 Zeichen
+      Komprimierungsrate:   73.3 \%
+\end{osuefmtcode}
+
+auf \osueglvar{stderr} liefern.
+
 
 \osueguidelinesone
 
