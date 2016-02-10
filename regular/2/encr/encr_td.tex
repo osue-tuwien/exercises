@@ -39,9 +39,6 @@ Reihenfolge terminieren können!
 
 Der Exit-Status jedes Kindes muss so früh wie möglich abgeholt werden.
 Behandeln Sie das Signal \osueconst{SIGCHLD}, um das zu gewährleisten.
-Achten Sie darauf, dass \osuefunc{fgets(3)} den Fehlercode \osueconst{EINTR}
-liefert, wenn es durch ein Signal unterbrochen wird. In diesem Fall
-muss \osuefunc{fgets(3)} erneut aufgerufen werden.
 
 \subsection*{Testen}
 

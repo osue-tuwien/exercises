@@ -1,0 +1,6 @@
+*~
+
+# latex outputs
+*.aux
+*.pdf
+*.log
