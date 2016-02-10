@@ -14,7 +14,7 @@ verschiedenen Zeichen ausgibt.
 
 \begin{verbatim}
     SYNOPSIS:
-        mydiff file1 file2
+        mydiff [-i] file1 file2
 \end{verbatim}
 
 \subsection*{Anleitung}
@@ -25,7 +25,9 @@ verschiedenen Zeichen ausgibt.
       sind als gleich zu behandeln. Falls eine Datei mehr Zeilen enthält
       als die andere, sollen die restlichen Zeilen ebenfalls ignoriert
       werden. Pro Zeile soll gezählt werden, wieviele Zeichen an der
-      gleichen Position nicht übereinstimmen.
+      gleichen Position nicht übereinstimmen. Falls die Option \verb|-i|
+      angegeben ist, soll Groß-/Kleinschreibung nicht als Unterschied
+      gezählt werden.
 
       Definieren Sie für die maximale Anzahl an Zeichen in einer
       Zeile eine Konstante, wobei Sie annehmen dürfen, dass keine
@@ -44,7 +46,7 @@ Erstellen Sie eine Testdatei \osuefilename{difftest1.txt} mit folgendem Inhalt:
 und eine zweite Testdatei \osuefilename{difftest2.txt} mit folgendem Inhalt:
 
 \begin{osuefmtcode}
-      abcdefg
+      Abcdefg
       Gartenzaun
       ahciejg
       abcdefg
@@ -53,7 +55,7 @@ und eine zweite Testdatei \osuefilename{difftest2.txt} mit folgendem Inhalt:
 Rufen Sie Ihr Programm dann mit folgenden Argumenten auf:
 
 \begin{osuefmtcode}
-    $ \osueinput{./mydiff difftest1.txt difftest2.txt}
+    $ \osueinput{./mydiff -i difftest1.txt difftest2.txt}
     Zeile: 3 Zeichen: 3
     $ \osueinput{./mydiff difftest1.txt bloedsinn.txt}
     mydiff: Datei bloedsinn.txt existiert nicht!
