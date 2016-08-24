@@ -1,0 +1,155 @@
+\input{../../template.ltx}
+\begin{document}
+
+\osuetitle{3}
+
+\section*{Aufgabenstellung -- ProcDB}
+
+In dieser Aufgabe setzen Sie eine Prozessdatenbank in C um. Die Implementierung
+soll aus zwei Programmen bestehen: einem Server, der die Prozessdatenbank hält
+und Anfragen über deren Inhalt bearbeitet, und einem Client, mit welchem der
+Benutzer Informationen aus der Prozessdatenbank vom Server abfragen kann. Die
+Kommunikation zwischen den Prozessen soll mittels Shared Memory realisiert
+werden und die Synchronisierung über Semaphore erfolgen.
+
+Der Client soll dem Benutzer ein Interface bieten, mit dem der Benutzer über
+Befehle Informationen vom Server abfragen kann. Diese Information soll eines
+der Felder \emph{cpu}, \emph{mem}, \emph{time} oder \emph{command}, welche
+jeder Eintrag in der Prozessdatenbank enthält, sein. Sie soll zu einem
+bestimmten Prozess, der durch seine PID gegeben ist, oder dem Prozess, bei
+welchem dieses Feld den höchsten oder den niedrigsten Wert in der Datenbank
+hat, abgefragt werden können.
+
+\subsection*{Anleitung}
+
+Die Kommunikation zwischen den Clients und dem Server soll mittels einem
+einzigen Shared Memory Object erfolgen (\textbf{nicht} einem pro Client).  Es
+darf auch nicht die gesamte Prozessdatenbank im Shared Memory geladen sein,
+sondern nur die Information, die der Server mit einem einzigen Client
+austauscht.  Allerdings muss eine beliebige Anzahl von Clients gleichzeitig und
+unabhängig voneinander mit dem Server kommunizieren können. Insbesondere darf
+das Warten auf Input eines Clients nicht andere Clients blockieren.
+
+Server und Client sollen Freigabe der Shared Memory Objects und Semaphore
+koordinieren. Spätestens wenn der Server und alle Clients terminiert haben,
+müssen alle Semaphore und Shared Memory Objects freigeben sein.
+
+\subsubsection*{Server}
+\begin{verbatim}
+USAGE: procdb-server input-file
+\end{verbatim}
+
+Der Server legt zu Beginn die benötigten Resourcen an. Anschließend liest er
+die als Argument angegebene Eingabedatei ein, parst die Information (z.B.\
+mittels \texttt{fgets}, \texttt{strtok}, \texttt{sscanf}) und legt sie in einer
+geeigneten Datenstruktur (z.B.\ Array, Liste, Hashtabelle) im Speicher ab.
+Diese dient dem Server im Weiteren als Informationsquelle für das Bearbeiten
+der Requests der Clients.
+
+Anschließend bearbeitet der Server Anfragen von Clients (siehe "`Client"'). Der
+Server sucht den entsprechenden Eintrag in der Datenbank und sendet dem Client
+eine Antwort mit der gewünschten Information.
+
+%Sollte der Server keinen Eintrag
+%mit der gegebenen PID in der Datenbank finden, so schickt er dem Client eine
+%Fehlernachricht.
+
+Der Server soll durch die Signale \texttt{SIGINT} und \texttt{SIGTERM} zum
+Terminieren gebracht werden. Dabei soll er "`sauber"' beenden, also alle
+verwendeten Resourcen (z.B. dynamisch reservierter Speicher, Semaphore, Shared
+Memory) freigeben. Das soll auch im Fehlerfall passieren.
+
+
+\subsubsection*{Client}
+\begin{verbatim}
+USAGE: procdb-client
+\end{verbatim}
+
+
+Der Client verbindet sich beim Starten zuerst mit dem Server ("`verbinden"'
+bedeutet hier zu überprüfen, ob die Semaphore und das Shared Memory Object,
+welche zur Kommunikation notwendig sind, existieren). Anschließend nimmt er vom
+Benutzer Befehle auf der Standardeingabe zum Abfragen von Informationen vom
+Server entgegen. Ein Befehl hat das Format
+
+\begin{verbatim}
+  pid field
+\end{verbatim}
+
+wobei \emph{pid} entweder ein numerischer Wert zur Auswahl eines bestimmten
+Prozesses anhand der PID ist, oder eine Zeichenkette aus \{\texttt{"{}min"},
+\texttt{"{}max"}, \texttt{"{}sum"}, \texttt{"{}avg"}\}.
+\emph{Field} ist eine Zeichenkette, die die entsprechende Information
+zurückliefern soll:
+
+\begin{itemize}
+  \item \texttt{"{}cpu"{}}: die CPU-Auslastung, ausgegeben in Prozent, auf
+    Zehntelprozent ("{}0.1\%"{}) genau.
+  \item \texttt{"{}mem"{}}: der Speicherverbrauch, ausgegeben in Prozent, auf
+    Zehntelprozent genau.
+  \item \texttt{"{}time"{}}: die Zeitdauer, über welche der Prozess bereits
+    läuft, ausgegeben in Stunden, Minuten und Sekunden
+  \item \texttt{"{}command"{}}: das Kommando, mit welchem der Prozess
+    gestartet wurde, als String.
+\end{itemize}
+
+Nur für die numerischen Felder können anstatt einer konkreten PID oben genannte
+Zeichenketten angegeben werden, welche den niedrigsten Wert, den höchsten Wert,
+die Summe, oder den Durchschnitt abfragen.
+%
+Sobald der Client die Antwort erhält, gibt er die PID des Prozesses (oder
+\texttt{"{}-"{}} im Fall von Summe oder Durchschnitt) und den Wert
+wie beschrieben aus.
+%
+Ungültige Abfragen sollen schon beim Client behandelt werden und für sie
+soll kein Request erzeugt werden.
+(Eine Anfrage für eine nicht existierende PID bildet keine ungültige Abfrage
+- dies muss der Server prüfen und eine entsprechende Antwort generieren.)
+%
+Die Befehlseingabe endet mit \emph{EOF} (Ctrl-D auf dem Terminal).
+Wie beim Server ist auch beim Client auf eine saubere Terminierung (auch bei
+Signalen und im Fehlerfall) zu achten.
+
+
+
+\subsection*{Datenformat}
+
+\subsubsection*{Datenbank}
+
+Die Datenbank-Datei ist im CSV (comma-separated values) gegeben.
+Jeder Eintrag (Zeile) enthält die Information eines Prozesses, welcher
+aus folgenden, durch Komma getrennte Felder enthält:
+
+\begin{itemize}
+  \item \emph{pid}: Die Prozess ID.
+  \item \emph{cpu}: Die CPU-Auslastung in Promille (Zehntelprozent).
+  \item \emph{mem}: Der Speicherverbrauch in Promille.
+  \item \emph{time}: Die Laufzeit des Prozesses in Sekunden.
+  \item \emph{command}: Das Kommando als Zeichenkette, höchstens 56
+    Zeichen lang
+\end{itemize}
+
+\paragraph{Beispiel:}
+
+\begin{verbatim}
+2214,0,0,1392074,/usr/bin/ssh-agent /usr/bin/dbus-launch --exit-with-sess
+2230,2,35,390837,/usr/lib/thunderbird/thunderbird
+9270,0,0,1124541,vim README.txt
+14141,24,66,89729,/usr/lib/firefox/firefox
+\end{verbatim}
+
+
+
+\subsubsection*{Shared Memory}
+
+Es soll eine geeignete Struktur definiert werden, die Felder für die Anfrage,
+als auch für die Antwort enthält. Die Art der Information, die abgefragt wird
+(cpu, mem, time, command) soll als Aufzählungstyp definiert sein.
+
+
+
+
+
+\osueguidelinesthree
+
+\end{document}

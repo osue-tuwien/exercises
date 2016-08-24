@@ -1,0 +1,97 @@
+\input{../../template.ltx}
+
+\begin{document}
+
+\osuetitle{3}
+
+\section*{Aufgabenstellung -- banking}
+
+Es soll ein Programm geschrieben werden, dass die Geldtransfers der Kunden
+verwaltet. Die Kunden können sich mit dem Programm verbinden und ihre
+Geldgeschäfte erledigen. Das Verwaltungsprogramm der Bank ist der Server und
+dieser kommuniziert mittels Shared Memory mit den Clients, die von den Kunden
+benutzt werden.
+
+Die Clients können Geld abheben und einzahlen, es auf anderes Konto überweisen
+und den aktuellen Kontostand abfragen. Aus Gründen der Sicherheit und des
+Datenschutzes müssen alle Informationen beim Server bleiben und die Clients
+wissen nur ihre eigene Kontonummer. Außerdem darf pro Konto nur ein Client
+angemeldet sein und jeder Client soll sich auch abmelden, wenn er sich beendet.
+
+
+
+\subsection*{Anleitung}
+
+Das Bank Account Management Tool soll als Client/Server Programm realisiert
+werden, wobei ein Server beliebig viele Clients bedient. Die Kommunikation
+zwischen Clients und Server soll per Shared Memory erfolgen.
+
+\subsubsection*{Server}
+\label{sec:server}
+
+Der Server liest aus einer CSV-Datei die Liste der Konten ein. Jede Zeile ist
+ein Konto und besteht aus der Kontonummer, dem Trennzeichen \texttt{';'} und
+dem Kontostand. Wenn der Server beendet, gibt er den neuen Stand der Konten als
+CSV-Datei aus.
+
+\begin{verbatim}
+USAGE: bankserver [ACCOUNT_LIST [OUT_ACCOUNT_LIST]]
+\end{verbatim}
+
+Zu Beginn liest der Server die Kontoliste ein und legt die benötigten
+Ressourcen an. Falls eine Datei als Argument übergeben wurde, wird die Liste
+aus dieser Datei gelesen, sonst wird die Liste von der Standardeingabe gelesen.
+Ein EOF kennzeichnet das Ende der Eingabe.
+
+Der Server soll beliebig viele Clients gleichzeitig bedienen können. Bei den
+Anfragen, die von den Clients kommen, muss der Server zuvor prüfen, ob die
+Operationen gültig sind, bevor Änderungen am Kontostand gemacht werden.
+Ansonsten würde Geld verloren gehen und die Kunden wären unzufrieden.
+
+Jeder Client muss sich vorher anmelden, bevor er Anfragen stellen kann.
+Außerdem darf nicht mehr als ein Client pro Konto angemeldet sein. Der Server
+muss dies überprüfen. Wenn sich ein Client vom Server trennt, muss sich dieser
+davor abmelden. Ansonsten gilt der Client als angemeldet und es kann sich kein
+weiterer Client für dieses Konto anmelden.
+
+Der Server muss folgende Anfragen bearbeiten können: Abfragen des Kontostandes,
+Abheben von Geld, Einzahlen von Geld, Überweisen auf ein anderes Konto. Beim
+Abheben und Überweisen darf der Client danach keinen negativen Betrag am Konto
+haben, d.h.\ es muss davor geprüft werden, ob genug Geld am Konto ist. Alle
+Anfragen geben nur zurück, ob die Anfrage erfolgreich bearbeitet wurde oder
+nicht. Bei der Abfrage des Kontostandes hingegen wird auch der Betrag an den
+Client geschickt.
+
+Beim Einlesen der Kontoliste darf der Kontostand negativ sein. Die Kontonummer
+besteht aus sieben Dezimalstellen und die Kontonummer 0 ist reserviert und darf
+von keinem Client benutzt werden. Für den Kontostand reicht eine
+vorzeichenbehaftete 32 bit große Zahl.
+Der Kontostand hat keine Nachkommastellen.
+
+Falls der Server ein \verb|SIGTERM| oder \verb|SIGINT| Signal erhält, sollen
+alle angelegten Ressourcen (lokal angelegter Speicher, Shared Memory,
+Semaphore, etc) korrekt freigegeben und terminiert werden.
+
+
+\subsubsection*{Client}
+
+Der Client bekommt als Argument eine Kontonummer übergeben und versucht sich
+mit dieser anzumelden.
+
+\begin{verbatim}
+USAGE: bankclient ACCOUNT_NR
+\end{verbatim}
+
+Der Client bietet dem Kunden ein einfaches Interface über die Standardeingabe
+an, mit der der Kunde Anfragen an den Server schicken kann. Das Ergebnis jeder
+Anfrage wird als Feedback auch auf die Standardausgabe ausgegeben.  Beim
+Abfragen des Kontostandes wird auch der Betrag ausgegeben.
+
+Beim Verbinden meldet sich der Client an und beim Trennen meldet er sich ab. Im
+Falle eines Fehlers soll sich der Client so gut es geht, beim Server abmelden.
+Der Client soll durch ein EOF an der Standardeingabe beendet werden.
+
+
+\osueguidelinesthree
+
+\end{document}
