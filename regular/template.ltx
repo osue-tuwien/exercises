@@ -52,9 +52,11 @@ C-Programmen} auf der Übungswebsite!
 \subsection*{Richtlinien}
 
 Beachten Sie unbedingt auch die \textit{Richtlinien für die Erstellung von
-C-Programmen} sowie die \textit{Allgemeinen Hinweise zur Beispielgruppe 2} auf
-der Übungswebsite!
+  C-Programmen} ("Coding Guidelines") auf TUWEL, sowie die folgenden
+allgemeinen Hinweise zur Beispielgruppe 2!
 
+\begin{description}
+\item[Dokumentation.]
 Insbesondere ist es ab dieser Beispielgruppe notwendig, die Dokumentation in
 Doxygen zu führen. 
 Eine kurze Einführung haben wir Ihnen im OSUE-Wiki bereitgestellt.
@@ -66,14 +68,77 @@ Achten Sie weiters darauf, dass nach außen hin sichtbare Funktionen (exportiert
 Funktionen) in der Header-Datei und lokale (\texttt{static}) Funktionen nur in
 der C-Datei dokumentiert werden. Sie sollten auch Ihre Typen (insbesondere
 \texttt{struct}s), Konstanten und globale Variablen dokumentieren.
+
+\item[Argumentbehandlung.] Vergessen Sie auch bei diesem Beispiel nicht auf die
+  Argumentbehandlung (auch bei einem Programm welches keine Argumente erhält
+  ist eine Argumentbehandlung durchzuführen)!
+\item[Pipes.] Falls Sie Pipes erzeugen, sollte das wie im Übungsskriptum
+  beschrieben geschehen.
+\item[Ressourcen.] Alle Ressourcen (wie z.B. Pipes) müssen ordnungsgemäß vor
+  Terminierung entfernt werden.
+\item[Terminierung.] Die Terminierung aller Kindprozesse ist sicherzustellen,
+  ohne \texttt{kill(2)} oder \texttt{killpg(2)} zu verwenden. Der Exit-Status
+  beendeter Kindprozesse muss vom Vaterprozess abgeholt werden
+  (\texttt{wait(2)}, \texttt{waitpid(2)}, \texttt{wait3(2)}).
+\item[Signalbehandlung.] Eine Signalbehandlung ist für diese Beispielgruppe
+  (mit Ausnahme von einem Beispiel, bei dem explizit eine Signalbehandlung
+  gefordert wird) nicht erforderlich!
+\end{description}
+
 }
 
 \newcommand\osueguidelinesthree{
 \subsection*{Richtlinien}
 
 Beachten Sie unbedingt auch die \textit{Richtlinien für die Erstellung von
-C-Programmen} sowie die \textit{Allgemeinen Hinweise zur Beispielgruppe 3} auf
-der Übungswebsite!
+  C-Programmen} ("Coding Guidelines") auf TUWEL, sowie die folgenden
+allgemeinen Hinweise zur Beispielgruppe 3.
+
+Entwickeln Sie die zu implementierenden Prozesse als getrennte Programme, die
+über POSIX Shared Memory (siehe \texttt{shm\_overview(7)}) Daten
+austauschen. Synchronisieren Sie den Zugriff auf das Shared Memory mit POSIX
+Semaphoren (siehe \texttt{sem\_overview(7)}).
+
+Es sind Named Semaphores zu verwenden (\texttt{sem\_open(3)},
+\texttt{sem\_close(3)} \texttt{sem\_unlink(3)}).
+
+Shared Memory Objekte und Semaphore werden nach Beendigung des Programms nicht
+automatisch gelöscht. Sie müssen daher im Programm explizit entfernt werden
+(siehe unten).
+
+Sollten durch einen Programmfehler bzw. Absturz Shared Memory oder Semaphore
+nicht gelöscht werden, können diese im Verzeichnis \texttt{/dev/shm/} mit den
+üblichen Kommandos \texttt{ls} und \texttt{rm} gelistet bzw. gelöscht
+werden. Sie erkennen die Ihnen zugeordneten Ressourcen an der Ownership der
+jeweiligen Files.
+
+\begin{description}
+\item[Aufrufreihenfolge.] Sollte bei einer Client/Server-Struktur (der Server
+  übernimmt das Anlegen und Freigeben gemeinsamer Ressourcen) der Client noch
+  keine der vom Server anzulegenden gemeinsamen Ressourcen vorfinden, so hat
+  der Client mit einer Fehlermeldung zu terminieren. Ob eine
+  Client/Server-Struktur Sinn macht, ist aus der Beispielangabe abzuleiten. Bei
+  der Verwendung einer Server/Client Struktur, ist, wenn nicht anders
+  angegeben, davon auszugehen, dass mehrere Clients gleichzeitig gestartet
+  werden können. Der Server muß nach der fehlerfreien Terminierung eines
+  Clients noch funktionsfähig bleiben. Es kann jedoch davon ausgegangen werden,
+  dass der Server nur einmal gestartet wird. Wenn sie keine Client/Server
+  Struktur verwenden, kann davon ausgegangen werden, dass jeder Prozess nur
+  einmal gestartet wird und das in einer beliebigen Reihenfolge.
+\item[Signalbehandlung.] Eine Signalbehandlung ist in dieser Beispielgruppe für
+  alle Programme (z.B. Client und Server) durchzuführen (\texttt{SIGINT},
+  \texttt{SIGTERM}).
+\item[Ressourcenverwendung.] Nutzen Sie ein Shared Memory fixer Groesse in
+  Ihrer Loesung. Nutzen Sie so wenige Semaphoren wie noetig; achten Sie jedoch
+  auf den korrekt synchronisierten Zugriff -- Ihrem Beispiel entsprechend --
+  auf das shared Memory. Falls Sie Fragen zur Synchronisation haben, wenden Sie
+  sich bitte an unsere Tutoren in der regulaer betreuten Uebungszeit.
+\item[Terminierung.] Nach einer fehlerfreien Programmabarbeitung soll eine
+  synchronisierte Terminierung der Prozesse erfolgen. D.h., achten Sie beim
+  Entfernen aller angelegten Ressourcen auf die Synchronisation zwischen den
+  laufenden Prozessen. Sorgen Sie dafür, dass auch im Fehlerfall alle
+  angelegten Ressourcen gelöscht werden.
+\end{description}
 }
 
 % semantic markup formatting commands:
