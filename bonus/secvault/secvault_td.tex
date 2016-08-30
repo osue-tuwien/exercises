@@ -1,0 +1,340 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{a4wide}
+\usepackage{url}
+\usepackage{hyperref}\hypersetup{colorlinks=true,linkcolor=blue,urlcolor=blue,citecolor=blue}
+\parindent0pt
+
+\begin{document}
+\begin{center}
+\begin{Large}
+OPERATING SYSTEMS UE BONUS BEISPIEL
+\end{Large}
+\end{center}
+
+
+\section*{Vorbereitung}
+Zur Vorbereitung lesen Sie bitte die ersten drei Kapitel sowie Kapitel
+5 des Buches "`Linux Device
+Drivers"'~\cite{Corbet:2005:LDD:1209083}. Weiters steht Ihnen ein
+rudiment{\"a}res \emph{"`Hello World"'} Modul inkl. Makefile in
+der Entwicklungsumgebung zur Verf{\"u}gung. Dieses k{\"o}nnen Sie gerne als
+Grundlage f{\"u}r die Entwicklung Ihres eigenen Kernel-Moduls
+verwenden.
+
+\section*{Abgabegespr{\"a}ch}
+Das Abgabegespr{\"a}ch findet am 27.06.2016 (und bei Bedarf am 28.06.) im TI-Labor statt.
+Eine Anmeldung im myTI zu einem Slot ist erforderlich -
+bitte bedenken Sie, dass eine nachtr{\"a}gliche Abgabe {\bf nicht}
+m{\"o}glich ist. Es gelten die
+bekannten Richtlinien mit den zus{\"a}tzlichen Einschr{\"a}nkungen
+bzw. Lockerungen:
+\begin{itemize}
+\item Ihre Implementierung muss in der TI-Lab Umgebung (User Mode Linux)
+  demonstriert werden.
+\item GNU C Standard (C99 Standard mit GNU Erweiterungen)
+\item Kernel Coding Style konform (siehe $<$kernel source
+  dir$>$/Documentation/CodingStyle), Coding Style Check Tool
+  (auch in der Entwicklungsumgebung verf{\"u}gbar):
+  \begin{verbatim}
+  # /usr/src/linux/scripts/checkpatch.pl -f <source file>
+  \end{verbatim}
+\item Das Kernel-Modul muss sich sauber (d.h. Freigabe aller
+  verwendeten Ressourcen) aus dem System per \emph{rmmod(8)} entfernen
+  lassen.
+\item Definieren Sie den Modul-Parameter \verb|debug|, der, wenn er
+  beim Laden des Moduls auf \texttt{1} gesetzt wird, f{\"u}r sinnvolle
+  Debugausgaben (z.B. bei den einzelnen Operationen auf den Character
+  Devices) sorgt.
+\end{itemize}
+
+\section*{Secvault, a Secure Vault}
+%TODO: je nach Aufwand koennte Verschluesselung und zusaetzliche Chardevs weggelassen werden bzw. etwas Code vorgegeben werden (+1)\\
+
+Implementieren Sie ein Linux Kernel Modul, welches {\"u}ber Character
+Devices bis zu 4 fl{\"u}chtige, aber sichere Speicher (Secure Vaults -
+kurz: \emph{Secvaults}) zur Verf{\"u}gung stellt.  Ein \emph{Secvault}
+hat eine \texttt{id} und eine konfigurierbare Gr{\"o}sse (\texttt{size})
+zwischen 1 Byte und 1 MByte. Er soll per eigenem Character Device vom
+Userspace aus beschreib- und lesbar sein. Daten, die auf ein
+\emph{Secvault} Character Device geschrieben werden, sollen
+verschl{\"u}sselt als Cyphertext im Speicher abgelegt werden. Beim
+Lesen soll der im Speicher abgelegte Cyphertext entschl{\"u}sselt
+werden und als Klartext in den Userpace {\"u}bergeben werden.  Als
+Verschl{\"u}sselung soll ein einfaches symmetrisches
+\emph{XOR}-Verfahren dienen: Abh{\"a}ngig von der Position im
+\emph{Secvault}, wird ein Schl{\"u}sselbyte mit einem Datenbyte per
+XOR verkn{\"u}pft:\\ $crypt(pos, data, key) = data[pos]\ \oplus\
+key[pos\ mod\ key_{size}]$
+
+Ein \emph{Secvault} hat also folgende Eigenschaften:
+\begin{itemize}
+\item \texttt{id}   [0--3]
+\item \texttt{key}  (10 Byte)
+\item \texttt{size} [1--1048576]
+\end{itemize}
+%TODO:
+
+Die Verwaltung der \emph{Secvaults} soll mit Hilfe des von Ihnen zu
+entwickelnden Userspace-Tools \texttt{svctl} erfolgen:
+\begin{verbatim}
+USAGE: ./svctl [-c <size>|-k|-e|-d] <secvault id>
+\end{verbatim}
+
+Wird keine Option angebeben, soll die Gr{\"o}{\ss}e des
+\emph{Secvaults} in Bytes ausgegeben werden.
+Die Option \texttt{-c} erzeugt einen neuen \emph{Secvault} der
+Gr{\"o}{\ss}e \texttt{size} Bytes im Kernel. Weiters sollen bei der
+Option \texttt{-c} von \emph{stdin} 10 Zeichen gelesen werden, die als
+Schl{\"u}ssel dienen. Der Rest einer l{\"a}ngeren Eingabe wird
+ignoriert; bei einer k{\"u}rzeren Eingabe wird der Rest des
+Schl{\"u}ssels mit 0x0 gef{\"u}llt.
+Die Option \texttt{-k} soll die {\"A}nderung des Schl{\"u}ssels eines
+\emph{Secvaults} erlauben. Dabei soll ebenfalls wie zuvor beschrieben
+ein Schl{\"u}ssel von \emph{stdin} eingelesen werden, der den alten
+Schl{\"u}ssel ersetzt.
+Der m{\"o}gliche Inhalt eines \emph{Secvaults} soll nicht ge{\"a}ndert werden.  
+Die Option \texttt{-e} l{\"o}scht
+die Daten eines existierenden \emph{Secvaults} - d.h. der gesamte
+Speicher wird Kernel-Modul intern mit 0x0 beschrieben (nicht indirekt
+{\"u}ber das \emph{Secvault} Character Device). Die Option \texttt{-d}
+soll den \emph{Secvault} aus dem System entfernen und den Speicher
+wieder freigeben.
+
+Das Kernel Modul legt direkt nach dem Laden (\emph{insmod(8)}) ein
+eigenes Character Device (ansprechbar {\"u}ber \verb|/dev/sv_ctl|\footnote{Sie m{\"u}ssen dieses Devicefile erst (einmalig) anlegen! Siehe Anleitung.} zur
+Steuerung und Statusabfrage an. Das Userspace-Tool \emph{svctl} soll
+per \emph{IOCTL} Calls mit dem Kernel Modul kommunizieren.
+
+\section*{Anleitung}
+\begin{itemize}
+\item Character (und Block) Devices werden {\"u}ber Major und Minor
+  Device Numbers im Filesystem {\"u}ber \emph{Special Files}
+  referenziert. Nehmen Sie 231 als Major Device Number f{\"u}r die
+  \emph{Secvault} Devices. Die \emph{Special Files} k{\"o}nnen Sie per
+  \emph{mknod(1)} im Verzeichnis \verb|/dev/| anlegen (es empfiehlt
+  sich ein Script daf{\"u}r im Homedirectory anzulegen).
+\item {\"U}ber das \emph{Secvault} Control Device (\verb|/dev/sv_ctl|)
+  k{\"o}nnen per \emph{open}, \emph{release} und \emph{ioctl}
+  Kommandos an das \emph{Secvault} Device abgesetzt werden.
+\item Per Userspace-Tool \emph{svctl} sind mit \emph{IOCTL} Calls
+  folgende Operationen m{\"o}glich:
+\begin{itemize}
+\item einen \emph{Secvault} anlegen und dabei Gr{\"o}sse und Schl{\"u}ssel
+  festlegen
+\item die Gr{\"o}{\ss}e eines \emph{Secvaults} abfragen
+\item den Schl{\"u}ssel eines \emph{Secvaults} {\"a}ndern
+\item einen \emph{Secvault} mit 0x0 initialisieren ( = Inhalt l{\"o}schen)
+\item einen \emph{Secvault} entfernen (inkl. Speicherfreigabe)
+\end{itemize}
+Bei der Erstellung eines neuen \emph{Secvaults} soll auch ein neues
+Character Device (ansprechbar {\"u}ber \verb|/dev/sv_data[0-3]|)
+angelegt werden.
+\item {\"U}ber \emph{Secvault} Data Devices (\verb|/dev/sv_data[0-3]|)
+  soll der Zugriff auf den verschl{\"u}sselten Speicher per
+  \emph{open}, \emph{release}, \emph{seek}, \emph{read} und
+  \emph{write} erfolgen.
+\item Implementieren Sie eine geeignete Behandlung von
+  Fehlerf{\"a}llen:
+\begin{itemize}
+\item {\"u}ber Speichergr{\"o}{\ss}e des \emph{Secvaults} hinaus
+  lesen/schreiben
+\item Anlegen eines existierenden \emph{Secvaults}
+\end{itemize}
+\end{itemize}
+\section*{Target und Entwicklungsumgebung}
+Da die Entwicklung von Kernel-Modulen aufgrund der Systemn{\"a}he bei
+Fehlern leicht zum Absturz des kompletten Systems f{\"u}hren kann,
+haben wir eine Entwicklungsumgebung eingerichtet, die den
+Normal-Betrieb im TI-Lab nicht st{\"o}rt: Im Verzeichnis:
+\begin{verbatim}
+/opt/osue/uml/
+\end{verbatim}
+befindet sich eine User Mode Linux (UML) Installation. Der darin
+enthaltene Linux Kernel (\verb|vmlinux|) wird als normaler User
+Prozess ausgef{\"u}hrt und kann auf dem Host-System auch nur
+Operationen durchf{\"u}hren, die Sie als Benutzer im TI-Lab durchf{\"u}hren
+k{\"o}nnen. Insbesondere ist es (in den meisten F{\"a}llen)
+nicht m{\"o}glich aufgrund von Programmierfehler das Hostsystem
+(TI-Lab Client bzw. den TI-Lab Application Server) zum Abst{\"u}rzen zu bringen.
+
+Im angegebenen Verzeichnis finden Sie au{\ss}erdem das Script
+\texttt{start}, welches bei Ausf{\"u}hrung eine Instanz des UML
+Kernels bootet. Beim Bootprozess nutzt der UML Kernel ein
+Minimal-Debian System\footnote{http://www.debian.org} (ohne
+graphischer Benutzeroberfl{\"a}che) als Root-Image. Bitte ignorieren
+Sie Fehlermeldungen betreffend des Netzwerkinterfaces. Am Ende des
+Bootprozesses werden alle virtuellen Konsolen mit 6 Pseudoterminals am
+Hostsystem verbunden. Die Ausgabe des \verb|start| Skripts bis
+zum Ende des Bootvorgangs sieht typischerweise so aus:
+\begin{verbatim}
+$ /opt/osue/uml/start
+ Using swap file: /home/b/.uml.swap
+ Using copy-on-write file: /home/b/.uml.cow
+...
+systemd[1]: Detected virtualization 'uml'.
+systemd[1]: Detected architecture 'x86-64'.
+
+Welcome to Debian GNU/Linux 8 (jessie)!
+...
+[  OK  ] Reached target Login Prompts.
+[  OK  ] Reached target Multi-User System.
+[  OK  ] Reached target Graphical Interface.
+         Starting Update UTMP about System Runlevel Changes...
+[  OK  ] Started Update UTMP about System Runlevel Changes.
+Virtual console 5 assigned device '/dev/pts/13'
+Virtual console 4 assigned device '/dev/pts/15'
+Virtual console 3 assigned device '/dev/pts/16'
+Virtual console 2 assigned device '/dev/pts/18'
+Virtual console 1 assigned device '/dev/pts/19'
+Virtual console 6 assigned device '/dev/pts/22'
+random: nonblocking pool is initialized
+\end{verbatim}
+
+{\bf Achtung:} Das Terminal, in dem Sie die UML Instanz gestartet
+haben, reagiert nun auf keine Eingaben mehr.
+%Weiters sollten Sie die
+%Gr{\"o}sse des Terminal-Windows nicht ver{\"a}ndern.
+
+Beachten Sie, dass diese Pseudoterminals je nach Auslastung vergeben
+werden - d.h. dass Sie i.d.R. nicht immer die gleichen IDs haben. Nun
+k{\"o}nnen Sie sich in einem anderen Terminalfenster beispielsweise
+per \texttt{screen} mit einem der Pseudoterminals verbinden (1x Return
+Taste nach dem Starten von Screen dr{\"u}cken):
+\begin{verbatim}
+# screen /dev/pts/25
+
+Debian GNU/Linux 8 sysprog-bonus tty6
+
+sysprog-bonus login: 
+\end{verbatim}
+
+Der Login lautet: \verb|root|\\
+Das Passwort: \verb|rootme|\\
+Im UML System haben Sie nun root-Rechte und k{\"o}nnen mit der
+Entwicklung des Kernel-Moduls beginnen. Wir haben Ihnen daf{\"u}r noch
+ein Script geschrieben, welches die Kernelquellen und Ihr
+Homeverzeichnis in das UML-System einbindet. F{\"u}hren Sie dazu
+bitte den Befehl im UML-System aus:
+\begin{verbatim}
+prepare <ti-lab username>
+\end{verbatim}
+
+Sie finden danach unter \texttt{/usr/src/linux/} die Kernel-Quellen
+und unter \texttt{/root/homedir/} Ihr Homeverzeichnis.
+
+\subsection*{Compilieren des Testmodules}
+Hier eine kurze Session die das Compilieren, Laden und Entfernen eines
+"`Hello-World"' Testmodules zeigt (angenommen wird, dass
+\texttt{\~/prepare} bereits aufgerufen wurde):
+\begin{verbatim}
+root@sysprog-bonus:~# ls /usr/src/linux
+COPYING        Makefile        block     init    modules.builtin  sound
+CREDITS        Module.symvers  crypto    ipc     modules.order    tools
+Documentation  README          drivers   kernel  net              usr
+Kbuild         REPORTING-BUGS  firmware  lib     samples          virt
+Kconfig        System.map      fs        linux   scripts          vmlinux
+MAINTAINERS    arch            include   mm      security         vmlinux.o
+root@sysprog-bonus:~# cd ~
+root@sysprog-bonus:~# cp test_module homedir/ -R
+root@sysprog-bonus:~# cd homedir/test_module
+root@sysprog-bonus:~/homedir/test_module# make clean all
+make V=1 ARCH=um -C /usr/src/linux M=$PWD clean;
+make[1]: Entering directory '/media/host/linux-4.0.2'
+[...]
+mkdir -p /root/homedir/test_module/.tmp_versions ; rm -f /root/homedir/test_module/.tmp_versions/*
+make -f ./scripts/Makefile.build obj=/root/homedir/test_module
+[...]
+make[1]: Leaving directory '/media/host/linux-4.0.2'
+root@sysprog-bonus:~/homedir/test_module# insmod ./tm_main.ko
+root@sysprog-bonus:~/homedir/test_module# rmmod ./tm_main.ko
+root@sysprog-bonus:~/homedir/test_module# dmesg | tail
+[...]
+Hello World! I am a simple tm (test module)!
+Bye World! tm unloading...
+\end{verbatim}
+
+\section*{Hinweise}
+
+\begin{itemize}
+\item Entwickeln Sie nach M{\"o}glichkeit auf einem TI-Lab Client
+  (d.h. ein tiXX.tilab.tuwien.ac.at Rechner). Diese sind - sofern
+  eingeschaltet - ebenfalls per ssh direkt von au{\ss}en erreichbar.
+\item Sie k{\"o}nnen den Quelltext des Kernelmoduls auch am Host
+  editieren (innerhalb ihres Homeverzeichnisses)
+\item Das Terminallayout k{\"o}nnen Sie mit dem Kommando \texttt{resize}
+  auf die Gr{\"o}{\ss}e des \emph{screen}-Fensters anpassen.
+  Nach einem Login ist die Gr{\"o}{\ss}e auf nur 80 Spalten
+  und 25 Zeilen gesetzt.
+\item Die UML Instanz k{\"o}nnen Sie sauber terminieren, indem Sie im
+  UML System den Befehl \texttt{halt} ausf{\"u}hren.
+\item Entwickeln und Testen Sie nach M{\"o}glichkeit in kurzen Zyklen:
+  Debugging, wie Sie es im Userspace per \emph{gdb} gewohnt sein
+  m{\"o}gen, steht Ihnen nur mit sehr viel mehr Aufwand im Kernelmode
+  zur Verf{\"u}gung. Erweitern Sie daher Ihr Modul in kleinen
+  Schritten und testen gr{\"u}ndlich bereits implementierte Funktionen,
+  bevor Sie darauf aufbauen.
+\item Es k{\"o}nnen die Character Device Files im Filesystem (unter \verb|/dev/|)
+  unabh{\"a}ngig von den tats{\"a}chlich vorhandenden Devices im
+  Kernel existieren (d.h. diese m{\"u}ssen nicht direkt vom Modul
+  angelegt werden bzw. wieder gel{\"o}scht werden).
+\item Registrieren Sie gleich beim Laden des Moduls eine \emph{character
+  device region}, in der alle f{\"u}nf Devices (ein Control- und vier
+  \emph{Secvault}-Devices) Platz finden.
+\item Sie k{\"o}nnen das Unixtool \emph{dd(1)} zum Testen der
+  einzelnen \emph{Secvaults} verwenden. Testen Sie insbesondere Ihre
+  Behandlung der m{\"o}glichen Fehlerf{\"a}lle (z.B. Schreiben/Lesen
+  {\"u}ber die Grenzen des \emph{Secvaults}, ...).
+\item Mit dem Kommando \emph{su(1)} k{\"o}nnen Sie die Identit{\"a}t
+  von einem der drei Testuser (test1, test2 oder test3) annehmen.
+%\item Falls die Meldung
+%  \verb|'<module name>' likely not compiled with -mcmodel=kernel| beim
+%  Laden des Moduls via insmod auftauchen sollte, bitte UML Instanz neu
+%  starten.
+\end{itemize}
+
+\section*{Fragen}
+\begin{itemize}
+\item Ist es Ihnen m{\"o}glich den \emph{Secvault} so einzurichten,
+  dass nur diejenigen Benutzer, die ihn angelegt haben, darauf
+  schreiben und davon lesen k{\"o}nnen? Jeder Benutzer des Systems
+  soll, sofern der angeforderte \emph{Secvault} frei ist, in der Lage
+  sein, einen \emph{Secvault} anzulegen.\\
+  {\bf Bemerkung: bis zu +5 weitere Bonuspunkte bei korrekter
+    Implementierung.}
+\item Wie verhindern Sie unsynchronisierten Zugriff bei
+  "`gleichzeitiger"' Verwendung des selben \emph{Secvault} Data
+  Devices ?
+\item Angenommen, ein Angreifer m{\"o}chte den unverschl{\"u}sselten
+  Inhalt eines \emph{Secvaults} kennen und hat die M{\"o}glichkeit RAM direkt
+  auszulesen\footnote{
+    Die Nintendo 3DS Spielekonsole nutzte beispielsweise einen externen
+    RAM Bauteil, wo Daten abgelegt wurden. Ein Angriff auf die CPU Kerne
+    in einem System-on-Chip (SoC) Package sowie auf den Programmcode war
+    aus diversen Gr{\"u}nden unpraktisch. Die Daten in diesem externen
+  RAM Bauteil waren jedoch abgreifbar. Siehe:
+  https://owncloud.tuwien.ac.at/public.php?service=files\&t=401f7fe05e214ea6acaeeffabd1224d7
+(by Neimod)}. Andere Systemkomponenten, insb. der \emph{Secvault} Schl{\"u}ssel,
+CPU und Programmcode, sind f{\"u}r den Angreifer jedoch nicht einsehbar
+oder sogar beeinflu{\ss}bar. Ist der Angreifer in der Lage den Plaintext
+des \emph{Secvaults} wiederherzustellen? Welche maximale Secvaultgr{\"o}{\ss}e
+w{\"a}re Ihrer Meinung nach sicher oder ist jede Gr{\"o}{\ss}e sicher/unsicher?
+\end{itemize}
+
+\bibliographystyle{plain}
+\begin{thebibliography}{9}
+
+\bibitem{Corbet:2005:LDD:1209083}
+    Jonathan Corbet, Alessandro Rubini, Greg Kroah-Hartman
+    \emph{Linux Device Drivers},
+    O'Reilly Media, Inc.,
+    3rd Edition,
+    2005,
+    0596005903,
+    Verf{\"u}gbar unter: \url{http://lwn.net/Kernel/LDD3/}.
+
+\end{thebibliography}
+
+\end{document}
+
