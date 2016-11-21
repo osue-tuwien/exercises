@@ -9,3 +9,10 @@ Topics include (but are not limited to):
 * Pipes
 * Semaphores
 * Shared memory
+
+## building
+
+To generate the pdf documents, a latex installation is required.
+The script `genpdfs.sh` is provided for convenience. It runs latex
+for all .tex files it finds in the current working directory and below
+(changing into the respective directory).

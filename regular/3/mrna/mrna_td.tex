@@ -1,0 +1,203 @@
+\input{../../template.ltx}
+\usepackage{multirow}
+
+\begin{document}
+
+\osuetitle{3}
+
+\section*{Aufgabenstellung -- mrna}
+
+In diesem Beispiel soll einer der grundlegendsten Vorgänge in der Zelle, die
+Synthese von Proteinen (auch Translation genannt), anschaulich dargestellt
+werden.
+
+Die \emph{mRNA} (messenger RNA), auch Boten-RNA genannt, entspricht einem
+Teilabschnitt der DNA und wird aus dieser synthetisiert (auch Transkription
+genannt).  Das daraus resultierende Template dient anschließend in der Zelle
+zur Produktion von unterschiedlichsten \emph{Proteinen}.
+
+Ein Protein besteht aus der Kombination von 20 verschiedenen
+\emph{Aminosäuren} und die Information, welche Aminosäuren bei der Synthese
+aneinander gehängt werden müssen, werden in der mRNA gespeichert. Den dazu
+verwendeten Code nennt man auch den \emph{genetischen Code}. (Siehe
+\textit{Genetic Code})
+
+Die mRNA verwendet keinen binären Code, jedoch erinnert der Aufbau sehr an
+Konzepte aus der Informatik. Statt Bits [\verb|0| oder \verb|1|; Basis 2]
+werden \emph{Nukleinbasen} [Adenin (\verb|A|), Guanin (\verb|G|), Cytosin
+(\verb|C|) oder Uracil (\verb|U|); Basis 4] zur Speicherung von Informationen
+verwendet. 8 Bits werden immer zu einem Byte zusammengefasst, 3 Nukleinbasen zu
+einem \emph{Codon}. Dieses Codon kann nun einem der 20 Aminosäuren zugeordnet
+werden. Vergleichbar: ein Byte entspricht einem ASCII Zeichen in der
+ASCII-Tabelle. Da es aber nur 20 Aminosäuren gibt, jedoch $4^3=64$ mögliche
+Codons, sind einige Aminosäuren mehrfach belegt.
+Tabelle~\ref{tab:geneticcode} zeigt die Zuordnung der Nukleinbasentripel
+zu den Aminosäuren.
+
+Beispiel: UUU=Phe(F), UUC=Phe(F), AAA=Lys(K), AAG=Lys(K)
+
+Eine Protein-Sequenz (die message) innerhalb einer mRNA-Sequenz beginnt immer
+mit einem \emph{Start-Codon} (AUG) und endet mit einem \emph{Stopp-Codon}
+(UAA, UAG, UGA). Die dazwischen liegenden Codons geben an, aus welchen
+Aminosäuren das Protein schlussendlich synthetisiert werden soll. Ein
+Beispiel illustriert den Vorgang:
+
+\renewcommand{\arraystretch}{1.4}
+\begin{center}
+\begin{tabular}{r c}
+\textit{mRNA} & … CACAGCCU AUG GUA GGG UCU GCU UAA CGCCGC ... \\
+ & AUG (START) | GUA=\textbf{V}, GGG=\textbf{G}, UCU=\textbf{S}, GCU=\textbf{A} | UAA (STOP) \\
+\textit{Protein} & \textbf{VGSA}
+\end{tabular}
+\end{center}
+
+
+\renewcommand{\arraystretch}{1.4}
+\begin{table}
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\cline{1-4} \cline{6-9} \cline{11-14} \cline{16-19}
+\multirow{16}{*}{U} & \multirow{4}{*}{U} & U & \multirow{2}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}Phe\\ F\end{tabular}}} & & \multirow{16}{*}{C} & \multirow{4}{*}{U} & U & \multirow{4}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}Leu\\ L\end{tabular}}} & & \multirow{16}{*}{A} & \multirow{4}{*}{U} & U & \multirow{3}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}Ile\\ I\end{tabular}}} & & \multirow{16}{*}{G} & \multirow{4}{*}{U} & U & \multirow{4}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}Val\\ V\end{tabular}}} \\ \cline{3-3} \cline{8-8} \cline{13-13} \cline{18-18}
+& & C & & & & & C & & & & & C & & & & & C & \\ \cline{3-4} \cline{8-8} \cline{13-13} \cline{18-18}
+& & A & \multirow{2}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}Leu\\ L\end{tabular}}} & & & & A & & & & & A & & & & & A & \\ \cline{3-3} \cline{8-8} \cline{13-14} \cline{18-18}
+& & G & & & & & G & & & & & G & \textbf{\begin{tabular}[c]{@{}c@{}}Met M\\START\end{tabular}} & & & & G & \\ \cline{2-4} \cline{7-9} \cline{12-14} \cline{17-19}
+& \multirow{4}{*}{C} & U & \multirow{4}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}Ser\\ S\end{tabular}}} & & & \multirow{4}{*}{C} & U & \multirow{4}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}Pro\\ P\end{tabular}}} & & & \multirow{4}{*}{C} & U & \multirow{4}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}Thr\\ T\end{tabular}}} & & & \multirow{4}{*}{C} & U & \multirow{4}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}Ala\\ A\end{tabular}}} \\ \cline{3-3} \cline{8-8} \cline{13-13} \cline{18-18}
+& & C & & & & & C & & & & & C & & & & & C & \\ \cline{3-3} \cline{8-8} \cline{13-13} \cline{18-18}
+& & A & & & & & A & & & & & A & & & & & A & \\ \cline{3-3} \cline{8-8} \cline{13-13} \cline{18-18}
+& & G & & & & & G & & & & & G & & & & & G & \\ \cline{2-4} \cline{7-9} \cline{12-14} \cline{17-19}
+& \multirow{4}{*}{A} & U & \multirow{2}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}Tyr\\ Y\end{tabular}}} & & & \multirow{4}{*}{A} & U & \multirow{2}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}His\\ H\end{tabular}}} & & & \multirow{4}{*}{A} & U & \multirow{2}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}Asn\\ N\end{tabular}}} & & & \multirow{4}{*}{A} & U & \multirow{2}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}Asp\\ D\end{tabular}}} \\ \cline{3-3} \cline{8-8} \cline{13-13} \cline{18-18}
+& & C & & & & & C & & & & & C & & & & & C & \\ \cline{3-4} \cline{8-9} \cline{13-14} \cline{18-19}
+& & A & \multirow{2}{*}{\textbf{STOP}} & & & & A & \multirow{2}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}Gln\\ Q\end{tabular}}} & & & & A & \multirow{2}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}Lys\\ K\end{tabular}}} & & & & A & \multirow{2}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}Glu\\ E\end{tabular}}} \\ \cline{3-3} \cline{8-8} \cline{13-13} \cline{18-18}
+& & G & & & & & G & & & & & G & & & & & G & \\ \cline{2-4} \cline{7-9} \cline{12-14} \cline{17-19}
+& \multirow{4}{*}{G} & U & \multirow{2}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}Cys\\ C\end{tabular}}} & & & \multirow{4}{*}{G} & U & \multirow{4}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}Arg\\ R\end{tabular}}} & & & \multirow{4}{*}{G} & U & \multirow{2}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}Ser\\ S\end{tabular}}} & & & \multirow{4}{*}{G} & U & \multirow{4}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}Gly\\ G\end{tabular}}} \\ \cline{3-3} \cline{8-8} \cline{13-13} \cline{18-18}
+& & C & & & & & C & & & & & C & & & & & C & \\ \cline{3-4} \cline{8-8} \cline{13-14} \cline{18-18}
+& & A & \textbf{STOP} & & & & A & & & & & A & \multirow{2}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}Arg\\ R\end{tabular}}} & & & & A & \\ \cline{3-4} \cline{8-8} \cline{13-13} \cline{18-18}
+& & G & \textbf{\begin{tabular}[c]{@{}c@{}}Trp\\ W\end{tabular}} & & & & G & & & & & G & & & & & G & \\ \cline{1-4} \cline{6-9} \cline{11-14} \cline{16-19}
+\end{tabular}
+  \caption{Genetischer Code: Dekodierung der Codons zu Aminosäuren}
+  \label{tab:geneticcode}
+\end{table}
+
+
+\subsection*{Anleitung}
+
+Die Implementierung besteht aus einem Server, der die mRNA Sequenz und Befehle
+entgegennimmt und entsprechend verarbeitet, und einem Client, der zur
+Eingabe von Daten dient und die Ergebnisse visualisiert. Die Kommunikation
+zwischen den Prozessen soll mittels Shared Memory realisiert werden und die
+Synchronisierung über Semaphore erfolgen.
+
+Die Kommunikation zwischen den Clients und dem Server soll mittels einem
+einzigen Shared Memory Object erfolgen (\textbf{nicht} einem pro Client),
+welches nur die Information, die der Server mit einem einzigen Client
+austauscht enthalten darf.  Allerdings muss eine beliebige Anzahl von Clients
+gleichzeitig und unabhängig voneinander mit dem Server kommunizieren können.
+Insbesondere darf das Warten auf den Input eines Clients nicht andere Clients
+blockieren.
+
+Server und Client sollen die Freigabe des Shared Memory Objects und der
+Semaphore koordinieren. Spätestens wenn der Server und alle Clients terminiert
+haben, müssen alle Semaphore und Shared Memory Objects freigegeben sein.
+
+
+\subsection*{Client}
+
+\begin{verbatim}
+USAGE: mrna-client
+\end{verbatim}
+
+Wenn der Client gestartet wird, soll dem Nutzer zuerst eine Liste aller
+verfügbaren Befehle ausgegeben werden:
+
+\begin{verbatim}
+$ ./mrna-client
+Available commands:
+ s - submit a new mRNA sequence
+ n - show next protein sequence in active mRNA sequence
+ r - reset active mRNA sequence
+ q - close this client
+\end{verbatim}
+
+Die Auswahl soll von der Standardeingabe gelesen werden.
+
+\begin{description}
+
+  \item[\texttt{s}] Dieser Befehl erlaubt es dem Nutzer eine neue mRNA-Sequenz
+    an den Server zu senden. Der Server hinterlegt diese Sequenz in einem dem
+    Client zugeordneten Datenspeicher. Die Eingabe wird durch zwei Leerzeilen
+    beendet und es sollen alle ungültigen Zeichen und Leerraum (Tabs,
+    Leerzeichen, Zeilenumbrüche) entfernt werden.
+
+  \item[\texttt{n}] Sollte für diesen Client eine mRNA-Sequenz am Server
+    hinterlegt sein, gibt dieser Befehl das nächste Vorkommen einer
+    Protein-Sequenz aus. Neben der gefundenen Protein-Sequenz selbst wird
+    sowohl die Start als auch die End-Position in der betreffenden mRNA-Sequenz
+    ausgegeben.
+
+  \item[\texttt{r}] Wenn das Ende einer aktiven mRNA-Sequenz erreicht wurde,
+    kann der Nutzer mit diesem Befehl den Cursor für diesen Client
+    zurückstellen. Dadurch kann wieder die gesammte mRNA-Sequenz mit dem
+    n-Command durchlaufen werden.
+
+  \item[\texttt{q}] Dieser Befehl schließt den Client und gibt alle Ressourcen
+    frei die der Client hält und die der Server für den Client hält
+    (z.B.\ die aktive mRNA-Sequenz oder die Cursor-Position).
+
+\end{description}
+
+
+\subsection*{Server}
+
+\begin{verbatim}
+USAGE: mrna-server
+\end{verbatim}
+
+Der Server legt zu Beginn die benötigten Resourcen an.
+Der Server soll es erlauben, dass mehrere unabhängige Clients mit ihm
+gleichzeitig kommunizieren können. Es soll sichergestellt sein, dass jeder
+Client nur seine eigene mRNA-Sequenz sieht und es in keinem Fall zu Deadlocks
+oder anderen Synchronisationsfehlern kommt.
+
+Empfängt der Server einen n-Befehl, so bewegt er einen Cursor durch die aktive
+mRNA-Sequenz bis er ein Start-Codon (AUG) entdeckt. Nun wird jedes folgende
+Codon einer Aminosäure zugeordnet bis eines der Stopp-Codons (UAA, UAG, UGA)
+erreicht wird. Die gefundene Protein-Sequenz wird dann über den Client
+ausgegeben. Die aktuelle Cursor-Position bleibt am Server gespeichert.
+
+\subsection*{Beispiel}
+
+Folgendes Beispiel zeigt den Umfang und das zu verwendende Format der
+Ausgabe des Clients.
+
+
+\begin{verbatim}
+$ ./mrna-client
+Available commands:
+ s - submit a new mRNA sequence
+ n - show next protein sequence in active mRNA sequence
+ r - reset active mRNA sequence
+ q - close this client
+Enter new command. (Enter to end input): s
+Enter new mRNA sequence. (Newline to end input):
+CACAGCCUAUGGUAGGGUCUGCUUAACGCCGCUAUGUAUCAUAAGGAGACAUGACGCCGC
+
+Enter new command. (Enter to end input): n
+Protein sequence found [11/60] to [23/60]: VGSA
+Enter new command. (Enter to end input): n
+Protein sequence found [36/60] to [51/60]: YHKET
+Enter new command. (Enter to end input): n
+End reached [60/60], send r to reset.
+Enter new command. (Enter to end input): r
+Reset. [0/60]
+Enter new command. (Enter to end input): n
+Protein sequence found [11/60] to [23/60]: VGSA
+Enter new command. (Enter to end input): q
+Close client.
+\end{verbatim}
+
+
+
+
+\osueguidelinesthree
+
+\end{document}

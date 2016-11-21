@@ -90,7 +90,7 @@ der C-Datei dokumentiert werden. Sie sollten auch Ihre Typen (insbesondere
 \subsection*{Richtlinien}
 
 Beachten Sie unbedingt auch die \textit{Richtlinien für die Erstellung von
-  C-Programmen} ("Coding Guidelines") auf TUWEL, sowie die folgenden
+  C-Programmen} („Coding Guidelines“) auf TUWEL, sowie die folgenden
 allgemeinen Hinweise zur Beispielgruppe 3.
 
 Entwickeln Sie die zu implementierenden Prozesse als getrennte Programme, die
@@ -101,6 +101,10 @@ Semaphoren (siehe \texttt{sem\_overview(7)}).
 Es sind Named Semaphores zu verwenden (\texttt{sem\_open(3)},
 \texttt{sem\_close(3)} \texttt{sem\_unlink(3)}).
 
+Verwenden Sie bei der Benennung der Ressourcen Ihre Matrikelnummmer als Präfix!
+
+
+
 Shared Memory Objekte und Semaphore werden nach Beendigung des Programms nicht
 automatisch gelöscht. Sie müssen daher im Programm explizit entfernt werden
 (siehe unten).
@@ -108,8 +112,8 @@ automatisch gelöscht. Sie müssen daher im Programm explizit entfernt werden
 Sollten durch einen Programmfehler bzw. Absturz Shared Memory oder Semaphore
 nicht gelöscht werden, können diese im Verzeichnis \texttt{/dev/shm/} mit den
 üblichen Kommandos \texttt{ls} und \texttt{rm} gelistet bzw. gelöscht
-werden. Sie erkennen die Ihnen zugeordneten Ressourcen an der Ownership der
-jeweiligen Files.
+werden. Sie erkennen die von Ihnen angelegten Ressourcen am Namen (siehe oben)
+bzw.\  an der Ownership der zugehörigen Files.
 
 \begin{description}
 \item[Aufrufreihenfolge.] Sollte bei einer Client/Server-Struktur (der Server
@@ -125,13 +129,13 @@ jeweiligen Files.
   Struktur verwenden, kann davon ausgegangen werden, dass jeder Prozess nur
   einmal gestartet wird und das in einer beliebigen Reihenfolge.
 \item[Signalbehandlung.] Eine Signalbehandlung ist in dieser Beispielgruppe für
-  alle Programme (z.B. Client und Server) durchzuführen (\texttt{SIGINT},
+  alle Programme (z.B.\ Client und Server) durchzuführen (\texttt{SIGINT},
   \texttt{SIGTERM}).
-\item[Ressourcenverwendung.] Nutzen Sie ein Shared Memory fixer Groesse in
-  Ihrer Loesung. Nutzen Sie so wenige Semaphoren wie noetig; achten Sie jedoch
+\item[Ressourcenverwendung.] Nutzen Sie ein Shared Memory fixer Größe in
+  Ihrer Lösung. Nutzen Sie so wenige Semaphoren wie nötig; achten Sie jedoch
   auf den korrekt synchronisierten Zugriff -- Ihrem Beispiel entsprechend --
-  auf das shared Memory. Falls Sie Fragen zur Synchronisation haben, wenden Sie
-  sich bitte an unsere Tutoren in der regulaer betreuten Uebungszeit.
+  auf das Shared Memory. Falls Sie Fragen zur Synchronisation haben, wenden Sie
+  sich bitte an unsere Tutoren in der regulär betreuten Übungszeit.
 \item[Terminierung.] Nach einer fehlerfreien Programmabarbeitung soll eine
   synchronisierte Terminierung der Prozesse erfolgen. D.h., achten Sie beim
   Entfernen aller angelegten Ressourcen auf die Synchronisation zwischen den

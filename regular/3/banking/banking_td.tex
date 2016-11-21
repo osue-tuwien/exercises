@@ -12,11 +12,12 @@ Geldgeschäfte erledigen. Das Verwaltungsprogramm der Bank ist der Server und
 dieser kommuniziert mittels Shared Memory mit den Clients, die von den Kunden
 benutzt werden.
 
-Die Clients können Geld abheben und einzahlen, es auf anderes Konto überweisen
-und den aktuellen Kontostand abfragen. Aus Gründen der Sicherheit und des
-Datenschutzes müssen alle Informationen beim Server bleiben und die Clients
-wissen nur ihre eigene Kontonummer. Außerdem darf pro Konto nur ein Client
-angemeldet sein und jeder Client soll sich auch abmelden, wenn er sich beendet.
+Die Clients können Geld abheben und einzahlen, es auf ein anderes Konto
+überweisen und den aktuellen Kontostand abfragen. Aus Gründen der Sicherheit
+und des Datenschutzes müssen alle Informationen beim Server bleiben und die
+Clients wissen nur ihre eigene Kontonummer. Außerdem darf pro Konto nur ein
+Client angemeldet sein und jeder Client soll sich auch abmelden, wenn er sich
+beendet.
 
 
 
@@ -25,6 +26,7 @@ angemeldet sein und jeder Client soll sich auch abmelden, wenn er sich beendet.
 Das Bank Account Management Tool soll als Client/Server Programm realisiert
 werden, wobei ein Server beliebig viele Clients bedient. Die Kommunikation
 zwischen Clients und Server soll per Shared Memory erfolgen.
+
 
 \subsubsection*{Server}
 \label{sec:server}
