@@ -24,15 +24,14 @@ Grundlage f{\"u}r die Entwicklung Ihres eigenen Kernel-Moduls
 verwenden.
 
 \section*{Abgabegespr{\"a}ch}
-Das Abgabegespr{\"a}ch findet am 27.06.2016 (und bei Bedarf am 28.06.) im TI-Labor statt.
-Eine Anmeldung im myTI zu einem Slot ist erforderlich -
+Das Abgabegespr{\"a}ch findet am 25.01.2017 (und bei Bedarf am 26.01.) im TI-Labor statt.
+Eine Anmeldung in TUWEL zu einem Slot ist erforderlich -
 bitte bedenken Sie, dass eine nachtr{\"a}gliche Abgabe {\bf nicht}
 m{\"o}glich ist. Es gelten die
 bekannten Richtlinien mit den zus{\"a}tzlichen Einschr{\"a}nkungen
 bzw. Lockerungen:
 \begin{itemize}
-\item Ihre Implementierung muss in der TI-Lab Umgebung (User Mode Linux)
-  demonstriert werden.
+\item Ihre Implementierung muss in der TI-Lab Umgebung (User Mode Linux) demonstriert werden.
 \item GNU C Standard (C99 Standard mit GNU Erweiterungen)
 \item Kernel Coding Style konform (siehe $<$kernel source
   dir$>$/Documentation/CodingStyle), Coding Style Check Tool
@@ -41,32 +40,19 @@ bzw. Lockerungen:
   # /usr/src/linux/scripts/checkpatch.pl -f <source file>
   \end{verbatim}
 \item Das Kernel-Modul muss sich sauber (d.h. Freigabe aller
-  verwendeten Ressourcen) aus dem System per \emph{rmmod(8)} entfernen
-  lassen.
-\item Definieren Sie den Modul-Parameter \verb|debug|, der, wenn er
-  beim Laden des Moduls auf \texttt{1} gesetzt wird, f{\"u}r sinnvolle
-  Debugausgaben (z.B. bei den einzelnen Operationen auf den Character
-  Devices) sorgt.
+  verwendeten Ressourcen) aus dem System per \emph{rmmod(8)} entfernen lassen.
+\item Definieren Sie den Modul-Parameter \verb|debug|, der, wenn er beim Laden des Moduls auf \texttt{1} gesetzt wird, f{\"u}r sinnvolle Debugausgaben (z.B. bei den einzelnen Operationen auf den Character Devices) sorgt.
 \end{itemize}
 
 \section*{Secvault, a Secure Vault}
 %TODO: je nach Aufwand koennte Verschluesselung und zusaetzliche Chardevs weggelassen werden bzw. etwas Code vorgegeben werden (+1)\\
 
-Implementieren Sie ein Linux Kernel Modul, welches {\"u}ber Character
-Devices bis zu 4 fl{\"u}chtige, aber sichere Speicher (Secure Vaults -
-kurz: \emph{Secvaults}) zur Verf{\"u}gung stellt.  Ein \emph{Secvault}
-hat eine \texttt{id} und eine konfigurierbare Gr{\"o}sse (\texttt{size})
-zwischen 1 Byte und 1 MByte. Er soll per eigenem Character Device vom
-Userspace aus beschreib- und lesbar sein. Daten, die auf ein
-\emph{Secvault} Character Device geschrieben werden, sollen
-verschl{\"u}sselt als Cyphertext im Speicher abgelegt werden. Beim
-Lesen soll der im Speicher abgelegte Cyphertext entschl{\"u}sselt
-werden und als Klartext in den Userpace {\"u}bergeben werden.  Als
-Verschl{\"u}sselung soll ein einfaches symmetrisches
-\emph{XOR}-Verfahren dienen: Abh{\"a}ngig von der Position im
-\emph{Secvault}, wird ein Schl{\"u}sselbyte mit einem Datenbyte per
-XOR verkn{\"u}pft:\\ $crypt(pos, data, key) = data[pos]\ \oplus\
-key[pos\ mod\ key_{size}]$
+Implementieren Sie ein Linux Kernel Modul, welches {\"u}ber Character Devices bis zu 4 fl{\"u}chtige, aber sichere Speicher (Secure Vaults - kurz: \emph{Secvaults}) zur Verf{\"u}gung stellt.
+Ein \emph{Secvault} hat eine \texttt{id} und eine konfigurierbare Gr{\"o}sse (\texttt{size}) zwischen 1 Byte und 1 MByte.
+Er soll per eigenem Character Device vom Userspace aus beschreib- und lesbar sein. Daten, die auf ein \emph{Secvault} Character Device geschrieben werden, sollen verschl{\"u}sselt als Cyphertext im Speicher abgelegt werden.
+Beim Lesen soll der im Speicher abgelegte Cyphertext entschl{\"u}sselt werden und als Klartext in den Userpace {\"u}bergeben werden.
+Als Verschl{\"u}sselung soll ein einfaches symmetrisches \emph{XOR}-Verfahren dienen: Abh{\"a}ngig von der Position im \emph{Secvault}, wird ein Schl{\"u}sselbyte mit einem Datenbyte per XOR verkn{\"u}pft:\\
+$crypt(pos, data, key) = data[pos]\ \oplus\ key[pos\ mod\ key_{size}]$
 
 Ein \emph{Secvault} hat also folgende Eigenschaften:
 \begin{itemize}
@@ -76,36 +62,24 @@ Ein \emph{Secvault} hat also folgende Eigenschaften:
 \end{itemize}
 %TODO:
 
-Die Verwaltung der \emph{Secvaults} soll mit Hilfe des von Ihnen zu
-entwickelnden Userspace-Tools \texttt{svctl} erfolgen:
+Die Verwaltung der \emph{Secvaults} soll mit Hilfe des von Ihnen zu entwickelnden Userspace-Tools \texttt{svctl} erfolgen:
 \begin{verbatim}
 USAGE: ./svctl [-c <size>|-k|-e|-d] <secvault id>
 \end{verbatim}
 
-Wird keine Option angebeben, soll die Gr{\"o}{\ss}e des
-\emph{Secvaults} in Bytes ausgegeben werden.
+Wird keine Option angebeben, soll die Gr{\"o}{\ss}e des \emph{Secvaults} in Bytes ausgegeben werden.
 Die Option \texttt{-c} erzeugt einen neuen \emph{Secvault} der
-Gr{\"o}{\ss}e \texttt{size} Bytes im Kernel. Weiters sollen bei der
-Option \texttt{-c} von \emph{stdin} 10 Zeichen gelesen werden, die als
-Schl{\"u}ssel dienen. Der Rest einer l{\"a}ngeren Eingabe wird
-ignoriert; bei einer k{\"u}rzeren Eingabe wird der Rest des
-Schl{\"u}ssels mit 0x0 gef{\"u}llt.
-Die Option \texttt{-k} soll die {\"A}nderung des Schl{\"u}ssels eines
-\emph{Secvaults} erlauben. Dabei soll ebenfalls wie zuvor beschrieben
-ein Schl{\"u}ssel von \emph{stdin} eingelesen werden, der den alten
-Schl{\"u}ssel ersetzt.
-Der m{\"o}gliche Inhalt eines \emph{Secvaults} soll nicht ge{\"a}ndert werden.  
-Die Option \texttt{-e} l{\"o}scht
-die Daten eines existierenden \emph{Secvaults} - d.h. der gesamte
-Speicher wird Kernel-Modul intern mit 0x0 beschrieben (nicht indirekt
-{\"u}ber das \emph{Secvault} Character Device). Die Option \texttt{-d}
-soll den \emph{Secvault} aus dem System entfernen und den Speicher
-wieder freigeben.
+Gr{\"o}{\ss}e \texttt{size} Bytes im Kernel.
+Weiters sollen bei der Option \texttt{-c} von \emph{stdin} 10 Zeichen gelesen werden, die als Schl{\"u}ssel dienen.
+Der Rest einer l{\"a}ngeren Eingabe wird ignoriert; bei einer k{\"u}rzeren Eingabe wird der Rest des Schl{\"u}ssels mit 0x0 gef{\"u}llt.
+Die Option \texttt{-k} soll die {\"A}nderung des Schl{\"u}ssels eines \emph{Secvaults} erlauben.
+Dabei soll ebenfalls wie zuvor beschrieben ein Schl{\"u}ssel von \emph{stdin} eingelesen werden, der den alten Schl{\"u}ssel ersetzt.
+Der m{\"o}gliche Inhalt eines \emph{Secvaults} soll nicht ge{\"a}ndert werden.
+Die Option \texttt{-e} l{\"o}scht die Daten eines existierenden \emph{Secvaults} - d.h. der gesamte Speicher wird Kernel-Modul intern mit 0x0 beschrieben (nicht indirekt {\"u}ber das \emph{Secvault} Character Device).
+Die Option \texttt{-d} soll den \emph{Secvault} aus dem System entfernen und den Speicher wieder freigeben.
 
-Das Kernel Modul legt direkt nach dem Laden (\emph{insmod(8)}) ein
-eigenes Character Device (ansprechbar {\"u}ber \verb|/dev/sv_ctl|\footnote{Sie m{\"u}ssen dieses Devicefile erst (einmalig) anlegen! Siehe Anleitung.} zur
-Steuerung und Statusabfrage an. Das Userspace-Tool \emph{svctl} soll
-per \emph{IOCTL} Calls mit dem Kernel Modul kommunizieren.
+Das Kernel Modul legt direkt nach dem Laden (\emph{insmod(8)}) ein eigenes Character Device (ansprechbar {\"u}ber \verb|/dev/sv_ctl|\footnote{Sie m{\"u}ssen dieses Devicefile erst (einmalig) anlegen! Siehe Anleitung.} zur Steuerung und Statusabfrage an.
+Das Userspace-Tool \emph{svctl} soll per \emph{IOCTL} Calls mit dem Kernel Modul kommunizieren.
 
 \section*{Anleitung}
 \begin{itemize}
