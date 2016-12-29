@@ -26,7 +26,7 @@ Anfragen bearbeiten und die Kaffeeproduktion einleiten.
 Nachdem eine Verbindung zwischen dem Client und dem Server hergestellt wurde,
 wird die Anfrage übermittelt. Angestellte können Tassengröße, Stärke und
 Geschmacksrichtung des Kaffees wählen. Die Kaffeemaschine soll mit
-Produktiondauer oder Status antworten.
+Produktionsdauer oder Status antworten.
 
 Verwenden Sie geeignete Ausgaben (auf \osueglvar{stdout}) am Server und Client
 um Anfragen und Kaffeeproduktion folgen zu können. Alle Fehlermeldungen müssen
@@ -46,11 +46,12 @@ voll und die Kapselkammer, die gebrauchte Kapseln sammelt, leer sein. Pro
 Anfrage: soll je nach Tassengröße der Inhalt des Wassertanks verringert werden
 und die Anzahl der Kapseln in der Kapselkammer inkrementiert werden. Ist das
 Wasser für die aktuelle Anfrage nicht mehr ausreichend oder die Kapselkammer
-voll soll ein Fehlercode zurück gesendet werden. Kann der Kaffee produziert
-werden, wird die Dauer der Produktion in Millisekunden zurückgeschickt.
+voll soll ein Fehlercode an den Client zurück gesendet werden. Kann der Kaffee
+produziert werden, wird die Dauer der Produktion in Millisekunden
+zurückgeschickt.
 
 Sobald der Server eines der Signale \osueconst{SIGINT} oder
-\osueconst{SIGTERM} empfängt, soll der Serversocket geschlossen und das
+\osueconst{SIGTERM} empfängt, soll der Socket geschlossen und das
 Programm mit Rückgabewert 0 beendet werden.
 
 \begin{verbatim}
@@ -64,7 +65,7 @@ per default 1234.
 
 \subsubsection*{Client}
 Legen Sie zuerst einen TCP/IP-Socket an. Stellen Sie dann die zum Hostnamen des
-Servers zugehörige IP-Adresse fest, und verbinden Sie sich mit dem
+Servers zugehörige IP-Adresse fest und verbinden Sie sich mit dem
 Server. Unmittelbar nach Verbindungsaufbau wird die Anfrage zur
 Kaffeeproduktion übermittelt und die Antwort des Servers ausgewertet und
 angezeigt. Danach soll der Socket geschlossen und das Programm beendet werden.
@@ -97,7 +98,8 @@ Werte sollen unterstützt werden:
 \item[Geschmacksrichtung:] Decaffeinato, Kazaar, Volluto, Ciocattino, Vanilio
 \end{description}
 
-Der \emph{Server} empfängt die Nachricht des Clients. Die Antwort des Servers ist vom Status der Kaffeemaschine abghängig.
+Der Server empfängt die Nachricht des Clients. Die Antwort des Servers ist vom
+Status der Kaffeemaschine (Wassertank, Kapselkammer) abhängig.
 %
 \begin{description}
 \item[Status OK] (Kaffee kann produziert werden) $\rightarrow$ Antwort: Dauer
