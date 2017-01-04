@@ -1,13 +1,5 @@
 \input{../../../template.ltx}
 
-\usepackage{bytefield}
-
-% for aligning the letters in the bytefield
-\newcommand{\baselinecenterit}[1]{%
-  \centering
-  \raisebox{0pt}[\heightof{W}][0pt]{\itshape #1}%
-}
-
 \begin{document}
 \osuetitle{1}
 
@@ -36,9 +28,9 @@ auf \osueglvar{stderr} ausgegeben.
 Der Server soll auf eingehende Verbindungen warten. Sobald eine Verbindung
 akzeptiert wurde, wird die Anfrage bearbeitet, d.h. Kaffee produziert. Die
 Kaffeeproduktion soll mit einem Verzögerung (delay) simuliert werden. Verwenden
-Sie \emph{Tassengröße in ml} $\cdot \, 10 \, ms$ (zB: bei einer Tassengröße von 100ml
-soll 1s lang gewartet werden). Neue Verbindungen werden erst zugelassen, wenn
-die Kaffeeproduktion der letzten Anfrage beendet wurde.
+Sie \emph{Tassengröße in ml} $\cdot \, 10 \, ms$ (zB: bei einer Tassengröße von
+100ml soll 1s lang gewartet werden). Neue Verbindungen werden erst zugelassen,
+wenn die Kaffeeproduktion der letzten Anfrage beendet wurde.
 
 Der Server verwaltet den aktuellen Status der Kaffeemaschine, welcher nach
 jeder Kaffeeproduktion aktualisiert werden muss. Initial soll der Wassertank
@@ -120,4 +112,3 @@ die Übertragung unabhängig von der Architektur funktioniert.
   System\footnote{\url{http://www.ros.org/}} portieren?}
 
 \end{document}
-
