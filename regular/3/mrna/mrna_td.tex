@@ -82,10 +82,11 @@ Beispiel illustriert den Vorgang:
 \subsection*{Anleitung}
 
 Die Implementierung besteht aus einem Server, der die mRNA Sequenz und Befehle
-entgegennimmt und entsprechend verarbeitet, und einem Client, der zur
-Eingabe von Daten dient und die Ergebnisse visualisiert. Die Kommunikation
-zwischen den Prozessen soll mittels Shared Memory realisiert werden und die
-Synchronisierung über Semaphore erfolgen.
+entgegennimmt und entsprechend verarbeitet, und einem Client, der zur Eingabe
+von Daten dient und die Ergebnisse visualisiert. Wählen Sie eine geeignete
+maximale Länge der mRNA- und Protein-Sequenz. Die Kommunikation zwischen den
+Prozessen soll mittels Shared Memory realisiert werden und die Synchronisierung
+über Semaphore erfolgen.
 
 Die Kommunikation zwischen den Clients und dem Server soll mittels einem
 einzigen Shared Memory Object erfolgen (\textbf{nicht} einem pro Client),
