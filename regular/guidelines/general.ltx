@@ -22,6 +22,7 @@ $ gcc -std=c99 -pedantic -Wall -D_DEFAULT_SOURCE -g -c filename.c
   (e.g., unspecified options or too many arguments), the program has to
   terminate with the usage message containing the program name and the correct
   calling syntax.
+  Argument handling should also be implemented for programs without arguments.
 
 \item Correct (=normal) termination, including a cleanup of resources.
 
@@ -91,6 +92,12 @@ $ gcc -std=c99 -pedantic -Wall -D_DEFAULT_SOURCE -g -c filename.c
   tags), description of parameters and return value (\texttt{@param},
   \texttt{@return} tags) and description of global variables the function uses
   (\texttt{@details} tag).
+
+  You should also document \texttt{static} functions (see
+  \texttt{EXTRACT\_STATIC} in the file \texttt{Doxyfile}). Document
+  visible/exported functions in the header file and local (\texttt{static})
+  functions in the C file. Document variables, constants and types (especially
+  \texttt{struct}s) too.
 
 \item Documentation, names of variables and constants shall be in English.
 
