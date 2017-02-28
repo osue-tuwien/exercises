@@ -3,6 +3,7 @@
 \usepackage[ngerman]{babel}
 \usepackage{fullpage}
 \usepackage{url}
+\usepackage{hyperref}
 \usepackage{lmodern}
 \usepackage{alltt}
 \usepackage{booktabs}
@@ -41,106 +42,84 @@ OPERATING SYSTEMS BEISPIEL #1
 \newcommand\bslash{\char`\\}
 
 % quick commands to insert guideline notices
-\newcommand\osueguidelinesone{
-\subsection*{Richtlinien}
+\newcommand\osueguidelinesnote{
+\newpage
+\section*{Coding Rules and Guidelines}
+Your score depends upon the compliance of your submission to the presented
+guidelines and rules. Violations result in deductions of points.
+Hence, before submitting your solution, go through the following list
+and check if your program complies.
+}
 
-Beachten Sie unbedingt auch die \textit{Richtlinien für die Erstellung von
-  C-Programmen} ("Coding Guidelines") in TUWEL!}
+\newcommand\osueguidelinesone{
+\osueguidelinesnote
+
+\subsection*{Rules}
+\input{../../../guidelines/rules.ltx}
+\subsection*{General Guidelines}
+\input{../../../guidelines/general.ltx}
+\subsection*{Exercise 1 Guidelines}
+\input{../../../guidelines/ex1.ltx}
+}
 
 \newcommand\osueguidelinestwo{
-\subsection*{Richtlinien}
+\osueguidelinesnote
 
-Beachten Sie unbedingt auch die \textit{Richtlinien für die Erstellung von
-  C-Programmen} ("Coding Guidelines") in TUWEL, sowie die folgenden
-allgemeinen Hinweise zur Beispielgruppe 2!
-
-\begin{description}
-\item[Dokumentation.]
-Insbesondere ist es ab dieser Beispielgruppe notwendig, die Dokumentation in
-Doxygen zu führen. 
-Eine kurze Einführung haben wir Ihnen im OSUE-Wiki bereitgestellt.
-Es muss zumindest das \textsc{html}-Output generierbar sein.
-Bitte dokumentieren Sie ausnahmslos alle Funktionen (auch
-\texttt{static}-Funktionen; siehe \texttt{EXTRACT\_STATIC} in der Datei
-\texttt{Doxyfile}).
-Achten Sie weiters darauf, dass nach außen hin sichtbare Funktionen (exportierte
-Funktionen) in der Header-Datei und lokale (\texttt{static}) Funktionen nur in
-der C-Datei dokumentiert werden. Sie sollten auch Ihre Typen (insbesondere
-\texttt{struct}s), Konstanten und globale Variablen dokumentieren.
-
-\item[Argumentbehandlung.] Vergessen Sie auch bei diesem Beispiel nicht auf die
-  Argumentbehandlung (auch bei einem Programm welches keine Argumente erhält
-  ist eine Argumentbehandlung durchzuführen)!
-\item[Pipes.] Falls Sie Pipes erzeugen, sollte das wie im Übungsskriptum
-  beschrieben geschehen.
-\item[Ressourcen.] Alle Ressourcen (wie z.B. Pipes) müssen ordnungsgemäß vor
-  Terminierung entfernt werden.
-\item[Terminierung.] Die Terminierung aller Kindprozesse ist sicherzustellen,
-  ohne \texttt{kill(2)} oder \texttt{killpg(2)} zu verwenden. Der Exit-Status
-  beendeter Kindprozesse muss vom Vaterprozess abgeholt werden
-  (\texttt{wait(2)}, \texttt{waitpid(2)}, \texttt{wait3(2)}).
-\item[Signalbehandlung.] Eine Signalbehandlung ist für diese Beispielgruppe
-  (mit Ausnahme von einem Beispiel, bei dem explizit eine Signalbehandlung
-  gefordert wird) nicht erforderlich!
-\end{description}
-
+\subsection*{Rules}
+\input{../../guidelines/rules.ltx}
+\subsection*{General Guidelines}
+\input{../../guidelines/general.ltx}
+\subsection*{Exercise 2 Guidelines}
+\input{../../guidelines/ex2.ltx}
 }
 
 \newcommand\osueguidelinesthree{
-\subsection*{Richtlinien}
+\osueguidelinesnote
 
-Beachten Sie unbedingt auch die \textit{Richtlinien für die Erstellung von
-  C-Programmen} („Coding Guidelines“) auf TUWEL, sowie die folgenden
-allgemeinen Hinweise zur Beispielgruppe 3.
+\subsection*{Rules}
+\input{../../guidelines/rules.ltx}
+\subsection*{General Guidelines}
+\input{../../guidelines/general.ltx}
+\subsection*{Exercise 3 Guidelines}
+\input{../../guidelines/ex3.ltx}
 
-Entwickeln Sie die zu implementierenden Prozesse als getrennte Programme, die
-über POSIX Shared Memory (siehe \texttt{shm\_overview(7)}) Daten
-austauschen. Synchronisieren Sie den Zugriff auf das Shared Memory mit POSIX
-Semaphoren (siehe \texttt{sem\_overview(7)}).
-
-Es sind Named Semaphores zu verwenden (\texttt{sem\_open(3)},
-\texttt{sem\_close(3)} \texttt{sem\_unlink(3)}).
-
-Verwenden Sie bei der Benennung der Ressourcen Ihre Matrikelnummmer als Präfix!
-
-
-
-Shared Memory Objekte und Semaphore werden nach Beendigung des Programms nicht
-automatisch gelöscht. Sie müssen daher im Programm explizit entfernt werden
-(siehe unten).
-
-Sollten durch einen Programmfehler bzw. Absturz Shared Memory oder Semaphore
-nicht gelöscht werden, können diese im Verzeichnis \texttt{/dev/shm/} mit den
-üblichen Kommandos \texttt{ls} und \texttt{rm} gelistet bzw. gelöscht
-werden. Sie erkennen die von Ihnen angelegten Ressourcen am Namen (siehe oben)
-bzw.\  an der Ownership der zugehörigen Files.
+\subsection*{Hints}
+Below are several hints regarding this exercise which should help you to ensure
+the guidelines.
 
 \begin{description}
-\item[Aufrufreihenfolge.] Sollte bei einer Client/Server-Struktur (der Server
-  übernimmt das Anlegen und Freigeben gemeinsamer Ressourcen) der Client noch
-  keine der vom Server anzulegenden gemeinsamen Ressourcen vorfinden, so hat
-  der Client mit einer Fehlermeldung zu terminieren. Ob eine
-  Client/Server-Struktur Sinn macht, ist aus der Beispielangabe abzuleiten. Bei
-  der Verwendung einer Server/Client Struktur, ist, wenn nicht anders
-  angegeben, davon auszugehen, dass mehrere Clients gleichzeitig gestartet
-  werden können. Der Server muß nach der fehlerfreien Terminierung eines
-  Clients noch funktionsfähig bleiben. Es kann jedoch davon ausgegangen werden,
-  dass der Server nur einmal gestartet wird. Wenn sie keine Client/Server
-  Struktur verwenden, kann davon ausgegangen werden, dass jeder Prozess nur
-  einmal gestartet wird und das in einer beliebigen Reihenfolge.
-\item[Signalbehandlung.] Eine Signalbehandlung ist in dieser Beispielgruppe für
-  alle Programme (z.B.\ Client und Server) durchzuführen (\texttt{SIGINT},
-  \texttt{SIGTERM}).
-\item[Ressourcenverwendung.] Nutzen Sie ein Shared Memory fixer Größe in
-  Ihrer Lösung. Nutzen Sie so wenige Semaphoren wie nötig; achten Sie jedoch
-  auf den korrekt synchronisierten Zugriff -- Ihrem Beispiel entsprechend --
-  auf das Shared Memory. Falls Sie Fragen zur Synchronisation haben, wenden Sie
-  sich bitte an unsere Tutoren in der regulär betreuten Übungszeit.
-\item[Terminierung.] Nach einer fehlerfreien Programmabarbeitung soll eine
-  synchronisierte Terminierung der Prozesse erfolgen. D.h., achten Sie beim
-  Entfernen aller angelegten Ressourcen auf die Synchronisation zwischen den
-  laufenden Prozessen. Sorgen Sie dafür, dass auch im Fehlerfall alle
-  angelegten Ressourcen gelöscht werden.
+\item[Client/server architecture.]
+  Derive from the exercise if a client/server architecture makes sense. In case
+  of a client/server architecture (server creates the resources):
+  \begin{itemize}
+  \item The client shall terminate with an appropriate error message if the
+    resources cannot be found.
+  \item Assume that more than one client can start concurrently. You can assume
+    only one server runs at the same time.
+  \item The server should stay functional after error-free termination of a
+    client.
+  \end{itemize}
+  If you don't use a client/server architecture, assume that each process can
+  be started once in random order.
+\item[Cleanup resources.]
+  Resources shall be cleaned up also in case of errors.
+
+  Note, shared memory objects and semaphores won't be automatically deleted
+  after the termination of a program. Hence, these resources have to be
+  explicitly removed.
+
+  Shared memory and semaphores, that haven't been removed due to a program
+  error or crash, can be listed and removed with the usual commands,
+  \texttt{ls} and \texttt{rm} respectively, in the folder
+  \texttt{/dev/shm/}. You can identify your resources by the chosen name
+  (matriculation number) or ownership of the resource files.
+\item[Avoid wasting resources.]
+  Use a shared memory of fixed size. Use a minimum number of semaphores
+  possible, but ensure correct synchronization (you may ask our tutors during
+  lab hours).
+\item[Termination.] After correct program execution (without errors) a
+  synchronous termination shall be performed, i.e., take care of the
+  synchronization between running processes when deleting the resources.
 \end{description}
 }
 

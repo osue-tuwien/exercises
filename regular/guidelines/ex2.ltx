@@ -1,0 +1,9 @@
+Violation of following guidelines leads to a deduction of points in exercise 2.
+
+\begin{enumerate}
+\item Correct use of fork/exec/pipes as tought in the lectures. For example, do
+  not exploit inherited memory areas.
+\item Ensure termination of child processes without \texttt{kill(2)} or
+  \texttt{killpg(2)}. Collect the exit codes of child processes
+  (\texttt{wait(2)}, \texttt{waitpid(2)}, \texttt{wait3(2)}).
+\end{enumerate}

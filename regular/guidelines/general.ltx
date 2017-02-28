@@ -1,0 +1,149 @@
+Violation of following guidelines leads to a deduction of points.
+
+\begin{enumerate}
+\item The program must compile with
+  \begin{lstlisting}
+$ gcc -std=c99 -pedantic -Wall -D_DEFAULT_SOURCE -g -c filename.c
+  \end{lstlisting}
+  without \emph{warnings and info messages}.
+
+\item There must be a Makefile for the program implementing the targets:
+  \texttt{all} to build the program from the sources (this must be the first
+  target in the Makefile); \texttt{clean} to delete all files that can be built
+  from your sources with the Makefile.
+
+\item The program shall operate according to the specification/assignment
+  without major issues (e.g., segmentation fault, memory corruption).
+
+\item Arguments have to be parsed according to UNIX conventions
+  (we strongly encourage the use of \texttt{getopt(3)}).
+  The program has to conform
+  to the given synopsis/usage in the assignment. If the synopsis is violated
+  (e.g., unspecified options or too many arguments), the program has to
+  terminate with the usage message containing the program name and the correct
+  calling syntax.
+
+\item Correct (=normal) termination, including a cleanup of resources.
+
+\item Upon success the program has to terminate with exit code~0, in case of
+  errors with an exit code greater than~0. We recommend to use the macros
+  \texttt{EXIT\_SUCCESS} and \texttt{EXIT\_FAILURE} (defined in
+  \texttt{stdlib.h}) to enable portability of the program.
+
+\item If a function indicates an error with its return value, it should be
+  checked in general
+  (e.g., resource allocation). In some cases it is ok to ignore the return
+  value, but then you must cast the function call to \texttt{void} (e.g.,
+  \lstinline{(void)fprintf(stderr,...)}, \lstinline{(void)fclose(...)} to a
+  file that has been opened for read only).
+
+\item Functions that do not take any parameters have to be declared with
+  \texttt{void} in the signature, e.g., \lstinline{int get_random_int(void);}.
+
+\item Procedures (i.e., functions that do not return a value) have to be
+  declared as \texttt{void}.
+
+\item Error messages shall be written to \texttt{stderr} and should contain the
+  program name \texttt{argv[0]}.
+
+\item It is forbidden to use the functions: \texttt{gets}, \texttt{scanf},
+  \texttt{fscanf}, \texttt{atoi} and \texttt{atol} to avoid crashes due to
+  invalid inputs.
+
+  \begin{table}[h!]
+    \centering
+    \begin{tabular}{ll}
+      \toprule
+      \textsc{forbidden} & \textsc{use instead} \\
+      \midrule
+      gets & fgets \\
+      scanf & fgets, sscanf \\
+      fscanf & fgets, sscanf \\
+      atoi & strtol \\
+      atol & strtol \\
+      \bottomrule
+    \end{tabular}
+  \end{table}
+
+\item Documenation is mandatory. Format the documentation in Doxygen style (see
+  \href{https://github.com/osue-tuwien/osue-tuwien.github.com/wiki/Doxygen-Primer}{Wiki}
+  and
+  \href{https://www.stack.nl/~dimitri/doxygen/manual/docblocks.html}{Doxygen's
+    intro}).
+
+\item Write meaningful comments.
+  For example, meaningful comments describe the algorithm, or why a particular
+  solution has been chosen, if there seems to be an easier solution at a first
+  glance.
+  Avoid comments that just repeat the code itself\\
+  (e.g., \lstinline{i = i + 1; /* i is incremented by one */}).
+
+\item The documentation of a module must include: name of the module, name and
+  student id of the author (\texttt{@author} tag), purpose of the module
+  (\texttt{@brief}, \texttt{@details} tags) and creation date of the module
+  (\texttt{@date} tag).
+
+  Also the Makefile has to include a header, with author and program name at
+  least.
+
+\item Each function shall be documented either before the declaration or the
+  implementation. It should include purpose (\texttt{@brief}, \texttt{@details}
+  tags), description of parameters and return value (\texttt{@param},
+  \texttt{@return} tags) and description of global variables the function uses
+  (\texttt{@details} tag).
+
+\item Documentation, names of variables and constants shall be in English.
+
+\item Internal functions shall be marked with the \texttt{static} qualifier and
+  are not allowed to be exported (e.g., in a header file). Only functions that
+  are used by other modules shall be declared in the header file.
+
+\item All exercises shall be solved with functions of the C standard library.
+  If a required function is not available in the standard library, you can use
+  other (external) functions too.
+  Avoid reinventing the wheel (e.g., re-implementation of \texttt{strcmp}).
+
+\item Name of constants shall be written in upper case, names of variables in
+  lower case (maybe with fist letter capital).
+
+\item Use meaningful variable and constant names (e.g., also semaphores and
+  shared memories).
+
+\item Avoid using global variables as far as possible.
+
+\item All boundaries shall be defined as constants (macros). Avoid arbitrary
+  boundaries. If boundaries are necessary, treat its crossing.
+
+\item Avoid side effects with \texttt{\&\&} and \texttt{||}, e.g., write
+  \lstinline{if(b != 0) c = a/b;} instead of \lstinline{if(b != 0 && c = a/b)}.
+
+\item Each \texttt{switch} block must contain a \texttt{default} case. If the
+  case is not reachable, write \texttt{assert(0)} to this case (defensive
+  programming).
+
+\item Logical values shall be treated with logical operators, numerical values
+  with arithmetic operators (e.g., test 2 strings for equality by
+  \lstinline{strcmp(...) == 0} instead of \lstinline{!strcmp(...)}).
+
+\item Indent your source code consistently (there are tools for that purpose,
+  e.g., \texttt{indent}).
+
+\item Avoid tricky arithmetic statements.
+  Programs are written once, but read more times.
+  Your program is not better if it is shorter!
+
+\item For all I/O operations (read/write from/to \texttt{stdin},
+  \texttt{stdout}, files, sockets, pipes, etc.) use \emph{either} standard I/O
+  functions (\texttt{fdopen(3)}, \texttt{fopen(3)}, \texttt{fgets(3)}, etc.)
+  \emph{or} POSIX functions (\texttt{open(2)}, \texttt{read(2)},
+  \texttt{write(2)}, etc.). Remember, standard I/O functions are buffered.
+  Mixing standard I/O functions and POSIX functions to access a common file
+  descriptor can lead to undefined behaviour and is therefore forbidden.
+
+\item Close files, free dynamically allocated memory, and remove resources
+  after usage.
+
+\item Don't waste resources due to inconvenient programming. Header files
+  shall not include implementation parts (exception: macros).
+
+\end{enumerate}

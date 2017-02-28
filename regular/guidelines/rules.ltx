@@ -1,0 +1,18 @@
+Compliance with these rules is essential to get any points for your
+submission.\\
+In other words, a violation of any of the following rules results in 0~points
+for your submission.
+
+\begin{enumerate}
+\item The program must compile via
+  \begin{lstlisting}
+  $ gcc -std=c99 -pedantic -Wall -D_DEFAULT_SOURCE -g -c filename.c
+  \end{lstlisting}
+  without \emph{errors}.
+  These flags must be used in the Makefile, of course.
+  The feature test macros must not be bypassed
+  (i.e., by undefining these macros or adding some in the C source code).
+\item The functionality of the program must conform to the assignment. The
+  program shall operate according to the specification/assignment given the
+  test cases in the respective assignment.
+\end{enumerate}
