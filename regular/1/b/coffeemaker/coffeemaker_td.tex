@@ -11,12 +11,12 @@ erweitert. Nun soll ein Service ``Kaffeeproduktion'' entwickelt werden.
 
 \subsection*{Anleitung}
 Implementieren Sie einen Client und einen Server, die mittels TCP/IP
-miteinander kommunizieren. Angestellte des Instituts starten den Client um eine
-Anfrage an die Kaffeemaschine zu senden. Der Server soll auf der Kaffeemaschine
-Anfragen bearbeiten und die Kaffeeproduktion einleiten.
+miteinander kommunizieren. Angestellte des Instituts starten den Client, um
+eine Anfrage an die Kaffeemaschine zu senden. Der Server soll auf der
+Kaffeemaschine Anfragen bearbeiten und die Kaffeeproduktion einleiten.
 
 Nachdem eine Verbindung zwischen dem Client und dem Server hergestellt wurde,
-wird die Anfrage übermittelt. Angestellte können Tassengröße, Stärke und
+wird die Anfrage übermittelt. Angestellte können Tassengröße und
 Geschmacksrichtung des Kaffees wählen. Die Kaffeemaschine soll mit
 Produktionsdauer oder Status antworten.
 
@@ -26,21 +26,22 @@ auf \osueglvar{stderr} ausgegeben.
 
 \subsubsection*{Server}
 Der Server soll auf eingehende Verbindungen warten. Sobald eine Verbindung
-akzeptiert wurde, wird die Anfrage bearbeitet, d.h. Kaffee produziert. Die
-Kaffeeproduktion soll mit einem Verzögerung (delay) simuliert werden. Verwenden
-Sie \emph{Tassengröße in ml} $\cdot \, 10 \, ms$ (zB: bei einer Tassengröße von
-100ml soll 1s lang gewartet werden). Neue Verbindungen werden erst zugelassen,
-wenn die Kaffeeproduktion der letzten Anfrage beendet wurde.
+akzeptiert wurde, wird die Anfrage bearbeitet. Neue Verbindungen werden
+unmittelbar nach Bearbeitung der Anfrage (d.h. lesen, berechnen, antworten)
+wieder zugelassen, d.h. der Server wartet nicht auf die Beendigung der
+Kaffeeproduktion (welche hier selbst nicht implementiert wird). Der Server
+sollte sich aber den Zeitstempel der Fertigstellung merken, um Anfragen während
+einer bereits laufenden Kaffeeproduktion korrekt bearbeiten zu können
+(Produktionsdauer).
 
 Der Server verwaltet den aktuellen Status der Kaffeemaschine, welcher nach
-jeder Kaffeeproduktion aktualisiert werden muss. Initial soll der Wassertank
-voll und die Kapselkammer, die gebrauchte Kapseln sammelt, leer sein. Pro
-Anfrage: soll je nach Tassengröße der Inhalt des Wassertanks verringert werden
-und die Anzahl der Kapseln in der Kapselkammer inkrementiert werden. Ist das
-Wasser für die aktuelle Anfrage nicht mehr ausreichend oder die Kapselkammer
-voll soll ein Fehlercode an den Client zurück gesendet werden. Kann der Kaffee
-produziert werden, wird die Dauer der Produktion in Millisekunden
-zurückgeschickt.
+jeder Anfrage aktualisiert werden muss. Initial soll der Wassertank voll und
+die Kapselkammer, die gebrauchte Kapseln sammelt, leer sein. Pro Anfrage: soll
+je nach Tassengröße der Inhalt des Wassertanks verringert werden und die Anzahl
+der Kapseln in der Kapselkammer inkrementiert werden. Ist das Wasser für die
+aktuelle Anfrage nicht mehr ausreichend oder die Kapselkammer voll, soll ein
+Fehlercode an den Client zurück gesendet werden. Kann der Kaffee produziert
+werden, wird die Dauer der Produktion in Sekunden zurückgeschickt.
 
 Sobald der Server eines der Signale \osueconst{SIGINT} oder
 \osueconst{SIGTERM} empfängt, soll der Socket geschlossen und das
@@ -51,9 +52,9 @@ SYNOPSIS
     server [-p PORT] [-l WATER] [-c CUPS]
 \end{verbatim}
 
-Die Größe des Wassertanks (default: 2l) und der Kapselkammer (default: 10
+Die Größe des Wassertanks (default: 1l) und der Kapselkammer (default: 10
 Kapseln) kann beim Starten des Servers ausgewählt werden. Die Portnummer ist
-per default 1234.
+per default 1821.
 
 \subsubsection*{Client}
 Legen Sie zuerst einen TCP/IP-Socket an. Stellen Sie dann die zum Hostnamen des
@@ -62,53 +63,66 @@ Server. Unmittelbar nach Verbindungsaufbau wird die Anfrage zur
 Kaffeeproduktion übermittelt und die Antwort des Servers ausgewertet und
 angezeigt. Danach soll der Socket geschlossen und das Programm beendet werden.
 
-Da mehrere Angestellte gleichzeitig auf den Service zugreifen können und die
-Kaffeeproduktion ihre Zeit braucht, kann es sein, dass der Client etwas warten
-muss bis dieser an der Reihe ist. Sollte der Angestellte zu ungeduldig sein,
-kann der Client mit den Signalen \osueconst{SIGINT} oder \osueconst{SIGTERM}
-beendet werden. Der Socket soll daraufhin geschlossen und das Programm mit
-Rückgabewert 0 beendet werden.
+Der Client sollte bei erfolgreichem Verbindungsaufbau mit dem Server, sofort
+eine Antwort bekommen. Tritt ein Fehler auf (z.B.: keine Verbindung möglich),
+beendet der Client mit einem Fehlercode. Der Client sollte nie blockieren, Sie
+können daher auf eine Signalbehandlung im Client verzichten.
 
 \begin{verbatim}
 SYNOPSIS
-    client [-h HOSTNAME] [-p PORT] SIZE STRENGTH FLAVOUR
+    client [-h HOSTNAME] [-p PORT] SIZE FLAVOUR
 \end{verbatim}
 
 Dem Client können Hostname (default: \emph{localhost}) und Portnummer (default:
-\emph{1234}) übergeben werden. Die Tassengröße (\osueconst{SIZE}), Stärke
-(\osueconst{STRENGTH}) und Geschmacksrichtung (\osueconst{FLAVOUR}) des Kaffees
-sollen über die Argumente gesetzt werden.
+\emph{1821}) übergeben werden. Die Tassengröße (\osueconst{SIZE}, ganzzahlig)
+und Geschmacksrichtung (\osueconst{FLAVOUR}, C-String) des Kaffees sollen über
+die Argumente gesetzt werden.
 
 \subsection*{Protokoll}
 \label{sec:prot}
-Der Client übermittelt Tassengröße, Stärke und Geschmacksrichtung. Folgende
-Werte sollen unterstützt werden:
+Der Client übermittelt Tassengröße und Geschmacksrichtung. Folgende Werte
+sollen unterstützt werden:
 %
 \begin{description}
-\item[Tassengröße:] 25ml, 100ml, 250ml
-\item[Stärke:] leicht, mittel, stark, extra-stark
-\item[Geschmacksrichtung:] Decaffeinato, Kazaar, Volluto, Ciocattino, Vanilio
+\item[Tassengröße:] 0 - 330 ml
+\item[Geschmacksrichtung:] \{Decaffeinato, Kazaar, Volluto, Ciocattino,
+  Vanilio, \dots\} - es sollen bis zu 32
+  Geschmacksrichtungen\footnote{\url{https://www.nespresso.com/at/de/grands-crus-uebersicht}}
+  unterstützt werden.
 \end{description}
 
-Der Server empfängt die Nachricht des Clients. Die Antwort des Servers ist vom
-Status der Kaffeemaschine (Wassertank, Kapselkammer) abhängig.
+Die Anfrage soll in 2 Bytes übermittelt werden. Das letzte Bit soll ein Parity
+Bit\footnote{\url{https://en.wikipedia.org/wiki/Parity_bit}}
+implementieren. Dieses ist am Server zu überprüfen.
+
+Die Antwort des Servers ist vom Status der Kaffeemaschine (Wassertank,
+Kapselkammer) und der in Produktion befindlichen Kaffees abhängig. Je nach
+Status ergeben sich folgende Inhalte der Antwort-Nachricht.
 %
 \begin{description}
-\item[Status OK] (Kaffee kann produziert werden) $\rightarrow$ Antwort: Dauer
-  der Kaffeeproduktion. Die Dauer wird durch die Tassengröße (Wassermenge)
-  bestimmt (siehe Beschreibung des Servers).
-\item[Status NOK] (Kaffeemaschine muss gewartet werden) $\rightarrow$ Antwort:
-  Fehlercode. Der Client soll zwischen Wassertank leer und Kapselkammer voll
-  unterscheiden können.
+\item[Status:] \{OK - Kaffee kann produziert werden, NOK - Kaffeemaschine muss
+  gewartet werden\}
+  \begin{description}
+  \item[OK $\rightarrow$ Dauer der Kaffeeproduktion:] Dauer in Sekunden, die
+    durch die Tassengröße (Wassermenge) bestimmt wird und Restdauer von
+    Kaffeeproduktion. Pro 10ml wird 1s benötigt. Sollte die Kaffeeproduktion
+    noch laufen, muss die Restdauer dazuaddiert werden. Runden Sie auf
+    ganzzahlige Sekunden-Werte.
+  \item[NOK $\rightarrow$ Fehlercode:] \{Wassertank leer, Kapselkammer voll\}
+  \end{description}
 \end{description}
 
-Definieren Sie ein geeignetes Format der Nachrichten. Stellen Sie sicher, dass
-die Übertragung unabhängig von der Architektur funktioniert.
+Die Antwort soll in 1 Byte übermittelt werden. Auch die Antwort soll ein Parity
+Bit enthalten und vom Client überprüft werden.
 
+Definieren Sie ein geeignetes Format der Nachrichten (z.B.: IDs für die
+Geschmacksrichtungen vergeben). Stellen Sie sicher, dass die Übertragung
+unabhängig von der Architektur funktioniert.
+
+
+%% \osueadvertise{Wollen Sie den Client erweitern und auf das Robot Operating
+%%   System\footnote{\url{http://www.ros.org/}} portieren?}
 
 \osueguidelinesone
-
-\osueadvertise{Wollen Sie den Client erweitern und auf das Robot Operating
-  System\footnote{\url{http://www.ros.org/}} portieren?}
 
 \end{document}
