@@ -147,6 +147,10 @@ $ gcc -std=c99 -pedantic -Wall -D_DEFAULT_SOURCE -g -c filename.c
   Mixing standard I/O functions and POSIX functions to access a common file
   descriptor can lead to undefined behaviour and is therefore forbidden.
 
+\item If asked in the assignment, you must implement signal handling
+  (\texttt{SIGINT}, \texttt{SIGTERM}). You must only use
+  \emph{async-signal-safe} functions in your signal handlers.
+
 \item Close files, free dynamically allocated memory, and remove resources
   after usage.
 
