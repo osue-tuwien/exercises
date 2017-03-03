@@ -17,8 +17,8 @@ Kaffeemaschine Anfragen bearbeiten und die Kaffeeproduktion einleiten.
 
 Nachdem eine Verbindung zwischen dem Client und dem Server hergestellt wurde,
 wird die Anfrage übermittelt. Angestellte können Tassengröße und
-Geschmacksrichtung des Kaffees wählen. Die Kaffeemaschine soll mit
-Produktionsdauer oder Status antworten.
+Geschmacksrichtung des Kaffees wählen. Die Kaffeemaschine soll mit einem Status
+und gegebenenfalls der Produktionsdauer antworten.
 
 Verwenden Sie geeignete Ausgaben (auf \osueglvar{stdout}) am Server und Client
 um Anfragen und Kaffeeproduktion folgen zu können. Alle Fehlermeldungen müssen
@@ -119,19 +119,81 @@ Definieren Sie ein geeignetes Format der Nachrichten (z.B.: IDs für die
 Geschmacksrichtungen vergeben). Stellen Sie sicher, dass die Übertragung
 unabhängig von der Architektur funktioniert.
 
+\subsection*{Testen}
+
+\begin{lstlisting}
+$ ./client 100 Kazaar
+[./client] Requesting a 100 ml cup of coffee of flavour 'Kazaar' (id=1).
+[./client] connect - Connection refused
+\end{lstlisting}
+
+\begin{lstlisting}
+$ ./server -p 1234 &
+[./server] Initial status: 1000ml water, 10 cups bin
+[./server] Waiting for client...
+\end{lstlisting}
+%
+Anforderung zweier Kaffees unmittelbar hintereinander:
+%
+\begin{lstlisting}
+$ ./client -h 127.0.0.1 -p 1234 100 Kazaar
+[./client] Requesting a 100 ml cup of coffee of flavour 'Kazaar' (id=1).
+[./server] Client connected.
+[./server] New status: 900ml water, 1 cups bin
+[./server] Finish in 10s.
+[./server] Start coffee for 100ml cup with flavour 'Kazaar'.
+[./server] Close connection to client.
+[./server] Waiting for client...
+[./client] Coffee ready in 10s.
+$ ./client -h localhost -p 1234 100 Kazaar
+[./client] Requesting a 100 ml cup of coffee of flavour 'Kazaar' (id=1).
+[./server] Client connected.
+[./server] New status: 800ml water, 2 cups bin
+[./server] Another coffee still in production.
+[./server] Finish in 19s.
+[./server] Start coffee for 100ml cup with flavour 'Kazaar'.
+[./server] Close connection to client.
+[./server] Waiting for client...
+[./client] Coffee ready in 19s.
+\end{lstlisting}
+%
+Wenn man weiter Kaffee anfordert, bis der Wassertank leer bzw. die Kapselkammer
+voll ist:
+%
+\begin{lstlisting}
+:
+$ ./client -p 1234 100 Kazaar
+[./client] Requesting a 100 ml cup of coffee of flavour 'Kazaar' (id=1).
+[./server] Client connected.
+[./server] New status: 50ml water, 10 cups bin
+[./server] Another coffee still in production.
+[./server] Finish in 35s.
+[./server] Start coffee for 100ml cup with flavour 'Kazaar'.
+[./server] Close connection to client.
+[./server] Waiting for client...
+[./client] Coffee ready in 35s.
+$ ./client -p 1234 100 Kazaar
+[./client] Requesting a 100 ml cup of coffee of flavour 'Kazaar' (id=1).
+[./server] Client connected.
+[./server] Error - no_water_and_full_bin.
+[./server] Close connection to client.
+[./server] Waiting for client...
+[./client] Error 3 - no_water_and_full_bin.
+\end{lstlisting}
+
 \subsection*{Bonus}
 
 In diesem Beispiel können Sie zusätzlich 10 Bonuspunkte erreichen, wenn Sie
 eine dynamische Liste für die Verwaltung der in der Produktion befindlichen
 Kaffees implementieren.
 
-Im Zuge jeder Anfrage wird die Liste aktualisiert: i) Beendete Produktionen
+Im Zuge einer Anfrage wird die Liste aktualisiert: i) Beendete Produktionen
 werden von der Liste entfernt. ii) Ein neues Listenelement für die aktuelle
 Anfrage wird hinzugefügt. Der Server soll die aktuelle Liste nach jeder Anfrage
 ausgeben.
 
 Definieren Sie eine geeignete Datenstruktur für ein Listenelement und
-implementieren Sie das Hinzufügen und Entfernen eines Elements.
+implementieren Sie das dynamische Hinzufügen und Entfernen eines Elements.
 
 %% \osueadvertise{Wollen Sie den Client erweitern und auf das Robot Operating
 %%   System\footnote{\url{http://www.ros.org/}} portieren?}
