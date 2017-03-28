@@ -84,7 +84,7 @@ Der Client übermittelt Tassengröße und Geschmacksrichtung. Folgende Werte
 sollen unterstützt werden:
 %
 \begin{description}
-\item[Tassengröße:] 0 - 330 ml
+\item[Tassengröße:] 50 - 330 ml
 \item[Geschmacksrichtung:] \{Decaffeinato, Kazaar, Volluto, Ciocattino,
   Vanilio, \dots\} - es sollen bis zu 32
   Geschmacksrichtungen\footnote{\url{https://www.nespresso.com/at/de/grands-crus-uebersicht}}
@@ -95,25 +95,26 @@ Die Anfrage soll in 2 Bytes übermittelt werden. Das letzte Bit soll ein Parity
 Bit\footnote{\url{https://en.wikipedia.org/wiki/Parity_bit}}
 implementieren. Dieses ist am Server zu überprüfen.
 
-Die Antwort des Servers ist vom Status der Kaffeemaschine (Wassertank,
-Kapselkammer) und der in Produktion befindlichen Kaffees abhängig. Je nach
-Status ergeben sich folgende Inhalte der Antwort-Nachricht.
+Die Antwort des Servers ist von der Anfrage, vom Status der Kaffeemaschine
+(Wassertank, Kapselkammer) und der in Produktion befindlichen Kaffees
+abhängig. Je nach Status ergeben sich folgende Inhalte der Antwort-Nachricht.
 %
 \begin{description}
-\item[Status:] \{OK - Kaffee kann produziert werden, NOK - Kaffeemaschine muss
-  gewartet werden\}
+\item[Status:] \{OK - Kaffee kann produziert werden, NOK - fehlerhafte Anfrage
+  oder Kaffeemaschine muss gewartet werden\}
   \begin{description}
   \item[OK $\rightarrow$ Dauer der Kaffeeproduktion:] Dauer in Sekunden, die
     durch die Tassengröße (Wassermenge) bestimmt wird und Restdauer von
     Kaffeeproduktion. Pro 10ml wird 1s benötigt. Sollte die Kaffeeproduktion
     noch laufen, muss die Restdauer dazuaddiert werden. Runden Sie auf
     ganzzahlige Sekunden-Werte.
-  \item[NOK $\rightarrow$ Fehlercode:] \{Wassertank leer, Kapselkammer voll\}
+  \item[NOK $\rightarrow$ Fehlercode:] \{Wassertank leer, Kapselkammer voll,
+    ungültige Tassengröße, fehlerhaftes Parity Bit in der Anfrage\}
   \end{description}
 \end{description}
 
-Die Antwort soll in 1 Byte übermittelt werden. Auch die Antwort soll ein Parity
-Bit enthalten und vom Client überprüft werden.
+Die Antwort soll in 2 Bytes übermittelt werden. Auch die Antwort soll ein
+Parity Bit enthalten und vom Client überprüft werden.
 
 Definieren Sie ein geeignetes Format der Nachrichten (z.B.: IDs für die
 Geschmacksrichtungen vergeben). Stellen Sie sicher, dass die Übertragung
