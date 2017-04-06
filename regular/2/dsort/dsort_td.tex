@@ -8,7 +8,7 @@
 \section*{Aufgabenstellung -- dsort}
 
 \begin{verbatim}
-    SYNOPSIS:
+    SYNOPSIS
         dsort "command1" "command2"
 \end{verbatim}
 
@@ -84,7 +84,7 @@ als 1023 echte Zeichen ist.
 \item Achten Sie darauf, dass der Elternprozess sich erst beendet,
 nachdem alle Kindprozesse terminiert haben.
 \item Gewisse Nicht-\textsc{ansi}-Funktionen (wie etwa \osuefunc{strdup(3)})
-werden erst sichtbar, wenn mit\\\osuearg{-D\_XOPEN\_SOURCE=500} kompiliert wird.
+werden erst sichtbar, wenn mit\\\osuearg{-D\_BSD\_SOURCE} kompiliert wird.
 \item Achten Sie unbedingt darauf, dass alle Ressourcen auch wieder
 freigegeben werden (besonders im Fehlerfall)!
 \end{itemize}
