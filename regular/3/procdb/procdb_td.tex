@@ -12,13 +12,13 @@ Benutzer Informationen aus der Prozessdatenbank vom Server abfragen kann. Die
 Kommunikation zwischen den Prozessen soll mittels Shared Memory realisiert
 werden und die Synchronisierung über Semaphore erfolgen.
 
-Der Client soll dem Benutzer ein Interface bieten, mit dem der Benutzer über
-Befehle Informationen vom Server abfragen kann. Diese Information soll eines
-der Felder \emph{cpu}, \emph{mem}, \emph{time} oder \emph{command}, welche
-jeder Eintrag in der Prozessdatenbank enthält, sein. Sie soll zu einem
-bestimmten Prozess, der durch seine PID gegeben ist, oder dem Prozess, bei
-welchem dieses Feld den höchsten oder den niedrigsten Wert in der Datenbank
-hat, abgefragt werden können.
+Der Client soll dem Benutzer ein Interface bieten, mit dem der Benutzer
+Informationen (\emph{cpu}, \emph{mem}, \emph{time} oder \emph{command}) über
+Prozesse vom Server abfragen kann. Jeder Prozess wird durch seine PID
+identifiziert. Weiters, kann jener Prozess abgefragt werden, bei welchem die
+gegebene Information den höchsten oder den niedrigsten Wert in der Datenbank
+hat. Auch die Summe und der Mittelwert bestimmter Informationen kann berechnet
+werden.
 
 \subsection*{Anleitung}
 
@@ -40,7 +40,7 @@ USAGE: procdb-server input-file
 \end{verbatim}
 
 Der Server legt zu Beginn die benötigten Resourcen an. Anschließend liest er
-die als Argument angegebene Eingabedatei ein, parst die Information (z.B.\
+die als Argument die angegebene Eingabedatei ein, parst die Information (z.B.\
 mittels \texttt{fgets}, \texttt{strtok}, \texttt{sscanf}) und legt sie in einer
 geeigneten Datenstruktur (z.B.\ Array, Liste, Hashtabelle) im Speicher ab.
 Diese dient dem Server im Weiteren als Informationsquelle für das Bearbeiten
@@ -53,6 +53,8 @@ eine Antwort mit der gewünschten Information.
 %Sollte der Server keinen Eintrag
 %mit der gegebenen PID in der Datenbank finden, so schickt er dem Client eine
 %Fehlernachricht.
+
+%Mit dem Signal \texttt{SIGUSR} soll die Datenbank ausgegeben werden.
 
 Der Server soll durch die Signale \texttt{SIGINT} und \texttt{SIGTERM} zum
 Terminieren gebracht werden. Dabei soll er "`sauber"' beenden, also alle
@@ -70,17 +72,18 @@ Der Client verbindet sich beim Starten zuerst mit dem Server ("`verbinden"'
 bedeutet hier zu überprüfen, ob die Semaphore und das Shared Memory Object,
 welche zur Kommunikation notwendig sind, existieren). Anschließend nimmt er vom
 Benutzer Befehle auf der Standardeingabe zum Abfragen von Informationen vom
-Server entgegen. Ein Befehl hat das Format
+Server entgegen. Ein Befehl hat das (einzeilige) Format:
 
 \begin{verbatim}
-  pid field
+  pid info
 \end{verbatim}
 
-wobei \emph{pid} entweder ein numerischer Wert zur Auswahl eines bestimmten
-Prozesses anhand der PID ist, oder eine Zeichenkette aus \{\texttt{"{}min"},
-\texttt{"{}max"}, \texttt{"{}sum"}, \texttt{"{}avg"}\}.
-\emph{Field} ist eine Zeichenkette, die die entsprechende Information
-zurückliefern soll:
+\texttt{pid} ist entweder die PID eines Prozesses, d.h. ein numerischer Wert,
+oder eine Zeichenkette aus \{\texttt{"{}min"}, \texttt{"{}max"},
+\texttt{"{}sum"}, \texttt{"{}avg"}\}.
+
+\texttt{info} ist eine Zeichenkette, die bestimmt welche Information
+zurückliefert werden soll:
 
 \begin{itemize}
   \item \texttt{"{}cpu"{}}: die CPU-Auslastung, ausgegeben in Prozent, auf
@@ -93,13 +96,21 @@ zurückliefern soll:
     gestartet wurde, als String.
 \end{itemize}
 
-Nur für die numerischen Felder können anstatt einer konkreten PID oben genannte
-Zeichenketten angegeben werden, welche den niedrigsten Wert, den höchsten Wert,
-die Summe, oder den Durchschnitt abfragen.
-%
+Nur für die numerischen Informationen (\texttt{"{}cpu"{}}, \texttt{"{}mem"{}},
+\texttt{"{}time"{}}) können anstatt einer konkreten PID oben genannte
+Zeichenketten (\texttt{"{}min"}, \texttt{"{}max"}, \texttt{"{}sum"},
+\texttt{"{}avg"}) angegeben werden, welche den niedrigsten Wert, den höchsten
+Wert, die Summe, oder den Durchschnitt der gegebenen Information aller Einträge
+in der Datenbank abfragen.
+
 Sobald der Client die Antwort erhält, gibt er die PID des Prozesses (oder
-\texttt{"{}-"{}} im Fall von Summe oder Durchschnitt) und den Wert
-wie beschrieben aus.
+\texttt{"{}-"{}} im Fall von Summe oder Durchschnitt, etc.) \texttt{pid} und
+den angeforderten Wert \texttt{value} aus. Zeichenketten sollen mit doppelten
+Hochkommas abgeschlossen ausgegeben werden. Folgendes Format ist zu verwenden:
+\begin{verbatim}
+  pid value
+\end{verbatim}
+
 %
 Ungültige Abfragen sollen schon beim Client behandelt werden und für sie
 soll kein Request erzeugt werden.
@@ -126,16 +137,16 @@ aus folgenden, durch Komma getrennte Felder enthält:
   \item \emph{mem}: Der Speicherverbrauch in Promille.
   \item \emph{time}: Die Laufzeit des Prozesses in Sekunden.
   \item \emph{command}: Das Kommando als Zeichenkette, höchstens 56
-    Zeichen lang
+    Zeichen lang, mit doppelten Hochkommas abgeschlossen.
 \end{itemize}
 
 \paragraph{Beispiel:}
 
 \begin{verbatim}
-2214,0,0,1392074,/usr/bin/ssh-agent /usr/bin/dbus-launch --exit-with-sess
-2230,2,35,390837,/usr/lib/thunderbird/thunderbird
-9270,0,0,1124541,vim README.txt
-14141,24,66,89729,/usr/lib/firefox/firefox
+2214,0,0,1392074,"/usr/bin/ssh-agent /usr/bin/dbus-launch --exit-with-sess"
+2230,2,35,390837,"/usr/lib/thunderbird/thunderbird"
+9270,0,0,1124541,"vim README.txt"
+14141,24,66,89729,"/usr/lib/firefox/firefox"
 \end{verbatim}
 
 
@@ -147,8 +158,39 @@ als auch für die Antwort enthält. Die Art der Information, die abgefragt wird
 (cpu, mem, time, command) soll als Aufzählungstyp definiert sein.
 
 
+\subsection*{Beispiele}
 
-
+Starten des Servers (Annahme: \texttt{test.db} enthält obiges
+Datenbank-Beispiel):
+%
+\begin{verbatim}
+$ ./server test.db
+\end{verbatim}
+%
+Starten des Clients und Eingeben eines Befehls:
+%
+\begin{verbatim}
+$ ./client
+2214 cpu
+2214 0
+\end{verbatim}
+%
+Weitere Befehle können zeilenweise übergeben werden:
+%
+\begin{verbatim}
+14141 mem
+14141 66
+sum cpu
+- 26
+min time
+- 89729
+9270 time
+1124541
+2230 command
+2230 "/usr/lib/thunderbird/thunderbird"
+max mem
+- 66
+\end{verbatim}
 
 \osueguidelinesthree
 
