@@ -78,21 +78,93 @@ Semaphore, etc) korrekt freigegeben und terminiert werden.
 \subsubsection*{Client}
 
 Der Client bekommt als Argument eine Kontonummer übergeben und versucht sich
-mit dieser anzumelden.
+mit dieser anzumelden. Schlägt die Anmeldung fehl, soll der Client mit
+\verb|EXIT_FAILURE| terminieren.
 
 \begin{verbatim}
 USAGE: bankclient ACCOUNT_NR
 \end{verbatim}
 
-Der Client bietet dem Kunden ein einfaches Interface über die Standardeingabe
-an, mit der der Kunde Anfragen an den Server schicken kann. Das Ergebnis jeder
-Anfrage wird als Feedback auch auf die Standardausgabe ausgegeben.  Beim
-Abfragen des Kontostandes wird auch der Betrag ausgegeben.
+Der eingeloggte Kunde kann anschließend folgende Abfragen vornehmen
+bzw. Kommandos ausführen:
+\begin{itemize}
+\item Kontostand ausgeben:\\
+  \texttt{balance}
+\item Geld in der Höhe von \texttt{<amount>} abheben:\\
+  \texttt{takeout <amount>}
+\item Geld in der Höhe von \texttt{<amount>} einzahlen:\\
+  \texttt{payin <amount>}
+\item Geld in der Höhe von \texttt{<amount>} an das Konto
+  \verb|<target_account>| überweisen:\\
+  \verb|transfer <amount> <target_account>|
+\end{itemize}
+%
+Das Ergebnis (\texttt{<result>} aus \texttt{"{}OK"{}} oder \texttt{"{}NOK"{}})
+jeder Anfrage wird auf die Standardausgabe ausgegeben. Beim Abfragen des
+Kontostandes wird auch der Betrag (\verb|<current_amount>|)
+ausgegeben. Folgendes Format soll dazu verwendet werden:
+\begin{verbatim}
+<result> [<current_amount>]
+\end{verbatim}
 
 Beim Verbinden meldet sich der Client an und beim Trennen meldet er sich ab. Im
 Falle eines Fehlers soll sich der Client so gut es geht, beim Server abmelden.
 Der Client soll durch ein EOF an der Standardeingabe beendet werden.
 
+\subsection*{Beispiele}
+
+\subsubsection*{Liste der Konten}
+Eine Beispiel-CSV-Datei als Input für den Server:
+\begin{verbatim}
+123456;0
+1234;-1
+98765;2000
+45678;-2000
+\end{verbatim}
+
+\subsubsection*{Aufrufe}
+Starten des Servers (Annahme: \texttt{test.csv} enthält obige Liste an Konten):
+\begin{verbatim}
+$ ./server test.csv
+\end{verbatim}
+%
+Starten eines Clients mit ungültiger Kontonummer:
+\begin{verbatim}
+$ ./client 54321
+./client: Login failed.
+$ echo $?
+1
+\end{verbatim}
+%
+Starten eines Clients mit gültiger Kontonummer und Eingeben eines Kommandos:
+%
+\begin{verbatim}
+$ ./client 1234
+balance
+OK -1
+\end{verbatim}
+%
+Weitere Befehle können zeilenweise übergeben werden:
+\begin{verbatim}
+takeout 100
+NOK
+payin 11
+OK
+balance
+OK 10
+transfer 20 45678
+NOK
+transfer 5 99
+NOK
+transfer 5 45678
+OK
+\end{verbatim}
+%
+Anmeldung eines weiteren Clients zum selbigen Konto:
+\begin{verbatim}
+$ ./client 1234
+./client: Login failed.
+\end{verbatim}
 
 \osueguidelinesthree
 
