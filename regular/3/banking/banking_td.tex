@@ -70,6 +70,9 @@ von keinem Client benutzt werden. Für den Kontostand reicht eine
 vorzeichenbehaftete 32 bit große Zahl.
 Der Kontostand hat keine Nachkommastellen.
 
+Wird das Signal \verb|SIGUSR1| empfangen, soll die Datenbank, d.h. alle Konten
+mit aktuellem Kontostand, ausgegeben werden.
+
 Falls der Server ein \verb|SIGTERM| oder \verb|SIGINT| Signal erhält, sollen
 alle angelegten Ressourcen (lokal angelegter Speicher, Shared Memory,
 Semaphore, etc) korrekt freigegeben und terminiert werden.

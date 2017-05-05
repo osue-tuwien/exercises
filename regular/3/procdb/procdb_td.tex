@@ -54,7 +54,8 @@ eine Antwort mit der gewünschten Information.
 %mit der gegebenen PID in der Datenbank finden, so schickt er dem Client eine
 %Fehlernachricht.
 
-%Mit dem Signal \texttt{SIGUSR} soll die Datenbank ausgegeben werden.
+Wird das Signal \texttt{SIGUSR1} empfangen, soll die Datenbank, d.h. alle Daten
+zu den Prozessen (PID und Informationen), ausgegeben werden.
 
 Der Server soll durch die Signale \texttt{SIGINT} und \texttt{SIGTERM} zum
 Terminieren gebracht werden. Dabei soll er "`sauber"' beenden, also alle
