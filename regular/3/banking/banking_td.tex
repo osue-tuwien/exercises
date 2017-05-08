@@ -6,11 +6,11 @@
 
 \section*{Aufgabenstellung -- banking}
 
-Es soll ein Programm geschrieben werden, dass die Geldtransfers der Kunden
+Es soll ein Programm geschrieben werden, das die Geldtransfers der Kunden
 verwaltet. Die Kunden können sich mit dem Programm verbinden und ihre
 Geldgeschäfte erledigen. Das Verwaltungsprogramm der Bank ist der Server und
-dieser kommuniziert mittels Shared Memory mit den Clients (\textbf{nicht} einem
-pro Client), die von den Kunden benutzt werden.
+dieser kommuniziert mittels einem einzigen Shared Memory Objekts mit den
+Clients (\textbf{nicht} einem pro Client), die von den Kunden benutzt werden.
 
 Die Clients können Geld abheben und einzahlen, es auf ein anderes Konto
 überweisen und den aktuellen Kontostand abfragen. Aus Gründen der Sicherheit
