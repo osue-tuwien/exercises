@@ -6,7 +6,7 @@ for your submission.
 \begin{enumerate}
 \item The program must compile via
   \begin{lstlisting}
-  $ gcc -std=c99 -pedantic -Wall -D_DEFAULT_SOURCE -g -c filename.c
+  $ gcc -std=c99 -pedantic -Wall -D_DEFAULT_SOURCE -D_BSD_SOURCE -D_SVID_SOURCE -D_POSIX_C_SOURCE=200809L -g -c filename.c
   \end{lstlisting}
   without \emph{errors}.
   These flags must be used in the Makefile, of course.
