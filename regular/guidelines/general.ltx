@@ -32,12 +32,15 @@ $ gcc -std=c99 -pedantic -Wall -D_DEFAULT_SOURCE -D_BSD_SOURCE -D_SVID_SOURCE
   \texttt{EXIT\_SUCCESS} and \texttt{EXIT\_FAILURE} (defined in
   \texttt{stdlib.h}) to enable portability of the program.
 
-\item If a function indicates an error with its return value, it should be
-  checked in general
-  (e.g., resource allocation). In some cases it is ok to ignore the return
-  value, but then you must cast the function call to \texttt{void} (e.g.,
-  \lstinline{(void)fprintf(stderr,...)}, \lstinline{(void)fclose(...)} to a
-  file that has been opened for read only).
+\item If a function indicates an error with its return value, it \emph{should} be
+  checked in general.
+  If the subsequent code depends on the successful execution of a function
+  (e.g. resource allocation), then the return value \emph{must} be checked.
+
+  %In some cases it is ok to ignore the return
+  %value, but then you must cast the function call to \texttt{void} (e.g.,
+  %\lstinline{(void)fprintf(stderr,...)}, \lstinline{(void)fclose(...)} to a
+  %file that has been opened for read only).
 
 \item Functions that do not take any parameters have to be declared with
   \texttt{void} in the signature, e.g., \lstinline{int get_random_int(void);}.
