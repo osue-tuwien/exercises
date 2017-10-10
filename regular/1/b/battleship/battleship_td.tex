@@ -176,8 +176,8 @@ wobei $x$ der Spalten-Index (Spalte \textbf{A}: Index 0, \textbf{B}: 1, \textbf{
 Beispielsweise entspricht das Kästchen \textbf{B5}
 den Indizes $x=1$ und $y=5$, um dieses zu treffen übermittelt der Client also $coord=51$.
 
-Der Wert \verb|p| entspricht einem \emph{Parity Bit} über die einzelnen Bits der
-Koordinaten (Bit~0 bis Bit~6). Um dieses zu Berechnen, werden die einzelnen Bits mit
+Der Wert \verb|p| entspricht einem \emph{Parity Bit}\footnote{\url{https://en.wikipedia.org/wiki/Parity_bit}}
+über die einzelnen Bits der Koordinaten (Bit~0 bis Bit~6). Um dieses zu Berechnen, werden die einzelnen Bits mit
 einer \emph{xor}-Operation verknüpft.
 
 \subsubsection*{Server}
@@ -231,28 +231,6 @@ Folgende Werte können in \verb|status| enthalten sein:
 }
 
 Das Feld \verb|unused| wird nicht verwendet, die entsprechenden Bits sollten auf 0 gesetzt werden.
-
-%\subsection*{Testfälle}
-%\label{sec:testcases}
-
-%Dieser Angabe liegt ein Script namens \verb|run_tests| bei, welches Sie zum Testen Ihrer Implementierung verwenden können.
-%Das Script führt Ihren Server und Client mit verschiedenen Testfällen aus.
-%Beim Aufruf übergeben Sie dem Script den Pfad zum Server- und zum Client-Programm.
-
-%\begin{verbatim}
-%run_tests:
-    %SYNOPSIS
-        %run_tests SERVER CLIENT
-    %EXAMPLE
-        %run_tests ./server ./client
-%\end{verbatim}
-
-%Sie können das Script auch bearbeiten und eigene Testfälle hinzufügen.
-
-%Außerdem liegt der vom Institut implementierte Server als Referenz bei.
-%Bei der Ausführung des \verb|run_tests|-Script können Sie diesen anstelle Ihres eigenen Server übergeben
-%und so vergleichen ob der von Ihnen implementierte Server sich gleich verhält.
-%Außerdem können Sie Ihren Client damit testen.
 
 \subsection*{Bewertung}
 \label{sec:grading}
@@ -324,6 +302,72 @@ entsprechenden Fehlermeldung terminieren.
     \end{tabular} \par
     }
 \end{itemize}
+
+\subsection*{Testfälle}
+\label{sec:testcases}
+
+Die folgenden Testfälle sollen Ihnen als Beispiele dienen, um Ihre Implementierung zu testen.
+Die gezeigten Ausgaben sollen als Beispiel dienen für die Ausgaben, die von Ihren Programmen erwartet werden.
+
+\subsubsection*{Fehlermeldungen beim Programmaufruf:}
+\vspace{-10pt}
+Server:
+\vspace{-10pt}
+\begin{verbatim}
+$ ./server -x G1I1 C5E5 A7B7 G6G8 I9J9 B0E0
+./server: invalid option -- 'x'
+usage: ./server [-p PORT] SHIP1 ...
+$ ./server G1I1 C5E5 A7B77 G6G8 I9J9 B0E0
+[./server] ERROR: wrong syntax for ship coordinates: A7B77
+$ ./server G1I1 C5E5 A7Z7 G6G8 I9J9 B0E0
+[./server] ERROR: coordinates outside of map: A7Z7
+$ ./server G1I1 C5E5 A7B9 G6G8 I9J9 B0E0
+[./server] ERROR: ships must be aligned either horizontally or vertically
+\end{verbatim}
+
+Client:
+\vspace{-10pt}
+\begin{verbatim}
+$ ./client -x
+./client: invalid option -- 'x'
+usage: ./client [-h HOSTNAME] [-p PORT]
+$ ./client arg
+usage: ./client [-h HOSTNAME] [-p PORT]
+\end{verbatim}
+
+\subsubsection*{Fehlermeldungen während des Spieles:}
+\vspace{-10pt}
+Paritätsfehler:
+\vspace{-10pt}
+\begin{verbatim}
+$ ./server G1I1 C5E5 A7B7 G6G8 I9J9 B0E0 & sleep 1 && ./client
+[./server] ERROR: parity error
+[./client] ERROR: parity error
+\end{verbatim}
+
+Ungültige Koordinate:
+\vspace{-10pt}
+\begin{verbatim}
+$ ./server G1I1 C5E5 A7B7 G6G8 I9J9 B0E0 & sleep 1 && ./client
+[./server] ERROR: invalid coordinate
+[./client] ERROR: invalid coordinate
+\end{verbatim}
+
+Client verliert:
+\vspace{-10pt}
+\begin{verbatim}
+$ ./server G1I1 C5E5 A7B7 G6G8 I9J9 B0E0 & sleep 1 && ./client
+[./server] game lost
+[./client] game lost
+\end{verbatim}
+
+Client gewinnt:
+\vspace{-10pt}
+\begin{verbatim}
+$ ./server G1I1 C5E5 A7B7 G6G8 I9J9 B0E0 & sleep 1 && ./client
+[./server] client wins in 77 rounds
+[./client] I win :)
+\end{verbatim}
 
 \osueguidelinesone
 
