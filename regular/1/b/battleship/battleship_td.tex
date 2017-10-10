@@ -1,5 +1,8 @@
 \input{../../../template.ltx}
 
+% wikipedia link parity bit (footnote)
+
+
 \usepackage{graphicx}
 \usepackage{bytefield}
 
@@ -27,13 +30,13 @@ Dafür kann der Gegenspieler in jedem Spielzug einen Schuss auf ein Kästchen ab
 Wurden alle Kästchen auf denen sich ein Schiff befindet getroffen, dann ist dieses Schiff versenkt.
 
 Üblicherweise haben bei ``Battleship'' beide Spieler Schiffe und versuchen jeweils die des Gegners
-zu versenken. In dieser Aufgabe spielen wir eine reduzierte Version,
+zu versenken. In dieser Aufgabe wird eine reduzierte Version gespielt,
 in der nur der Server Schiffe besitzt und der Client versucht diese zu versenken.
 \emph{Beachten Sie, dass der Client vollautomatisch agieren soll}. Daher
 ist die Implementierung einer Spielstrategie ebenfalls Teil der Aufgabe
 (siehe Abschnitt~\nameref{sec:grading}).
 
-In unserer Variante des Spiels gibt es folgende Schiffe:
+In dieser Variante des Spiels gibt es folgende Schiffe:
 
 {\centering
 \begin{tabular}{ | l | l | l | }
@@ -80,10 +83,20 @@ ein Schiff, welches die Kästchen \textbf{C2}, \textbf{D2} und \textbf{E2} einni
 Der Server soll auf eingehende Verbindungen warten. Sobald eine Verbindung
 akzeptiert wurde, beginnt ein neues Spiel, und der Server antwortet bis zum
 Ende des Spiels auf die Anfragen des Clients.
-Am Ende des Spiels wird entweder eine Fehlermeldung,
-oder die Anzahl der Spielrunden und die Anzahl versenkter Schiffe ausgegeben,
-und das Serverprogramm wird mit einem entsprechenden Rückgabewert (siehe weiter
-unten) beendet.
+Sobald der Server eine Anfrage erhält, soll er zunächst die Korrektheit des Paritätsbit in der Nachricht des Client
+überprüfen (siehe Abschnitt~\nameref{sec:prot}).
+Sollte dieses falsch sein, antwortet der Server sofort mit dem entsprechenden Fehler-Status,
+ohne den Rest der Nachricht zu verarbeiten.
+Anschließend prüft der Server, ob die vom Client übermittelte Koordinate gültig ist
+und infomiert den Client darüber, ob er mit seinem Schuss ein Schiff getroffen hat.
+Am Ende des Spiels soll die Verbindung geschlossen und das Programm beendet werden
+(Rückgabewerte siehe weiter unten).
+
+%Am Ende des Spiels wird entweder eine Fehlermeldung,
+%oder die Anzahl der Spielrunden und die Anzahl versenkter Schiffe ausgegeben,
+%und das Serverprogramm wird mit einem entsprechenden Rückgabewert (siehe weiter
+%unten) beendet.
+
 %Sobald der Server eines der Signale \osueconst{SIGINT} oder
 %\osueconst{SIGTERM} empfängt, soll der Serversocket geschlossen und das
 %Programm mit Rückgabewert 0 beendet werden.
@@ -104,10 +117,12 @@ und der Port auf 1280 gesetzt. Legen Sie zuerst einen
 TCP/IP-Socket an. Stellen Sie dann die zum Hostnamen des Servers zugehörige
 IP-Adresse fest, und verbinden Sie sich mit dem Server. Danach wird sofort mit
 dem Spiel begonnen, und der Client übermittelt wiederholt die Koordinaten,
-die durch seinen Schuss getroffen werden, bis der Server entweder kommuniziert,
-dass alle Schiffe versenkt wurden, oder einen Fehler übermittelt. Am Ende des
-Spiels werden entweder die Anzahl der gespielten Runden oder der zuletzt
-übermittelte Fehler ausgegeben. Danach soll der Socket geschlossen und das
+die durch seinen Schuss getroffen werden, bis der Server kommuniziert,
+dass alle Schiffe versenkt wurden, die maximale Rundenanzahl erreicht wurde
+oder einen Fehler übermittelt.
+%Am Ende des Spiels wird entweder eine Erfolgsmeldung (falls das Spiel gewonnen wurde)
+%oder der zuletzt übermittelte Fehler ausgegeben.
+Danach soll der Socket geschlossen und das
 Programm beendet werden (Rückgabewert siehe nächster Absatz).
 
 \begin{verbatim}
@@ -120,24 +135,22 @@ Client:
 
 % Verbinden Sie den Socket mittels \emph{connect}. Senden Sie mittels \emph{write} die Anfragen an de Server, und empfangen Sie de Antwort des Servers mittels \emph{read} und schicken ihn mittels \emph{write} wieder zurück.
 \paragraph{Fehlermeldungen und Rückgabewerte:}
-Der Server soll zunächst die Korrektheit des Paritätsbit in der Nachricht des Client
-überprüfen (siehe Abschnitt~\nameref{sec:prot}).
-Sollte dieses falsch sein, antwortet der Server sofort mit dem entsprechenden Fehler-Status,
-ohne den Rest der Nachricht zu verarbeiten.
-Falls der Server in seiner Antwort einen Fehler anzeigt,
-sollen sowohl der Client als auch der Server terminieren.
-Bei einem Paritätsfehler soll die Meldung ``Parity error'' ausgegeben und beide
-Programme mit dem Wert 2 beendet werden. Bei einer Überschreitung der maximalen
-Rundenanzahl, wenn also der Client es nicht geschafft hat alle Schiffe zu versenken,
-geben Sie die Meldung ``Game lost'' aus und beenden Sie beide Programme mit dem Exit-Code 3.
+
+Falls der Server in seiner Antwort einen Fehler anzeigt, sollen sowohl der Client als auch der Server terminieren.
+Bei einem Paritätsfehler sollen beide Programme die Meldung ``Parity error'' ausgegeben
+und beide Programme mit dem Wert 2 beendet werden.
+Wenn der Server meldet, dass der Client einen ungültige Koordinate übertragen hat,
+geben Sie in beiden Programmen die Meldung ``Invalid coordinate'' aus und beenden Sie beide Programme mit dem Exit-Code 3.
 Bei sonstigen Fehlern (z.B.\ ungültige Kommandozeilenargumente, Verbindungsfehler, \ldots)
 soll eine informative Fehlermeldung ausgegeben und mit Rückgabewert
 \osueconst{EXIT\_FAILURE} (1) terminiert werden. Alle Fehlermeldungen müssen auf
 \osueglvar{stderr} ausgegeben und von einem Zeilenumbruch gefolgt werden.
 
-Endet das Spiel regulär (der Client versenkt alle Schiffe), so soll die
-Anzahl gespielter Runden auf \osueglvar{stdout} ausgegeben werden und beide
+Das Spiel endet regulär wenn der Client alle Schiffe versenkt hat oder die maximale Rundenanzahl erreicht wurde.
+Gelingt es dem Client alle Schiffe zu versenken, so soll der Server die Anzahl gespielter Runden auf \osueglvar{stdout} ausgegeben und beide
 Programme mit Rückgabewert 0 beendet werden.
+Wenn es dem Client nicht gelingt in 80 Runden alle Schiffe zu versenken, dann sollen beide Programme die Meldung ``Game lost'' auf \osueglvar{stdout} ausgeben
+und ebenfalls mit Rückgabewert 0 terminieren.
 
 \subsection*{Protokoll}
 \label{sec:prot}
@@ -159,7 +172,7 @@ Der Wert \verb|coord| entspricht den Koordinaten des Kästchens, welches durch
 den Schuss des Client getroffen wird. Dieser wird wie folgt berechnet:\\
 $$coord = x + y * 10$$
 
-wobei $x$ die Spalte und $y$ die Reihe des Kästchen ist.
+wobei $x$ der Spalten-Index (Spalte \textbf{A}: Index 0, \textbf{B}: 1, \textbf{C}: 2, \ldots) und $y$ der Zeilen-Index des Kästchen ist.
 Beispielsweise entspricht das Kästchen \textbf{B5}
 den Indizes $x=1$ und $y=5$, um dieses zu treffen übermittelt der Client also $coord=51$.
 
@@ -198,22 +211,48 @@ ob dieses versenkt wurde. Das Feld kann folgenden Werte annehmen:
 }
 
 Das Feld \verb|status| informiert den Client über den Spielstatus und eventuelle Fehler,
-die in seiner letzten Nachricht enthalten waren. Folgende Werte können darin enthalten sein:
+die in seiner letzten Nachricht enthalten waren.
+Falls \verb|status| einen Fehler anzeigt wird das Feld \verb|hit| ignoriert und die entsprechenden Bits sollten auf 0 gesetzt werden.
+Folgende Werte können in \verb|status| enthalten sein:
 
 {\centering
 \begin{tabular}{ | c | l | }
 \hline
 \verb|status| & Bedeutung \\
 \hline
+%0 & Keine Fehler \\
 0 & Spiel läuft \\
-1 & Die letzte Nachricht enthielt eine ungültige Koordinate \\
-2 & Die letzte Nachricht enthielt ein ungültiges Parity Bit \\
-3 & Die maximale Anzahl an Spielzügen wurde erreicht (Spielende) \\
+1 & Spiel beendet (Alle Schiffe versenkt oder maximale Rundenzahl erreicht) \\
+2 & Fehler: Die letzte Nachricht enthielt ein ungültiges Parity Bit \\
+3 & Fehler: Die letzte Nachricht enthielt eine ungültige Koordinate \\
+%3 & Die maximale Anzahl an Spielzügen wurde erreicht (Spielende) \\
 \hline
 \end{tabular}\par
 }
 
 Das Feld \verb|unused| wird nicht verwendet, die entsprechenden Bits sollten auf 0 gesetzt werden.
+
+%\subsection*{Testfälle}
+%\label{sec:testcases}
+
+%Dieser Angabe liegt ein Script namens \verb|run_tests| bei, welches Sie zum Testen Ihrer Implementierung verwenden können.
+%Das Script führt Ihren Server und Client mit verschiedenen Testfällen aus.
+%Beim Aufruf übergeben Sie dem Script den Pfad zum Server- und zum Client-Programm.
+
+%\begin{verbatim}
+%run_tests:
+    %SYNOPSIS
+        %run_tests SERVER CLIENT
+    %EXAMPLE
+        %run_tests ./server ./client
+%\end{verbatim}
+
+%Sie können das Script auch bearbeiten und eigene Testfälle hinzufügen.
+
+%Außerdem liegt der vom Institut implementierte Server als Referenz bei.
+%Bei der Ausführung des \verb|run_tests|-Script können Sie diesen anstelle Ihres eigenen Server übergeben
+%und so vergleichen ob der von Ihnen implementierte Server sich gleich verhält.
+%Außerdem können Sie Ihren Client damit testen.
 
 \subsection*{Bewertung}
 \label{sec:grading}
@@ -222,8 +261,8 @@ Servers als auch des Clients korrekt funktionieren (siehe allgemeine
 Beispielanforderungen) und folgenden Anforderungen genügen:
 
 \paragraph{Server:}
-Teile des Servers sind bereits vorgegeben. Bitte verwenden Sie dieses Template
-und erweitern Sie es entsprechend.
+%Teile des Servers sind bereits vorgegeben. Bitte verwenden Sie dieses Template
+%und erweitern Sie es entsprechend.
 
 Der Server muss nach dem Start die Argumente, die er von der Kommandozeile erhält, analysieren
 und falls ungültige Optionen oder Argumente übergeben wurde mit einer \textbf{usage}-Meldung terminieren.
@@ -251,13 +290,15 @@ falls keine Hostname übergeben wurde) und dem angegebenen Port (oder 1280 falls
 herstellen.
 
 Sobald der Client eine Verbindung zum Server hergestellt hat beginnt das Spiel
-und der Client muss jeweils innerhalb von einer Sekunde (auf
-dem Abgaberechner im TI-Labor) eine Anfrage an den Server generieren.
+und der Client sendet seine erste Anfrage.
+%und der Client muss jeweils innerhalb von einer Sekunde (auf
+%dem Abgaberechner im TI-Labor) eine Anfrage an den Server generieren.
 % Weiters muss jedes Spiel innerhalb von 35 Runden gewonnen werden.
 Sendet der Server einen Fehlercode, so muss der Client sofort mit der
 entsprechenden Fehlermeldung terminieren.
 
 \paragraph{Bonuspunkte:} Für gute und ausgezeichnete Lösungen werden Bonuspunkte vergeben.
+\textbf{Bonuspunkte werden nur vergeben, wenn der Client und der Server korrekt funktionieren.}
 
 \begin{itemize}
     \item \textbf{Server:} Sie erhalten 2 Bonuspunkte wenn Ihr Server überprüft,
@@ -269,15 +310,16 @@ entsprechenden Fehlermeldung terminieren.
     also mit den in Abschnitt~\nameref{sec:aufgabenstellung} angegebenen Schiffen,
     wobei zwei Schiffe nie aneinander grenzen (auch nicht in diagonaler Richtung).
     Sie erhalten 2 Bonuspunkte, wenn Ihr Client jedes Spiel gewinnt.
-    Außerdem erhalten Sie bis zu 6 Bonuspunkte, wenn Ihr Client durchschnittlich besonders wenig Züge benötigt, um zu gewinnen:
+    Außerdem können Sie bis zu 6 weitere Bonuspunkte erhalten,
+    wenn Ihr Client jedes Spiel gewinnt und dafür durchschnittlich besonders wenig Züge benötigt:
 
     \vspace{3pt}
     {\centering
     \begin{tabular}{| c | c | c | c |}
     \hline
-    Anzahl Züge & $<70$ & $<55$ & $<40$ \\
+    Durchschnittliche Anzahl an Zügen & $<70$ & $<55$ & $<40$ \\
     \hline
-    Bonuspunkte & 2 & 4 & 6 \\
+    Zusätzliche Bonuspunkte & 2 & 4 & 6 \\
     \hline
     \end{tabular} \par
     }
