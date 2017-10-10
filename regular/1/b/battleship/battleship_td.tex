@@ -83,12 +83,12 @@ ein Schiff, welches die Kästchen \textbf{C2}, \textbf{D2} und \textbf{E2} einni
 Der Server soll auf eingehende Verbindungen warten. Sobald eine Verbindung
 akzeptiert wurde, beginnt ein neues Spiel, und der Server antwortet bis zum
 Ende des Spiels auf die Anfragen des Clients.
-Sobald der Server eine Anfrage erhält, soll er zunächst die Korrektheit des Paritätsbit in der Nachricht des Client
+Sobald der Server eine Anfrage erhält, soll er zunächst die Korrektheit des Paritätsbit in der Nachricht des Clients
 überprüfen (siehe Abschnitt~\nameref{sec:prot}).
 Sollte dieses falsch sein, antwortet der Server sofort mit dem entsprechenden Fehler-Status,
 ohne den Rest der Nachricht zu verarbeiten.
 Anschließend prüft der Server, ob die vom Client übermittelte Koordinate gültig ist
-und infomiert den Client darüber, ob er mit seinem Schuss ein Schiff getroffen hat.
+und informiert den Client darüber, ob er mit seinem Schuss ein Schiff getroffen hat.
 Am Ende des Spiels soll die Verbindung geschlossen und das Programm beendet werden
 (Rückgabewerte siehe weiter unten).
 
@@ -137,8 +137,8 @@ Client:
 \paragraph{Fehlermeldungen und Rückgabewerte:}
 
 Falls der Server in seiner Antwort einen Fehler anzeigt, sollen sowohl der Client als auch der Server terminieren.
-Bei einem Paritätsfehler sollen beide Programme die Meldung ``Parity error'' ausgegeben
-und beide Programme mit dem Wert 2 beendet werden.
+Bei einem Paritätsfehler sollen beide Programme die Meldung ``Parity error'' ausgeben
+und beide Programme mit dem Wert 2 beenden.
 Wenn der Server meldet, dass der Client einen ungültige Koordinate übertragen hat,
 geben Sie in beiden Programmen die Meldung ``Invalid coordinate'' aus und beenden Sie beide Programme mit dem Exit-Code 3.
 Bei sonstigen Fehlern (z.B.\ ungültige Kommandozeilenargumente, Verbindungsfehler, \ldots)
