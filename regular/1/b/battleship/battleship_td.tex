@@ -1,8 +1,5 @@
 \input{../../../template.ltx}
 
-% wikipedia link parity bit (footnote)
-
-
 \usepackage{graphicx}
 \usepackage{bytefield}
 
@@ -76,8 +73,8 @@ Teile des Servers sind bereits vorgegeben. Bitte verwenden Sie dieses Template
 und erweitern Sie es entsprechend.  Dem Server kann als Option der Port
 übergeben werden, auf dem er für die Clients erreichbar sein soll.
 Außerdem werden dem Server 6 Argumente übergeben, die die Positionen der 6 Schiffe angeben.
-Jedes dieser Argumente hat Länge \textbf{4} und besteht aus den Koordinaten
-für Bug und Heck des Schiffes. So beschreibt zum Beispiel der String ``\verb|C2E2|''
+Jedes dieser Argumente hat Länge \textbf{4} und besteht aus den Koordinaten für Bug und Heck des Schiffes.
+So beschreibt zum Beispiel der String ``\verb|C2E2|''
 ein Schiff, welches die Kästchen \textbf{C2}, \textbf{D2} und \textbf{E2} einnimmt.
 
 Der Server soll auf eingehende Verbindungen warten. Sobald eine Verbindung
@@ -89,6 +86,8 @@ Sollte dieses falsch sein, antwortet der Server sofort mit dem entsprechenden Fe
 ohne den Rest der Nachricht zu verarbeiten.
 Anschließend prüft der Server, ob die vom Client übermittelte Koordinate gültig ist
 und informiert den Client darüber, ob er mit seinem Schuss ein Schiff getroffen hat.
+Das Spiel endet sobald der Client alle Schiffe versenkt hat
+oder wenn am Ende der 80. Runde noch immer Schiffe übrig sind.
 Am Ende des Spiels soll die Verbindung geschlossen und das Programm beendet werden
 (Rückgabewerte siehe weiter unten).
 
@@ -101,10 +100,11 @@ Am Ende des Spiels soll die Verbindung geschlossen und das Programm beendet werd
 %\osueconst{SIGTERM} empfängt, soll der Serversocket geschlossen und das
 %Programm mit Rückgabewert 0 beendet werden.
 
+\vspace{-10pt}
 \begin{verbatim}
 Server:
     SYNOPSIS
-        server [-p PORT] SHIP1 ...
+        server [-p PORT] SHIP1...
     EXAMPLE
         server -p 1280 C2E2 F0H0 B6A6 E8E6 I2I5 H8I8
 \end{verbatim}
@@ -125,6 +125,7 @@ oder einen Fehler übermittelt.
 Danach soll der Socket geschlossen und das
 Programm beendet werden (Rückgabewert siehe nächster Absatz).
 
+\vspace{-10pt}
 \begin{verbatim}
 Client:
     SYNOPSIS
@@ -306,8 +307,8 @@ entsprechenden Fehlermeldung terminieren.
 \subsection*{Testfälle}
 \label{sec:testcases}
 
-Die folgenden Testfälle sollen Ihnen als Beispiele dienen, um Ihre Implementierung zu testen.
-Die gezeigten Ausgaben sollen als Beispiel dienen für die Ausgaben, die von Ihren Programmen erwartet werden.
+Die folgenden Testfälle können Sie als Hilfestellung verwenden, um Ihre Implementierung zu testen.
+Außerdem sollen Sie Ihnen als Beispiel dienen für die Ausgaben, die von Ihren Programmen erwartet werden.
 
 \subsubsection*{Fehlermeldungen beim Programmaufruf:}
 \vspace{-10pt}
@@ -316,7 +317,7 @@ Server:
 \begin{verbatim}
 $ ./server -x G1I1 C5E5 A7B7 G6G8 I9J9 B0E0
 ./server: invalid option -- 'x'
-usage: ./server [-p PORT] SHIP1 ...
+usage: ./server [-p PORT] SHIP1...
 $ ./server G1I1 C5E5 A7B77 G6G8 I9J9 B0E0
 [./server] ERROR: wrong syntax for ship coordinates: A7B77
 $ ./server G1I1 C5E5 A7Z7 G6G8 I9J9 B0E0
