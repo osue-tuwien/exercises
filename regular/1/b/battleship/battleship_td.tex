@@ -87,7 +87,7 @@ ohne den Rest der Nachricht zu verarbeiten.
 Anschließend prüft der Server, ob die vom Client übermittelte Koordinate gültig ist
 und informiert den Client darüber, ob er mit seinem Schuss ein Schiff getroffen hat.
 Das Spiel endet sobald der Client alle Schiffe versenkt hat
-oder wenn am Ende der 80. Runde noch immer Schiffe übrig sind.
+oder wenn am Ende der 80.\ Runde noch immer Schiffe übrig sind.
 Am Ende des Spiels soll die Verbindung geschlossen und das Programm beendet werden
 (Rückgabewerte siehe weiter unten).
 
@@ -178,8 +178,10 @@ Beispielsweise entspricht das Kästchen \textbf{B5}
 den Indizes $x=1$ und $y=5$, um dieses zu treffen übermittelt der Client also $coord=51$.
 
 Der Wert \verb|p| entspricht einem \emph{Parity Bit}\footnote{\url{https://en.wikipedia.org/wiki/Parity_bit}}
-über die einzelnen Bits der Koordinaten (Bit~0 bis Bit~6). Um dieses zu Berechnen, werden die einzelnen Bits mit
+über die einzelnen Bits der Koordinaten (Bit~0 bis Bit~6).
+Um dieses zu Berechnen, werden die einzelnen Bits mit
 einer \emph{xor}-Operation verknüpft.
+Wir verwenden \emph{even parity}, so dass die gesamte Nachricht immer aus einer geraden Anzahl an 1-Bits besteht.
 
 \subsubsection*{Server}
 
@@ -206,7 +208,7 @@ ob dieses versenkt wurde. Das Feld kann folgenden Werte annehmen:
 0 & Nichts getroffen (der Schuss ging ins Leere) \\
 1 & Ein Schiff wurde getroffen (aber nicht versenkt) \\
 2 & Ein Schiff wurde getroffen und damit versenkt, aber es gibt noch weitere Schiffe \\
-3 & Das letzte Schiff wurde versenkt (Spielende) \\
+3 & Das letzte Schiff wurde versenkt (der Client gewinnt) \\
 \hline
 \end{tabular}\par
 }
@@ -323,7 +325,7 @@ $ ./server G1I1 C5E5 A7B77 G6G8 I9J9 B0E0
 $ ./server G1I1 C5E5 A7Z7 G6G8 I9J9 B0E0
 [./server] ERROR: coordinates outside of map: A7Z7
 $ ./server G1I1 C5E5 A7B9 G6G8 I9J9 B0E0
-[./server] ERROR: ships must be aligned either horizontally or vertically
+[./server] ERROR: ships must be aligned either horizontally or vertically: A7B9
 \end{verbatim}
 
 Client:
