@@ -27,7 +27,7 @@ Konzepte aus der Informatik. Statt Bits [\verb|0| oder \verb|1|; Basis 2]
 werden \emph{Nukleinbasen} [Adenin (\verb|A|), Guanin (\verb|G|), Cytosin
 (\verb|C|) oder Uracil (\verb|U|); Basis 4] zur Speicherung von Informationen
 verwendet. 8 Bits werden immer zu einem Byte zusammengefasst, 3 Nukleinbasen zu
-einem \emph{Codon}. Dieses Codon kann nun einem der 20 Aminosäuren zugeordnet
+einem \emph{Codon}. Dieses Codon kann nun einer der 20 Aminosäuren zugeordnet
 werden. Vergleichbar: ein Byte entspricht einem ASCII Zeichen in der
 ASCII-Tabelle. Da es aber nur 20 Aminosäuren gibt, jedoch $4^3=64$ mögliche
 Codons, sind einige Aminosäuren mehrfach belegt.
@@ -38,7 +38,7 @@ Beispiel: UUU=Phe(F), UUC=Phe(F), AAA=Lys(K), AAG=Lys(K)
 
 Eine Protein-Sequenz (die message) innerhalb einer mRNA-Sequenz beginnt immer
 mit einem \emph{Start-Codon} (AUG) und endet mit einem \emph{Stopp-Codon}
-(UAA, UAG, UGA). Die dazwischen liegenden Codons geben an, aus welchen
+(UAA, UAG oder UGA). Die dazwischen liegenden Codons geben an, aus welchen
 Aminosäuren das Protein schlussendlich synthetisiert werden soll. Ein
 Beispiel illustriert den Vorgang:
 
@@ -93,13 +93,19 @@ einzigen Shared Memory Object erfolgen (\textbf{nicht} einem pro Client),
 welches nur die Information, die der Server mit einem einzigen Client
 austauscht enthalten darf.  Allerdings muss eine beliebige Anzahl von Clients
 gleichzeitig und unabhängig voneinander mit dem Server kommunizieren können.
-Insbesondere darf das Warten auf den Input eines Clients nicht andere Clients
-blockieren.
+
+Implementieren Sie ein geeinetes Protokoll, mit welchem die Clients und der
+Server über das Shared Memory Object kommunizieren. Überlegen Sie sich dafür
+eine Struktur, mit welcher Anfragen und Antworten im Shared Memory gespeichert
+werden. Legen Sie so viele Semaphore an, wie für die Synchronisierung der
+Kommunikation zwischen dem Server und den Clients benötigt werden. Achten Sie
+darauf Deadlocks zu vermeiden!
 
 Server und Client sollen die Freigabe des Shared Memory Objects und der
 Semaphore koordinieren. Spätestens wenn der Server und alle Clients terminiert
 haben, müssen alle Semaphore und Shared Memory Objects freigegeben sein.
-
+Sollte der Server vor einigen der Clients terminieren, dann müssen auch alle
+verbleibenden Clients unverzüglich terminieren.
 
 \subsection*{Client}
 
@@ -156,14 +162,16 @@ USAGE: mrna-server
 Der Server legt zu Beginn die benötigten Resourcen an.
 Der Server soll es erlauben, dass mehrere unabhängige Clients mit ihm
 gleichzeitig kommunizieren können. Es soll sichergestellt sein, dass jeder
-Client nur seine eigene mRNA-Sequenz sieht und es in keinem Fall zu Deadlocks
-oder anderen Synchronisationsfehlern kommt.
+Client nur seine eigene mRNA-Sequenz sieht. Überlegen Sie sich dafür eine
+geeignete Strategie, mittels derer der Server die einzelnen Anfragen dem
+jeweiligen Client zuordnen kann.
 
 Empfängt der Server einen n-Befehl, so bewegt er einen Cursor durch die aktive
-mRNA-Sequenz bis er ein Start-Codon (AUG) entdeckt. Nun wird jedes folgende
-Codon einer Aminosäure zugeordnet bis eines der Stopp-Codons (UAA, UAG, UGA)
-erreicht wird. Die gefundene Protein-Sequenz wird dann über den Client
-ausgegeben. Die aktuelle Cursor-Position bleibt am Server gespeichert.
+mRNA-Sequenz bis er ein Start-Codon (AUG) entdeckt. Nun wird ab dieser
+Position jedes Codon einer Aminosäure zugeordnet bis eines der Stopp-Codons
+(UAA, UAG, UGA) erreicht wird. Die gefundene Protein-Sequenz wird an den
+Client zurückgegeben. Die aktuelle Cursor-Position bleibt am Server
+gespeichert.
 
 \subsection*{Beispiel}
 
@@ -183,15 +191,15 @@ Enter new mRNA sequence. (Newline to end input):
 CACAGCCUAUGGUAGGGUCUGCUUAACGCCGCUAUGUAUCAUAAGGAGACAUGACGCCGC
 
 Enter new command. (Enter to end input): n
-Protein sequence found [11/60] to [23/60]: VGSA
+Protein sequence found [11/60] to [23/60]: MVGSA
 Enter new command. (Enter to end input): n
-Protein sequence found [36/60] to [51/60]: YHKET
+Protein sequence found [36/60] to [51/60]: MYHKET
 Enter new command. (Enter to end input): n
 End reached [60/60], send r to reset.
 Enter new command. (Enter to end input): r
 Reset. [0/60]
 Enter new command. (Enter to end input): n
-Protein sequence found [11/60] to [23/60]: VGSA
+Protein sequence found [11/60] to [23/60]: MVGSA
 Enter new command. (Enter to end input): q
 Close client.
 \end{verbatim}
