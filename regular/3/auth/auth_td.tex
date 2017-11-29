@@ -13,7 +13,7 @@ oder abfragen kann. Die Kommunikation zwischen den Prozessen soll mittels
 Shared Memory realisiert werden und die Synchronisation über Semaphore
 erfolgen.
 
-Der Server speichert folgende die Benutzerdaten - Name des Benutzers
+Der Server speichert folgende Benutzerdaten - Name des Benutzers
 (\texttt{username}), Passwort (\texttt{password}) und ein Geheimnis
 (\texttt{secret}) - in einer Datenbank. Der Client soll dem Benutzer ein
 Interface bieten, mit dem der Benutzer diese Informationen vom Server setzen
@@ -26,12 +26,20 @@ einzigen Shared Memory Object erfolgen (\textbf{nicht} einem pro Client). Es
 darf auch nicht die gesamte Datenbank im Shared Memory geladen sein,
 sondern nur die Information, die der Server mit einem einzigen Client
 austauscht. Allerdings muss eine beliebige Anzahl von Clients gleichzeitig und
-unabhängig voneinander mit dem Server kommunizieren können. Insbesondere darf
-das Warten auf den Input eines Clients nicht andere Clients blockieren.
+unabhängig voneinander mit dem Server kommunizieren können.
+
+Implementieren Sie ein geeinetes Protokoll, mit welchem die Clients und der
+Server über das Shared Memory Object kommunizieren. Überlegen Sie sich dafür
+eine Struktur, mit welcher Anfragen und Antworten im Shared Memory gespeichert
+werden. Legen Sie so viele Semaphore an, wie für die Synchronisierung der
+Kommunikation zwischen dem Server und den Clients benötigt werden. Achten Sie
+darauf Deadlocks zu vermeiden!
 
 Server und Client sollen die Freigabe des Shared Memory Objects und der
 Semaphore koordinieren. Spätestens wenn der Server und alle Clients terminiert
 haben, müssen alle Semaphore und Shared Memory Objects freigegeben sein.
+Sollte der Server vor einigen der Clients terminieren, dann müssen auch alle
+verbleibenden Clients unverzüglich terminieren.
 
 \subsubsection*{Server}
 \begin{verbatim}
@@ -151,12 +159,6 @@ Emil;osueisgreat;Something you would like to know, but I won't say ANYBODY!
 
 Der zweite Benutzer namens \texttt{Anton} hat in diesem Beispiel kein Geheimnis
 gespeichert.
-
-
-\subsubsection*{Shared Memory}
-
-Es soll eine geeignete Struktur definiert werden, die Felder für die Anfrage,
-als auch für die Antwort enthält.
 
 
 \osueguidelinesthree
