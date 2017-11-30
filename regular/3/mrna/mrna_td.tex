@@ -105,7 +105,13 @@ Server und Client sollen die Freigabe des Shared Memory Objects und der
 Semaphore koordinieren. Spätestens wenn der Server und alle Clients terminiert
 haben, müssen alle Semaphore und Shared Memory Objects freigegeben sein.
 Sollte der Server vor einigen der Clients terminieren, dann müssen auch alle
-verbleibenden Clients unverzüglich terminieren.
+verbleibenden Clients unverzüglich terminieren. Achten Sie deshalb auf eine
+geeignete und korrekte Signal- und Fehlerbehandlung.
+
+Sobald der Server oder Client eines der Signale \osueconst{SIGINT} oder
+\osueconst{SIGTERM} empfängt, soll die aktuelle Transaktion beendet werden und
+das Programm anschließend mit dem Rückgabewert 0 beendet werden.
+
 
 \subsection*{Client}
 
