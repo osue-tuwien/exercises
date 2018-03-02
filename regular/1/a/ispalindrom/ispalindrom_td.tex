@@ -6,22 +6,26 @@
 
 \section*{Aufgabenstellung A -- ispalindrom}
 
-Implementieren Sie ein Programm \osueprog{ispalindrom}, welches
-eingegebene Strings auf Palindromeigenschaften überprüft.
+Implementieren Sie ein Programm \osueprog{ispalindrom}, welches Strings auf
+Palindromeigenschaften überprüft.
 
 \begin{verbatim}
     SYNOPSIS:
-        ispalindrom [-s] [-i]
+        ispalindrom [-s] [-i] [-o outfile] [infile]
 \end{verbatim}
 
-Das Programm \osueprog{ispalindrom} soll zeilenweise Strings mit einer
-Länge von bis zu 40 echten Zeichen von der Standardeingabe lesen;
-prüfen, ob ein Palindrom vorliegt, d.h.\ ob der Text rückwärts gelesen
-mit sich selbst ident ist; und den Text gefolgt von \osueoutput{ist ein
-Palindrom} bzw. \osueoutput{ist kein Palindrom} auf die Standardausgabe
-ausgeben. Die Option \osuearg{-s} soll bewirken, dass Leerzeichen
-ignoriert werden; die Option \osuearg{-i} soll bewirken, dass nicht
-zwischen Groß- und Kleinschreibung unterschieden wird.
+Das Programm \osueprog{ispalindrom} soll zeilenweise Strings mit einer Länge
+von bis zu 40 echten Zeichen lesen; prüfen, ob ein Palindrom vorliegt, d.h.\ ob
+der Text rückwärts gelesen mit sich selbst ident ist; und den Text gefolgt
+von \osueoutput{ist ein Palindrom} bzw. \osueoutput{ist kein Palindrom}
+ausgeben.
+
+Wird keine Eingabedatei (\verb|infile|) angegeben, so ist von \osueglvar{stdin}
+zu lesen. Fehlt die Option \verb|-o|, wird auf \osueglvar{stdout} ausgegeben.
+
+Die Option \osuearg{-s} soll bewirken, dass Leerzeichen ignoriert werden; die
+Option \osuearg{-i} soll bewirken, dass nicht zwischen Groß- und
+Kleinschreibung unterschieden wird.
 
 \subsection*{Testen}
 
@@ -41,6 +45,16 @@ Testen Sie Ihr Programm mit verschiedenen Eingaben, wie z.B.:
       O Genie der Herr ehre Dein Ego ist ein Palindrom
       \osueinput{aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa}
       ispalindrom: Eingabe zu lang, max 40 Zeichen!
+
+      $ \osueinput{cat example.in}
+      Otto
+      Rentner
+      neben
+      $ \osueinput{./ispalindrom -o example.out example.in}
+      $ \osueinput{cat example.out}
+      Otto ist kein Palindrom
+      Rentner ist kein Palindrom
+      neben ist ein Palindrom
 \end{osuefmtcode}
 
 \osueguidelinesone
