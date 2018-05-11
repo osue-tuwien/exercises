@@ -1,0 +1,395 @@
+\input{../../template.ltx}
+
+\usepackage{multicol}
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+
+\begin{document}
+
+\osuetitle{3}
+
+\section*{Feedback Arc Set}
+\label{sec:intro}
+
+Implement an algorithm which removes cycles in a directed graph
+by removing the least edges possible.
+A set of edges which must be removed to make a graph acyclic
+is also called a feedback arc set;
+and the set with the least edges is a minimal feedback arc set.
+
+For instance, consider the following directed graph:
+
+\begin{center}
+\begin{tikzpicture}[scale=1.6,>=triangle 60]
+    \node[shape=circle,draw=black] (0) at (0,1) {0};
+    \node[shape=circle,draw=black] (1) at (1,1) {1};
+    \node[shape=circle,draw=black] (2) at (2,1) {2};
+    \node[shape=circle,draw=black] (3) at (1,0) {3};
+    \node[shape=circle,draw=black] (4) at (2,0) {4};
+    \node[shape=circle,draw=black] (5) at (3,0) {5};
+    \node[shape=circle,draw=black] (6) at (0,0) {6};
+    \path[->](0) edge node {} (1);
+    \path[->](1) edge node {} (2);
+    \path[->](1) edge node {} (3);
+    \path[->](1) edge node {} (4);
+    \path[->](2) edge node {} (4);
+    \path[->](4) edge node {} (3);
+    \path[->](4) edge node {} (5);
+    \path[->](3) edge node {} (6);
+    \path[->](6) edge node {} (0);
+\end{tikzpicture}
+\end{center}
+
+This graph has some cycles, such as
+$\{\;0\rightarrow 1\rightarrow 3\rightarrow 6\rightarrow 0\;\}$
+or
+$\{\;0\rightarrow 1\rightarrow 2\rightarrow 4\rightarrow 3\rightarrow 6\rightarrow 0\;\}$.
+All of these cycles can be broken by removing a single edge,
+for instance by removing the edge $(\,0,1\,)$.
+Therefore, $\{\;(\,0,1\,)\;\}$ is a minimal feedback arc set for this graph.
+Note that there are other feedback arc sets of equal length,
+such as $\{\;(\,6,0\,)\;\}$ or $\{\;(\,3,6\,)\;\}$.
+
+The problem of finding a minimal feedback arc set is NP-complete,
+therefore an exact solution becomes infeasible for moderately large graph sizes.
+However, a randomized algorithm can be used to find a good approximation,
+i.e. to find a feedback arc set which is close to minimal.
+\footnote{
+You can read more about the complexity of the feedback arc set problem
+and about Monte Carlo randomized algorithms in general on Wikipedia:\\
+\url{https://en.wikipedia.org/wiki/Feedback_arc_set}\\
+\url{https://en.wikipedia.org/wiki/Monte_Carlo_algorithm}\\
+}
+
+A simple randomized algorithm for this problem generates a feedback arc set
+by executing following steps:
+
+\begin{itemize}
+\item Order the vertices of the graph randomly,
+i.e. generate a random permutation of the set of vertices.
+
+\item Select all edges $(\,u,v\,)$ for which $u>v$ in the above ordering.
+These edges form a feedback arc set.
+
+\emph{Proof:}
+The subgraph $L$, which is obtained by removing all edges of this feedback arc set,
+contains only the edges $(\,u,v\,)$ for which $u<v$ in our ordering.
+Therefore, the permutation generated in the first step is a topological ordering of $L$,
+and consequently $L$ must be acyclic.
+\footnote{
+More background information on topological ordering and directed acyclic graphs can be found on Wikipedia:\\
+\url{https://en.wikipedia.org/wiki/Topological_sorting}
+}
+\end{itemize}
+
+These steps are executed repeatedly and the smallest feedback arc set so far is retained.
+
+Although it might seem surprising given its simplicity,
+this algorithm has an expected runtime which is polynomial in the size of the graph
+and thus is on average much faster than an algorithm which tries to find an exact solution.
+
+\clearpage
+\subsection*{Instructions}
+
+In order to further reduce the runtime of this algorithm,
+multiple processes generate the random feedback arc sets in parallel
+and report their results to a supervisor process,
+which remembers the set with the least edges.
+
+Write two programs: a \textbf{generator program} and a \textbf{supervisor program}.
+\textbf{Multiple generator processes} generate random solutions to the problem
+and report their solutions to \textbf{one supervisor process}.
+The supervisor process remembers the best solution so far.
+The processes communicate with eachother by means of a circular buffer,
+which is implemented using shared semaphores and a shared memory.
+
+\subsubsection*{Supervisor}
+
+The supervisor sets up the shared memory and the semaphores
+and initializes the circular buffer
+required for the communication with the generators.
+It then waits for the generators to write solutions to the circular buffer
+and reads these solutions, remembering the best solution so far.
+
+The supervisor program takes no arguments.
+
+Once initialization is complete,
+the supervisor reads the solutions from the circular buffer
+and remembers the best solution so far, i.e. the solution with the least edges.
+Every time a better solution than the previous best solution is found,
+the supervisor writes the new solution to standard output.
+If a generator writes a solution with 0 edges to the circular buffer,
+then the graph is acyclic and the supervisor aborts the algorithm.
+Otherwise the supervisor keeps reading results from the circular buffer
+until it receives a \texttt{SIGINT} or a \texttt{SIGTERM} signal.
+
+Before terminating, the supervisor notifies all generators
+that they should terminate as well.
+This can be done by setting a variable in the shared memory,
+which is checked by the generator processes before writing to the buffer.
+The supervisor then unlinks all shared resources and exits.
+
+\subsubsection*{Generator}
+
+The generator program takes a graph as input.
+The program repeatedly generates a random solution to the problem as described on the first page
+and writes its result to the circular buffer.
+It repeats this procedure until it is notified by the supervisor to terminate.
+
+The generator program takes as arguments the set of edges of the graph:
+
+\begin{verbatim}
+    SYNOPSIS
+        generator EDGE1...
+    EXAMPLE
+        generator 0-1 1-2 1-3 1-4 2-4 3-6 4-3 4-5 6-0
+\end{verbatim}
+
+Each positional argument is one edge; at least one edge must be given.
+An edge is specified by a string,
+with the indices of the two nodes it connects separated by a \texttt{-}.
+Since the graph is directed,
+the edge starts at the first node and leads to the second node.
+Note that the number of nodes of the graph is implicitly provided
+through the indices in the edges.
+In the example above the generator program is called with the graph shown on the first page.
+
+The generator uses the algorithm described on the first page
+to generate random feedback arc sets for the given graph.
+It writes these feedback arc sets to the circular buffer, one at a time;
+therefore a feedback arc set is a single element of the circular buffer.
+The generator may produce debug output,
+describing the feedback arc sets which it writes to the circular buffer.
+
+\clearpage
+\subsubsection*{Circular Buffer}
+
+The generators report their solutions to the supervisor by means of a circular buffer.
+The generators write their solutions to the write end of the circular buffer
+and the supervisor reads them from the read end.
+
+A circular buffer is a common data structure which uses a single fixed-size buffer
+to implement a queue (i.e. a FIFO buffer).
+A circular buffer is essentially \textbf{an array of the elements} you want to pass through.
+Elements are written successively to the array
+and once the end of the array is reached, writing restarts from the beginning.
+Similarly, elements are also read successively from the array,
+restarting from the beginning upon reaching the end,
+thus reading the elements in the exact same order they have been written.
+\footnote{
+Visualizations of circular buffers can be found on Wikipedia:\\
+\url{https://en.wikipedia.org/wiki/Circular_buffer}\\
+}
+
+Implement your circular buffer such that \textbf{reading and writing} to the buffer
+can happen \textbf{simultaneously}.
+Some synchronization is required
+in order to avoid overwriting data which has not been read yet
+and also to avoid trying to read from locations which have not been written yet.
+This is achieved using two semaphores:
+\textbf{one semaphore tracking the free space} in the circular buffer
+and \textbf{one semaphore tracking the used space}.
+The value of the free space semaphore corresponds to the amount of free space in the buffer array;
+it is initialized to the size of the buffer, since initially the circular buffer is empty.
+The value of the used space semaphore corresponds to the amount of used space in the buffer array;
+it is initialized to 0.
+
+Upon \textbf{writing to the circular buffer}, the free space semaphore is decremented;
+if the buffer is currently full and there is no free space to write to,
+this intentionally blocks the write until space becomes available.
+After the write is complete, the used space semaphore is incremented,
+since the buffer now holds one more element which can be read.
+
+Upon \textbf{reading from the circular buffer}, the used space semaphore is decremented;
+if the buffer is currently empty and there is no data to be read,
+this intentionally blocks the read until data becomes available.
+After the read is complete, the free space semaphore is incremented,
+since the position occupied by the element which has been read just has been freed up.
+
+Since multiple generators write to the circular buffer,
+an additional semaphore will be required
+to guarantee a \textbf{mutually exclusive access to the write end} of the circular buffer.
+
+\subsection*{Hints}
+\begin{itemize}
+\item Store the graph in a way which is suitable for the implementation of the randomized algorithm.
+
+\item If you need inspiration for generating random permutations of the graph's vertices,
+you might want to have a look at the Fisher-Yates shuffle algorithm.
+\footnote{
+A description of this algorithm along with a pseudocode example can be found on Wikipedia:\\
+\url{https://en.wikipedia.org/wiki/Fisher\%E2\%80\%93Yates_shuffle}\\
+If you want to read more about algorithms to generate random permutations, have a look at:\\
+\url{https://en.wikipedia.org/wiki/Permutation\#Algorithms_to_generate_permutations}
+}
+
+\item Think of a suitable structure to store a feedback arc set.
+Choose a limit on the maximum number of edges which it can contain.
+Since we are looking for small solutions,
+the generator can discard any solutions which contain too much edges
+instead of writing them to the circular buffer.
+You may choose a limit as low as 8 edges.
+
+\item Select a reasonable size for the circular buffer.
+If the size is too small,
+then the generators will spend a lot of time waiting for free space to become available.
+If the size is too large,
+the circular buffer is wasting resources.
+The size of the shared memory should not exceed 4~KiB.
+
+\end{itemize}
+
+\clearpage
+\subsection*{Examples}
+\setlength{\columnsep}{-20mm}
+
+\begin{multicols}{2}
+\subsubsection*{Simple cyclic graph}
+
+\begin{tikzpicture}[scale=1.6,>=triangle 60]
+    \node[shape=circle,draw=black] (0) at (0.5,0.866) {0};
+    \node[shape=circle,draw=black] (1) at (0,0) {1};
+    \node[shape=circle,draw=black] (2) at (1,0) {2};
+    \path[->](0) edge node {} (1);
+    \path[->](1) edge node {} (2);
+    \path[->](2) edge node {} (0);
+\end{tikzpicture}
+
+\vfill
+
+The minimal feedback arc set of this\\
+graph contains 1 edge; in fact there\\
+are 3 minimal feedback arc sets:
+
+$\{\;(\,0,1\,)\;\}$, $\{\;(\,1,2\,)\;\}$ and $\{\;(\,2,0\,)\;\}$
+
+\columnbreak
+
+\textbf{Invocation of the supervisor:}
+\vspace{-5mm}
+\begin{verbatim}
+$ ./supervisor
+[./supervisor] Solution with 2 edges: 1-2 2-0
+[./supervisor] Solution with 1 edges: 2-0
+\end{verbatim}
+
+\textbf{Invocation of one generator:}
+\vspace{-5mm}
+\begin{verbatim}
+$ ./generator 0-1 1-2 2-0
+\end{verbatim}
+
+\textbf{Invocation of 10 generators in parallel:}
+\vspace{-5mm}
+\begin{verbatim}
+$ for i in {1..10}; do (./generator 0-1 1-2 2-0 &); done
+\end{verbatim}
+\end{multicols}
+
+\vspace{8mm}
+\begin{multicols}{2}
+\subsubsection*{Graph from the first page}
+
+\begin{tikzpicture}[scale=1.6,>=triangle 60]
+    \node[shape=circle,draw=black] (0) at (0,1) {0};
+    \node[shape=circle,draw=black] (1) at (1,1) {1};
+    \node[shape=circle,draw=black] (2) at (2,1) {2};
+    \node[shape=circle,draw=black] (3) at (1,0) {3};
+    \node[shape=circle,draw=black] (4) at (2,0) {4};
+    \node[shape=circle,draw=black] (5) at (3,0) {5};
+    \node[shape=circle,draw=black] (6) at (0,0) {6};
+    \path[->](0) edge node {} (1);
+    \path[->](1) edge node {} (2);
+    \path[->](1) edge node {} (3);
+    \path[->](1) edge node {} (4);
+    \path[->](2) edge node {} (4);
+    \path[->](4) edge node {} (3);
+    \path[->](4) edge node {} (5);
+    \path[->](3) edge node {} (6);
+    \path[->](6) edge node {} (0);
+\end{tikzpicture}
+
+\vfill
+
+This graph has again 3 minimal\\
+feedback arc sets, each with one edge:
+
+$\{\;(\,0,1\,)\;\}$, $\{\;(\,3,6\,)\;\}$ and $\{\;(\,6,0\,)\;\}$
+
+\columnbreak
+
+\textbf{Invocation of the supervisor:}
+\vspace{-5mm}
+\begin{verbatim}
+$ ./supervisor
+[./supervisor] Solution with 5 edges: 1-2 1-3 1-4 2-4 6-0
+[./supervisor] Solution with 4 edges: 0-1 2-4 4-3 6-0
+[./supervisor] Solution with 3 edges: 0-1 1-4 2-4
+[./supervisor] Solution with 1 edges: 0-1
+\end{verbatim}
+
+\textbf{Invocation of the generator:}
+\vspace{-5mm}
+\begin{verbatim}
+$ ./generator 0-1 1-2 1-3 1-4 2-4 3-6 4-3 4-5 6-0
+\end{verbatim}
+\end{multicols}
+
+\vspace{8mm}
+\begin{multicols}{2}
+\subsubsection*{Acyclic graph}
+
+\begin{tikzpicture}[scale=1.6,>=triangle 60]
+    \node[shape=circle,draw=black] (0) at (0,0) {0};
+    \node[shape=circle,draw=black] (1) at (3,1) {1};
+    \node[shape=circle,draw=black] (2) at (0,1) {2};
+    \node[shape=circle,draw=black] (3) at (1,0) {3};
+    \node[shape=circle,draw=black] (4) at (2,0) {4};
+    \node[shape=circle,draw=black] (5) at (2,1) {5};
+    \node[shape=circle,draw=black] (6) at (1,1) {6};
+    \path[->](1) edge node {} (4);
+    \path[->](1) edge node {} (5);
+    \path[->](2) edge node {} (6);
+    \path[->](3) edge node {} (4);
+    \path[->](3) edge node {} (6);
+    \path[->](4) edge node {} (5);
+    \path[->](6) edge node {} (0);
+    \path[->](6) edge node {} (5);
+\end{tikzpicture}
+
+\vfill
+
+This graph is already acyclic.
+
+\columnbreak
+
+\textbf{Invocation of the supervisor:}
+\vspace{-5mm}
+\begin{verbatim}
+$ ./supervisor
+[./supervisor] Solution with 5 edges: 1-4 1-5 2-6 3-4 3-6
+[./supervisor] Solution with 2 edges: 3-6 4-5
+[./supervisor] Solution with 1 edges: 6-0
+[./supervisor] The graph is acyclic!
+\end{verbatim}
+
+\textbf{Invocation of the generator:}
+\vspace{-5mm}
+\begin{verbatim}
+$ ./generator 1-4 1-5 2-6 3-4 3-6 4-5 6-0 6-5
+\end{verbatim}
+\end{multicols}
+
+\vspace{8mm}
+If you want to test your implementation with a challenging graph, try this one:
+
+\texttt{0-2 0-9 0-11 1-4 3-2 3-6 4-2 4-9 5-2 5-11 6-2 6-4 7-2 7-4 7-5 7-8 7-16 7-17 8-9 8-12\\
+8-17 10-2 10-9 11-2 12-1 12-6 12-10 13-5 13-6 13-8 14-4 14-12 15-8 15-11 15-13 16-1\\
+16-6 16-17 17-6 17-10 17-11 18-7 18-8 18-11}
+
+Note: This graph is acyclic,
+therefore one of your generators should eventually come up with a solution with 0 edges.
+
+\osueguidelinesthree
+
+\end{document}
