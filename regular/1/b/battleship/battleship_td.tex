@@ -68,6 +68,15 @@ erreicht wurde.
 
 \subsection*{Implementierungshinweise}
 \label{sec:implhints}
+
+\begin{center}
+\fbox{\parbox{0.95\linewidth}{
+\textbf{Wichtig:} Beachten Sie, dass der wesentliche Teil in diesem Beispiel
+die korrekte Implementierung der Kommunikation zwischen Client und Server ist.
+Achten Sie auch darauf, dass Ihre Programme immer die richtigen Rückgabewerte verwenden!
+}}
+\end{center}
+
 \paragraph{Server:}
 Teile des Servers sind bereits vorgegeben. Bitte verwenden Sie dieses Template
 und erweitern Sie es entsprechend.  Dem Server kann als Option der Port
@@ -95,10 +104,6 @@ Am Ende des Spiels soll die Verbindung geschlossen und das Programm beendet werd
 %oder die Anzahl der Spielrunden und die Anzahl versenkter Schiffe ausgegeben,
 %und das Serverprogramm wird mit einem entsprechenden Rückgabewert (siehe weiter
 %unten) beendet.
-
-Sobald der Server eines der Signale \osueconst{SIGINT} oder
-\osueconst{SIGTERM} empfängt, soll der Serversocket geschlossen und das
-Programm mit Rückgabewert 0 beendet werden.
 
 \vspace{-10pt}
 \begin{verbatim}
@@ -153,35 +158,57 @@ Programme mit Rückgabewert 0 beendet werden.
 Wenn es dem Client nicht gelingt in 80 Runden alle Schiffe zu versenken, dann sollen beide Programme die Meldung ``Game lost'' auf \osueglvar{stdout} ausgeben
 und ebenfalls mit Rückgabewert 0 terminieren.
 
+Sobald der Server eines der Signale \osueconst{SIGINT} oder
+\osueconst{SIGTERM} empfängt, soll der Serversocket geschlossen und das
+Programm mit Rückgabewert 0 beendet werden.
+
 \subsection*{Protokoll}
 \label{sec:prot}
+
+\begin{center}
+\fbox{\parbox{0.95\linewidth}{
+\textbf{Wichtig:} Achten Sie darauf, dass Sie das Protokoll exakt so implementieren, wie nachfolgend beschrieben!
+Die korrekte Implementierung des Protokolls wird beim Abgabegespräch überprüft, Abweichungen sind nicht zulässig.
+Insbesondere wird dabei auch festgestellt, ob Ihre Programme korrekt auf Fehler reagieren,
+also ob beispielsweise Ihr Server einen Paritätsfehler oder ungültige Koordinaten erkennt
+und ob Ihr Client auf Fehlermeldungen korrekt reagiert.
+Überlegen Sie sich geeignete Tests, um die Korrektheit Ihrer Implementierung sicherzustellen!
+}}
+\end{center}
+
 \emph{Server} und \emph{Client} kommunizieren in Runden wie nachfolgend
-gezeigt. Der Client übermittelt pro Runde genau ein Byte,
-der Server antwortet ebenso mit genau einem Byte.
+gezeigt. Der Client übermittelt pro Runde genau zwei Bytes,
+der Server antwortet mit genau einem Byte.
 
 \subsubsection*{Client}
 Der \emph{Client} schickt an den Server Nachrichten im folgenden Format:
 
 {\centering
-\begin{bytefield}[boxformatting={\baselinecenterit},bitwidth=2.2em,endianness=big]{8}
-   \bitheader{0-7} \\
-   \bitbox{1}{p} & \bitbox{7}{coord}
+\begin{bytefield}[boxformatting={\baselinecenterit},bitwidth=2.2em,endianness=big]{16}
+   \bitheader{0-15} \\
+   \bitbox{1}{p} & \bitbox{3}{unused} & \bitbox{6}{x} & \bitbox{6}{y}
 \end{bytefield} \par
 }
 
-Der Wert \verb|coord| entspricht den Koordinaten des Kästchens, welches durch
-den Schuss des Client getroffen wird. Dieser wird wie folgt berechnet:\\
-$$coord = x + y * 10$$
-
-wobei $x$ der Spalten-Index (Spalte \textbf{A}: Index 0, \textbf{B}: 1, \textbf{C}: 2, \ldots) und $y$ der Zeilen-Index des Kästchen ist.
+Die Werte \verb|x| und \verb|y| entsprechen dabei den Koordinaten des Kästchens,
+welches durch den Schuss des Client getroffen wird,
+wobei \verb|x| der Spalten-Index (Spalte \textbf{A}: Index 0, \textbf{B}: 1, \textbf{C}: 2, \ldots)
+und \verb|y| der Zeilen-Index des Kästchen ist.
 Beispielsweise entspricht das Kästchen \textbf{B5}
-den Indizes $x=1$ und $y=5$, um dieses zu treffen übermittelt der Client also $coord=51$.
+den Indizes $\verb|x|=1$ und $\verb|y|=5$.
 
 Der Wert \verb|p| entspricht einem \emph{Parity Bit}\footnote{\url{https://en.wikipedia.org/wiki/Parity_bit}}
-über die einzelnen Bits der Koordinaten (Bit~0 bis Bit~6).
+über die restlichen Bits der Nachricht (Bit~0 bis Bit~14).
 Um dieses zu Berechnen, werden die einzelnen Bits mit
 einer \emph{xor}-Operation verknüpft.
 Wir verwenden \emph{even parity}, so dass die gesamte Nachricht immer aus einer geraden Anzahl an 1-Bits besteht.
+
+Das Feld \verb|unused| wird nicht verwendet, die entsprechenden Bits sollten auf 0 gesetzt werden.
+
+Da die Nachricht aus mehr als einem Byte besteht, ist es wichtig die
+Byte-Reihenfolge\footnote{\url{https://de.wikipedia.org/wiki/Byte-Reihenfolge}} zu beachten:
+Der Client muss zuerst das Byte mit den niederwertigen Bits (Bit~0 bis Bit~7)
+und anschließend das Byte mit den höherwertigen Bits (Bit~8 bis Bit~15) übertragen.
 
 \subsubsection*{Server}
 

@@ -1,7 +1,7 @@
 /**
  * @file server.c
  * @author OSUE Team <osue-team@cps.tuwien.ac.at>
- * @date 2017-10-06
+ * @date 2018-03-02
  *
  * @brief Server for OSUE exercise 1B `Battleship'.
  */
@@ -36,13 +36,13 @@
 static const char *port = DEFAULT_PORT; // the port to bind to
 
 // Static variables for resources that should be freed before exiting:
-static struct addrinfo *ai = NULL;      // addrinfo struct
+static struct addrinfo *ai = NULL;      // stores address information
 static int sockfd = -1;                 // socket file descriptor
 static int connfd = -1;                 // connection file descriptor
 
 /* TODO
  * You might want to add further static variables here, for instance to save
- * the programe name (argv[0]) since you should include it in all messages.
+ * the program name (argv[0]) since you should include it in all messages.
  *
  * You should also have some kind of a list which saves information about your
  * ships. For this purpose you might want to define a struct. Bear in mind that
