@@ -1,0 +1,215 @@
+\input{../../../template.ltx}
+
+\begin{document}
+\osuetitle{1}
+
+\section*{Assignment B -- HTTP}
+\label{sec:intro}
+
+Implement a client and a server for the Hypertext Transfer Protocol (HTTP).
+
+HTTP is text-based request-response protocol.
+
+\subsection*{Instructions}
+
+Write a client program and a server program
+which partially implement version 1.1 of the HTTP.
+
+\subsubsection*{Client}
+
+The client takes a URL as input,
+connects to the server specified in that URL
+and requests the file specified in the URL.
+
+\begin{verbatim}
+SYNOPSIS
+    client [-p PORT] [ -o FILE | -d DIR ] URL
+EXAMPLE
+    client en.wikipedia.org/wiki/Hypertext_Transfer_Protocol
+\end{verbatim}
+
+The client may be called with a number of options:
+\begin{itemize}
+\item Option \texttt{-p} can be used to specify the port
+on which the client shall attempt to connect to the server.
+If this option is not used the port defaults to 80.
+\item
+\end{itemize}
+
+The client creates a TCP/IP socket
+and connects to the hostname specified in the URL.
+For simplicity you may assume that
+the hostname is the part before any of the following characters:
+
+\texttt{;} \texttt{/} \texttt{?} \texttt{:} \texttt{@} \texttt{=} \texttt{\&}
+
+Once the connection is established,
+the client sends a request for the file specified in the URL
+(the filename is the part starting at the first \texttt{/} )
+using the HTTP method \texttt{GET}.
+The request header must start with the request line
+and as a minimum must contain the \texttt{Host} field.
+For instance, the minimal request header for the URL
+\texttt{en.wikipedia.org/index.html} is:
+\begin{verbatim}
+GET /index.html HTTP/1.1
+Host: en.wikipedia.org
+\end{verbatim}
+
+After transmitting his request, the client waits for a response from the server.
+Your client must correctly parse the response header.
+
+If the response header is invald,
+the client prints the message \texttt{"Protocol error!"}
+and terminates with exit code 2.
+
+If the response status in the first line of the response header is not 200,
+the client prints a message with the response status
+and terminates with exit code 3.
+
+\subsubsection*{Server}
+
+The server waits for connections from clients
+and transmits the requested files.
+
+\begin{verbatim}
+SYNOPSIS
+    server [-p PORT] [-i INDEX] DOC_ROOT
+EXAMPLE
+    server -p 1280 -i index.html ~/Documents/my_website/
+\end{verbatim}
+
+
+The server must support the HTTP method \texttt{GET}.
+Support for any other method is optional.
+Your server must be able to correctly parse any fields in the request header.
+Fields which are unknown to the server are silently ignored.
+
+
+If your server receives an invalid request
+
+If the server cannot locate and open the file identified by the URL,
+then sends a response header with the status code 404
+and closes the connection.
+
+Otherwise, the server sends a response header with status code 200
+and at minimum following fields (with the values changed accordingly):
+\begin{verbatim}
+HTTP/1.1 200 OK
+Date: Mon, 23 May 2005 22:38:34 GMT
+Content-Type: text/html; charset=UTF-8
+Content-Encoding: UTF-8
+Content-Length: 138
+Last-Modified: Wed, 08 Jan 2003 23:11:55 GMT
+Connection: close
+\end{verbatim}
+Once the header is transmitted,
+the server proceeds with the transmission of the requested file.
+
+\subsection*{Protocol}
+\label{sec:prot}
+
+\subsection*{Bonus Points}
+
+\textbf{Bonus points are only awarded
+if both your client and your server program are FULLY FUNCTIONAL
+and COMPLY WITH ALL INSTRUCTIONS!
+Do not try to implement any of the bonus tasks
+while your programs do not function properly!
+When adding features for bonus tasks,
+check that the basic requirements are still fulfilled,
+otherwise you risk loosing more points than you might gain!}
+
+\subsubsection*{Server}
+
+\begin{itemize}
+
+\item \textbf{Compression (2):}
+Implement compression of the transferred content in the gzip format.
+Make use of the zlib compression library (see sect.~``\nameref{sect:zlib}'')
+for compressing the data.
+
+2 bonus points are awarded if your server recognizes clients
+which accept data encoded in gzip format,
+responds to requests from these clients with the line
+\begin{verbatim}
+Content-Encoding: gzip
+\end{verbatim}
+in the responde header
+and correctly compresses the content in the body into that format.
+
+\item \textbf{Reuse connection (2):}
+Allow a client to make multiple requests using the same connection.
+If a client indicates that he wishes to reuse the connection with the line
+\begin{verbatim}
+Connection: keep-alive
+\end{verbatim}
+in the request header,
+the server sends a response with the same line in the response header
+and once all content has been transfered,
+the server waits for another request from that client.
+A \textbf{timeout must be implemented},
+which closes the connection
+if the client does not send another request within 15 seconds.
+
+\item \textbf{Simultaneous connections (2):}
+Use a file descriptor set (see the man page \texttt{fd\_set(3)})
+to manage connections from multiple clients in parallel.
+
+2 bonus points are awarded if your server uses \texttt{select(3p)} or \texttt{pselect(3p)}
+to monitor all open connections simultaneously,
+accepts new connections instantaneously while other connections are kept open
+and responds to a request on any connection instantaneously.
+
+Do not forget to set a large enough \texttt{backlog} when calling \texttt{listen(2)}.
+
+Your server must never repeatedly poll connections for new data
+or use any kind of busy waiting!
+
+\end{itemize}
+
+\subsubsection*{Client}
+
+\begin{itemize}
+
+\item \textbf{Decompression (2):}
+Implement decompression of content in the gzip format.
+Make use of the zlib compression library (see sect.~``\nameref{sect:zlib}'')
+for decompressing the data.
+
+2 bonus points are awarded if your client advertises this capability with the line
+\begin{verbatim}
+Accept-Encoding: gzip
+\end{verbatim}
+in the request header and is able to correctly decompress content sent with that encoding.
+
+\item \textbf{Load external content (2):}
+Load external content from \texttt{<link>}, \texttt{<script>} and \texttt{<img>} tags.
+
+If the transferred content is of content type \texttt{text/html},
+then search for \texttt{<link>}, \texttt{<script>} and \texttt{<img>} tags
+(this can be implemented with a simple search
+for the strings \verb|"<link"|, \verb|"<script"| and \verb|"<img"| in the content).
+If any of these tags contains a \texttt{rel} or \texttt{src} attribute
+(which must come before the \texttt{>} at the end of the tag),
+then the file specified by this attribute is also requested.
+
+\end{itemize}
+
+\subsubsection*{Using zlib}
+\label{sect:zlib}
+
+zlib\footnote{\url{http://zlib.net/}} is installed in the TILab.
+You can use it by including the \texttt{zlib.h} header:
+\begin{verbatim}
+#include <zlib.h>
+\end{verbatim}
+Also, you will have to link the zlib library by adding \texttt{-lz} to your linker options.
+
+\textbf{It would be a shame if you loose points because using zlib produces
+compiler or linker warnings or errors.
+Make sure to TEST YOUR IMPLEMENTATION IN THE TILAB!}
+
+\osueguidelinesone
+
+\end{document}
