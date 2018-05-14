@@ -112,8 +112,7 @@ which is implemented using shared semaphores and a shared memory.
 The supervisor sets up the shared memory and the semaphores
 and initializes the circular buffer
 required for the communication with the generators.
-It then waits for the generators to write solutions to the circular buffer
-and reads these solutions, remembering the best solution so far.
+It then waits for the generators to write solutions to the circular buffer.
 
 The supervisor program takes no arguments.
 
@@ -123,7 +122,7 @@ and remembers the best solution so far, i.e. the solution with the least edges.
 Every time a better solution than the previous best solution is found,
 the supervisor writes the new solution to standard output.
 If a generator writes a solution with 0 edges to the circular buffer,
-then the graph is acyclic and the supervisor aborts the algorithm.
+then the graph is acyclic and the supervisor terminates.
 Otherwise the supervisor keeps reading results from the circular buffer
 until it receives a \texttt{SIGINT} or a \texttt{SIGTERM} signal.
 

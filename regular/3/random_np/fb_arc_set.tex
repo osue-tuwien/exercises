@@ -68,8 +68,21 @@ by executing following steps:
 \item Order the vertices of the graph randomly,
 i.e. generate a random permutation of the set of vertices.
 
-\item Select all edges $(\,u,v\,)$ for which $u>v$ in the above ordering.
+\item Select all edges $(\,u,v\,)$ for which $u>v$ in the ordering.
 These edges form a feedback arc set.
+
+For instance, a random permutation of the vertices of the above graph might be
+$\{\;3,6,1,5,0,2,4\;\}$.
+Consider the edge $(\,0,1\,)$:
+in the permutation, 1 comes before 0, thus $0>1$ in the permutation
+and therefore the edge is selected.
+Repeating this for all edges of the graph, we find that
+the edges for which $u>v$ for this permutation are
+$\{\;(\,0,1\,),(\,1,3\,),(\,4,3\,),(\,4,5\,)\;\}$.
+Therefore these edges are one possible feedback arc set for this graph
+(although not a mimimal one).
+%The other edges, for which $u<v$, are
+%$\{\;(\,1,2\,),(\,1,4\,),(\,2,4\,),(\,3,6\,),(\,6,0\,)\;\}$.
 
 \emph{Proof:}
 The subgraph $L$, which is obtained by removing all edges of this feedback arc set,
@@ -108,8 +121,7 @@ which is implemented using shared semaphores and a shared memory.
 The supervisor sets up the shared memory and the semaphores
 and initializes the circular buffer
 required for the communication with the generators.
-It then waits for the generators to write solutions to the circular buffer
-and reads these solutions, remembering the best solution so far.
+It then waits for the generators to write solutions to the circular buffer.
 
 The supervisor program takes no arguments.
 
@@ -119,7 +131,7 @@ and remembers the best solution so far, i.e. the solution with the least edges.
 Every time a better solution than the previous best solution is found,
 the supervisor writes the new solution to standard output.
 If a generator writes a solution with 0 edges to the circular buffer,
-then the graph is acyclic and the supervisor aborts the algorithm.
+then the graph is acyclic and the supervisor terminates.
 Otherwise the supervisor keeps reading results from the circular buffer
 until it receives a \texttt{SIGINT} or a \texttt{SIGTERM} signal.
 
