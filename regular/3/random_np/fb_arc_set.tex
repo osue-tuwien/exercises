@@ -116,8 +116,9 @@ The supervisor process remembers the best solution so far.
 The processes communicate with eachother by means of a circular buffer,
 which is implemented using shared semaphores and a shared memory.
 
-\subsubsection*{Supervisor}
+\textbf{Supervisor}
 
+\vspace{-2mm}
 The supervisor sets up the shared memory and the semaphores
 and initializes the circular buffer
 required for the communication with the generators.
@@ -141,8 +142,9 @@ This can be done by setting a variable in the shared memory,
 which is checked by the generator processes before writing to the buffer.
 The supervisor then unlinks all shared resources and exits.
 
-\subsubsection*{Generator}
+\textbf{Generator}
 
+\vspace{-2mm}
 The generator program takes a graph as input.
 The program repeatedly generates a random solution to the problem as described on the first page
 and writes its result to the circular buffer.
@@ -164,6 +166,13 @@ Since the graph is directed,
 the edge starts at the first node and leads to the second node.
 Note that the number of nodes of the graph is implicitly provided
 through the indices in the edges.
+The generator must not make any assumptions as to the number of edges that may be specified
+and programmatically accept a graph of any size
+(as well in the number edges as in the number of nodes)
+\footnote{
+Practically, the number of edges which can be specified is limited by the system constant \texttt{ARG\_MAX}.
+However, your program must not make any assumptions based on this (or other) limits.
+}.
 In the example above the generator program is called with the graph shown on the first page.
 
 The generator uses the algorithm described on the first page
@@ -174,7 +183,7 @@ The generator may produce debug output,
 describing the feedback arc sets which it writes to the circular buffer.
 
 \clearpage
-\subsubsection*{Circular Buffer}
+\textbf{Circular Buffer}
 
 The generators report their solutions to the supervisor by means of a circular buffer.
 The generators write their solutions to the write end of the circular buffer
@@ -235,7 +244,7 @@ If you want to read more about algorithms to generate random permutations, have 
 \url{https://en.wikipedia.org/wiki/Permutation\#Algorithms_to_generate_permutations}
 }
 
-\item Think of a suitable structure to store a feedback arc set.
+\item Think of a suitable structure to store a feedback arc set in the circular buffer.
 Choose a limit on the maximum number of edges which it can contain.
 Since we are looking for small solutions,
 the generator can discard any solutions which contain too much edges

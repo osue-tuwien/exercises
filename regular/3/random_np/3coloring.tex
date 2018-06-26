@@ -107,7 +107,7 @@ The supervisor process remembers the best solution so far.
 The processes communicate with eachother by means of a circular buffer,
 which is implemented using shared semaphores and a shared memory.
 
-\subsubsection*{Supervisor}
+\textbf{Supervisor}
 
 The supervisor sets up the shared memory and the semaphores
 and initializes the circular buffer
@@ -132,7 +132,7 @@ This can be done by setting a variable in the shared memory,
 which is checked by the generator processes before writing to the buffer.
 The supervisor then unlinks all shared resources and exits.
 
-\subsubsection*{Generator}
+\textbf{Generator}
 
 The generator program takes a graph as input.
 The program repeatedly generates a random solution to the problem as described on the first page
@@ -153,6 +153,13 @@ An edge is specified by a string,
 with the indices of the two nodes it connects separated by a \texttt{-}.
 Note that the number of nodes of the graph is implicitly provided
 through the indices in the edges.
+The generator must not make any assumptions as to the number of edges that may be specified
+and programmatically accept a graph of any size
+(as well in the number edges as in the number of nodes)
+\footnote{
+Practically, the number of edges which can be specified is limited by the system constant \texttt{ARG\_MAX}.
+However, your program must not make any assumptions based on this (or other) limits.
+}.
 In the example above the generator program is called with the graph shown on the top of the first page.
 
 The generator uses the algorithm described on the first page
@@ -163,7 +170,7 @@ The generator may produce debug output,
 describing the edge sets which it writes to the circular buffer.
 
 \clearpage
-\subsubsection*{Circular Buffer}
+\textbf{Circular Buffer}
 
 The generators report their solutions to the supervisor by means of a circular buffer.
 The generators write their solutions to the write end of the circular buffer
@@ -215,7 +222,7 @@ to guarantee a \textbf{mutually exclusive access to the write end} of the circul
 \begin{itemize}
 \item Store the graph in a way which is suitable for the implementation of the randomized algorithm.
 
-\item Think of a suitable structure to store a set of edges.
+\item Think of a suitable structure to store a set of edges in the circular buffer.
 Choose a limit on the maximum number of edges which it can contain.
 Since we are looking for small solutions,
 the generator can discard any solutions which contain too much edges
