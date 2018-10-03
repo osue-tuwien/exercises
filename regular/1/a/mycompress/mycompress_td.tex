@@ -4,72 +4,98 @@
 
 \osuetitle{1}
 
-\section*{Aufgabenstellung A -- mycompress}
-      Schreiben Sie ein C-Programm \osueprog{mycompress},
-      das die als Argumente übergebenen Eingabedateien mittels
-      eines einfachen Algorithmus komprimiert.
-      Wird keine Eingabedatei angegeben, so ist von
-      \osueglvar{stdin} zu lesen.
+%\section*{Aufgabenstellung A -- mycompress}
+\section*{Assignment A -- mycompress}
+
+%Schreiben Sie ein C-Programm \osueprog{mycompress},
+%das die als Argumente übergebenen Eingabedateien mittels
+%eines einfachen Algorithmus komprimiert.
+%Wird keine Eingabedatei angegeben, so ist von
+%\osueglvar{stdin} zu lesen.
+Write a C-program \osueprog{mycompress},
+which reads and compresses input files with a simple algorithm.
+
 \begin{verbatim}
     SYNOPSIS:
-        mycompress [-o outfile] [infile1] [infile2] ...
+        mycompress [-o outfile] [file...]
 \end{verbatim}
 
-\subsection*{Anleitung}
-      Das Programm soll den Inhalt der übergebenenen Eingabedateien
-      nacheinander auslesen, komprimieren, und die komprimierte Form in ein
-      File mit dem durch die Option \verb|-o| spezifizierten Namen
-      \osuefilename{outfile} ausgeben.
-      Werden keine Eingabedateien angegeben, so ist von \osueglvar{stdin} zu
-      lesen.
-      Fehlt die Option \verb|-o|, wird auf \osueglvar{stdout} ausgegeben.
+%Das Programm soll den Inhalt der übergebenenen Eingabedateien
+%nacheinander auslesen, komprimieren, und die komprimierte Form in ein
+%File mit dem durch die Option \verb|-o| spezifizierten Namen
+%\osuefilename{outfile} ausgeben.
+%Werden keine Eingabedateien angegeben, so ist von \osueglvar{stdin} zu
+%lesen.
+%Fehlt die Option \verb|-o|, wird auf \osueglvar{stdout} ausgegeben.
+The program shall read the content of any files given as positional arguments
+one after the other, compress it,
+and write the compressed content to an output file \osuefilename{outfile}
+given by the option \verb|-o|.
+If no input files are given, the program reads from \osueglvar{stdin}.
+If no output file is given, the program writes to \osueglvar{stdout}.
 
-      Die Komprimierung soll so erfolgen, dass die Zeichen durch
-      \verb|Zeichen + Anzahl| ersetzt werden -- z.B.: \verb|aaa| durch
-      \verb|a3| und \verb|b| durch \verb|b1|.
-      Das Newline ist auch ein Zeichen und soll ebenfalls komprimiert werden
-      (siehe \verb|'1'| zu Beginn einer Zeile im folgenden Beispiel).
+Your program must accept lines of any length.
 
-      Geben Sie die Anzahl der gelesenen Zeichen, die Anzahl der geschriebenen
-      Zeichen und die daraus resultierende Komprimierungsrate
-      auf die Standardfehlerausgabe \osueglvar{stderr} aus.
-      (Sie werden feststellen, dass die Komprimierung nur bei vielen gleichen
-      Zeichen effizient ist.)
+%Die Komprimierung soll so erfolgen, dass die Zeichen durch
+%\verb|Zeichen + Anzahl| ersetzt werden -- z.B.: \verb|aaa| durch
+%\verb|a3| und \verb|b| durch \verb|b1|.
+%Das Newline ist auch ein Zeichen und soll ebenfalls komprimiert werden
+%(siehe \verb|'1'| zu Beginn einer Zeile im folgenden Beispiel).
+The input is compressed by substituting subsequent identical characters
+by only one occurence of the character followed by the number of characters.
+For example, if you encounter the sequence \verb|aaa|,
+then it is replaced by \verb|a3|.
+If a character appears only once in sequence,
+then it is printed followed by a 1.
+Therefore the sequence \verb|b| is converted to \verb|b1|.
+The newline character is also processed like any other character
+(which in the output results in numbers being printed at the start of each line,
+except for the first line;
+those are actually the number of subsequent newline characters).
 
-      Definieren Sie für die maximale Anzahl an Zeichen in einer
-      Zeile eine Konstante, wobei Sie annehmen dürfen, dass keine
-      Zeile mehr Zeichen enthält.
+%Geben Sie die Anzahl der gelesenen Zeichen, die Anzahl der geschriebenen
+%Zeichen und die daraus resultierende Komprimierungsrate
+%auf die Standardfehlerausgabe \osueglvar{stderr} aus.
+%(Sie werden feststellen, dass die Komprimierung nur bei vielen gleichen
+%Zeichen effizient ist.)
+Print the number of read characters, the number of written characters
+and the resulting compression ratio to \osueglvar{stderr}.
 
-\subsection*{Testen}
-      Testen Sie Ihr Programm mit verschiedenen Eingaben; z.B.\ soll
-      die Eingabe
+%Definieren Sie für die maximale Anzahl an Zeichen in einer
+%Zeile eine Konstante, wobei Sie annehmen dürfen, dass keine
+%Zeile mehr Zeichen enthält.
+
+%\subsection*{Testen}
+\subsection*{Testing}
+%Testen Sie Ihr Programm mit verschiedenen Eingaben; z.B.\ soll
+%die Eingabe
+Test your program with various inputs, such as:
 
 \begin{osuefmtcode}
-      aaabbbbbc
-      dddddddde
-      ggghhhhha
+aaabbbbbc
+dddddddde
 
+ggghhhhha
+eeeeefffg
 \end{osuefmtcode}
 
-die Ausgabe
+which shall write following output to the output file or to \osueglvar{stdout}:
 
 \begin{osuefmtcode}
-      a3b5c1
-      1d8e1
-      1g3h5a1
-      1
+a3b5c1
+1d8e1
+2g3h5a1
+1e5f3g1
+1
 \end{osuefmtcode}
 
-auf \osueglvar{stdout} (bzw.\ der angegebenen Ausgabedatei) und die Ausgabe
+and following output to \osueglvar{stderr}:
 
 \begin{osuefmtcode}
-      Gelesen:          30 Zeichen
-      Geschrieben:      22 Zeichen
-      Komprimierungsrate:   73.3 \%
+Read:      41 characters
+Written:   30 characters
+Compression ratio: 73.2\%
 \end{osuefmtcode}
-
-auf \osueglvar{stderr} liefern.
-
 
 \osueguidelinesone
 

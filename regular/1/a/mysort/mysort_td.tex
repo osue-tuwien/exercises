@@ -4,25 +4,34 @@
 
 \osuetitle{1}
 
-\section*{Aufgabenstellung A -- mysort}
-Schreiben Sie eine abgewandelte Version des \textsc{Unix}-Kommandos
-\osueprog{sort} als C-Programm. Es soll nur die Option \osuearg{-r} (absteigend
-sortieren) implementiert werden. Alle anderen Optionen können ignoriert werden.
-Wird keine Datei angegeben, so sollen die Daten über \osueglvar{stdin}
-eingelesen werden.
+%\section*{Aufgabenstellung A -- mysort}
+\section*{Assignment A -- mysort}
+
+%Schreiben Sie eine abgewandelte Version des \textsc{Unix}-Kommandos
+%\osueprog{sort} als C-Programm. Es soll nur die Option \osuearg{-r} (absteigend
+%sortieren) implementiert werden. Alle anderen Optionen können ignoriert werden.
+%Wird keine Datei angegeben, so sollen die Daten über \osueglvar{stdin}
+%eingelesen werden.
+Implement a variation of the Unix-command \osueprog{sort}.
+Write a C-program \osueprog{mysort},
+which reads in several files and replaces tabs with spaces.
 
 \begin{verbatim}
     SYNOPSIS
         mysort [-r] [file1] ...
 \end{verbatim}
 
-\subsection*{Anleitung}
-Lesen Sie alle Dateien zeilenweise in einen dafür geeigneten Puffer ein.
-Sortieren Sie danach die Daten mit Hilfe von \osuefunc{qsort(3)}. Im Anschluss
-geben Sie die nun sortieren Daten auf \osueglvar{stdout} aus. Es kann davon
-ausgegangen werden, dass keine Zeile länger als 1022 Zeichen ist (ohne Newline).
+%\subsection*{Anleitung}
+%Lesen Sie alle Dateien zeilenweise in einen dafür geeigneten Puffer ein.
+%Sortieren Sie danach die Daten mit Hilfe von \osuefunc{qsort(3)}. Im Anschluss
+%geben Sie die nun sortieren Daten auf \osueglvar{stdout} aus. Es kann davon
+%ausgegangen werden, dass keine Zeile länger als 1022 Zeichen ist (ohne Newline).
 
-\subsection*{Testen}
+Your program must accept lines of any length.
+
+%\subsection*{Testen}
+\subsection*{Testing}
+
 Testen Sie Ihr Programm mit verschieden Eingaben. Erstellen Sie zum Beispiel
 eine Testdatei \osuefilename{t1} mit folgenden Zeilen:
 

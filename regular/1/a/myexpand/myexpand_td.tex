@@ -4,61 +4,99 @@
 
 \osuetitle{1}
 
-\section*{Aufgabenstellung A -- myexpand}
-Implementieren Sie eine vereinfachte Variante des Unix-Kommandos
-\osueprog{expand}.
+%\section*{Aufgabenstellung A -- myexpand}
+\section*{Assignment A -- myexpand}
+
+%Implementieren Sie eine vereinfachte Variante des Unix-Kommandos
+%\osueprog{expand}.
+Implement a variation of the Unix-command \osueprog{expand}.
+Write a C-program \osueprog{myexpand},
+which reads in several files and replaces tabs with spaces.
+
 \begin{verbatim}
     SYNOPSIS:
-        myexpand [-t tabstop] [file...]
+        myexpand [-t tabstop] [-o outfile] [file...]
 \end{verbatim}
 
-Das Programm \osueprog{myexpand} soll die als Argumente angegebenen Dateien
-lesen. Ist keine Datei angegeben, soll von \osueglvar{stdin} gelesen werden.
-Dabei werden auftretende Tabs durch Leerzeichen ersetzt. Die Ausgabe
-soll auf \osueglvar{stdout} erfolgen. Der optionale Parameter \osuearg{tabstop}
-gibt an, an welchen Positionen die Tabs enden sollen (fehlt dieser,
-ist der Wert 8 anzunehmen).
+%Das Programm \osueprog{myexpand} soll die als Argumente angegebenen Dateien
+%lesen. Ist keine Datei angegeben, soll von \osueglvar{stdin} gelesen werden.
+%Dabei werden auftretende Tabs durch Leerzeichen ersetzt. Die Ausgabe
+%soll auf \osueglvar{stdout} erfolgen. Der optionale Parameter \osuearg{tabstop}
+%gibt an, an welchen Positionen die Tabs enden sollen (fehlt dieser,
+%ist der Wert 8 anzunehmen).
 
-\subsection*{Anleitung}
-Lesen Sie die Dateien zeichenweise ein und überprüfen Sie den
-ASCII-Code des eingelesenen Zeichens. Handelt es sich um ein Tab
-(\verb|\t|), berechnen Sie die Position \verb|p| des folgenden
-Zeichens als nächstes Vielfaches von \verb|tabstop| größer der
-aktuellen Position plus 1:
+%\subsection*{Anleitung}
+%Lesen Sie die Dateien zeichenweise ein und überprüfen Sie den
+%ASCII-Code des eingelesenen Zeichens. Handelt es sich um ein Tab
+%(\verb|\t|), berechnen Sie die Position \verb|p| des folgenden
+%Zeichens als nächstes Vielfaches von \verb|tabstop| größer der
+%aktuellen Position plus 1:
+
+%\verb|p = tabstop * ((x / tabstop) + 1)|
+
+%wobei \verb|x| die Position des Tabs in der aktuellen Zeile und
+%\verb|/| eine ganzzahlige Division (mit Abschneiden der
+%Nachkommastellen) beschreibt.
+
+%\verb|\t| steht für ein Tab-Zeichen und ist eine \emph{Escape
+  %Sequence}\footnote{\url{https://en.wikipedia.org/wiki/Escape_sequences_in_C}},
+%d.h. \verb|\t| wird durch ein horizontales Tab ersetzt.
+
+The program shall read each file given as positional argument
+(or \osueglvar{stdin} if there are no positional arguments)
+line by line and search for tab characters (\verb|\t|).
+
+Your program must accept lines of any length.
+
+Each of these tabs is replaced with a number of space characters,
+such that the next character
+is placed at the next multiple of the tabstop distance within the line.
+This position can be calculated as follows:
 
 \verb|p = tabstop * ((x / tabstop) + 1)|
 
-wobei \verb|x| die Position des Tabs in der aktuellen Zeile und
-\verb|/| eine ganzzahlige Division (mit Abschneiden der
-Nachkommastellen) beschreibt.
+where \verb|x| is the position of the tab character
+(after expanding any previous tabs on that line)
+and \verb|/| is the standard integer division (retaining only the quotient).
 
-\verb|\t| steht für ein Tab-Zeichen und ist eine \emph{Escape
-  Sequence}\footnote{\url{https://en.wikipedia.org/wiki/Escape_sequences_in_C}},
-d.h. \verb|\t| wird durch ein horizontales Tab ersetzt.
+The tabstop distance is 8 by default,
+but this can be overridden with an arbitrary positive integer
+using the option \osuearg{-t}.
 
-\subsection*{Testen}
-Testen Sie Ihr Programm mit mehreren Eingabedateien. Erstellen Sie z.B. eine
-Testdatei \osuefilename{t1} mit folgendem Inhalt:
+If the option \osuearg{-o} is given,
+the output is written to the specified file (\verb|outfile|).
+Otherwise, the output is written to \osueglvar{stdout}.
+
+%\subsection*{Testen}
+\subsection*{Testing}
+
+%Testen Sie Ihr Programm mit mehreren Eingabedateien. Erstellen Sie z.B. eine
+%Testdatei \osuefilename{t1} mit folgendem Inhalt:
+Test your program with various inputs,
+such as a file \osuefilename{t1.txt} with following content
+(where \verb|\t| represents the ASCII tab character,
+entered by hitting the tabulator key):
 
 \begin{osuefmtcode}
-	1234567890
-	123\bslash{}t90
+    1234567890
+    123\bslash{}t567890
+    \bslash{}t\bslash{}t90
 \end{osuefmtcode}
 
-Rufen Sie Ihr Programm dann wie folgt auf:
+%Rufen Sie Ihr Programm dann wie folgt auf:
+Executing your program should give an output similar to the following:
 
 \begin{osuefmtcode}
-$ \osueinput{./myexpand t1}
-	1234567890
-	123     90
+    $ \osueinput{./myexpand t1.txt}
+    1234567890
+    123     567890
+                    90
 
-$ \osueinput{cat t1 \textup{|} ./myexpand}
-	1234567890
-	123     90
-
-$ \osueinput{./myexpand -t 6 t1}
-	1234567890
-	123   90
+    $ \osueinput{./myexpand -t 4 -o out.txt t1.txt}
+    $ \osueinput{cat out.txt}
+    1234567890
+    123 567890
+            90
 \end{osuefmtcode}
 
 \osueguidelinesone

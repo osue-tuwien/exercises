@@ -4,61 +4,93 @@
 
 \osuetitle{1}
 
-\section*{Aufgabenstellung A -- mydiff}
-Implementieren Sie eine Abwandlung des Unix-Kommandos \osueprog{diff}.
-Schreiben Sie zu diesem Zweck ein C-Programm
-\osueprog{mydiff}, das zwei übergebene Dateien zeilenweise
-miteinander vergleicht und, falls sich zwei Zeilen voneinander
-unterscheiden, die Zeilennummer und die Anzahl der
-verschiedenen Zeichen ausgibt.
+%\section*{Aufgabenstellung A -- mydiff}
+\section*{Assignment A -- mydiff}
+
+%Implementieren Sie eine Abwandlung des Unix-Kommandos \osueprog{diff}.
+%Schreiben Sie zu diesem Zweck ein C-Programm
+%\osueprog{mydiff}, das zwei übergebene Dateien zeilenweise
+%miteinander vergleicht und, falls sich zwei Zeilen voneinander
+%unterscheiden, die Zeilennummer und die Anzahl der
+%verschiedenen Zeichen ausgibt.
+Implement a variation of the Unix-command \osueprog{diff}.
+Write a C-program \osueprog{mydiff},
+which reads in two files und compares them.
+If two lines differ, then the line number
+and the number of differing characters is printed.
 
 \begin{verbatim}
     SYNOPSIS:
-        mydiff [-i] file1 file2
+        mydiff [-i] [-o outfile] file1 file2
 \end{verbatim}
 
-\subsection*{Anleitung}
-      Das Programm soll jede Datei zeilenweise einlesen und die
-      gelesenen Zeichen miteinander vergleichen. Sind die Zeilen
-      ungleich lang, so soll nur bis zur Länge der kürzeren Zeile
-      verglichen werden -- z.B.: \verb+Haus\n+ und \verb+Haustor\n+
-      sind als gleich zu behandeln. Falls eine Datei mehr Zeilen enthält
-      als die andere, sollen die restlichen Zeilen ebenfalls ignoriert
-      werden. Pro Zeile soll gezählt werden, wieviele Zeichen an der
-      gleichen Position nicht übereinstimmen. Falls die Option \verb|-i|
-      angegeben ist, soll Groß-/Kleinschreibung nicht als Unterschied
-      gezählt werden.
+%\subsection*{Anleitung}
+%Das Programm soll jede Datei zeilenweise einlesen und die
+%gelesenen Zeichen miteinander vergleichen. Sind die Zeilen
+%ungleich lang, so soll nur bis zur Länge der kürzeren Zeile
+%verglichen werden -- z.B.: \verb+Haus\n+ und \verb+Haustor\n+
+%sind als gleich zu behandeln. Falls eine Datei mehr Zeilen enthält
+%als die andere, sollen die restlichen Zeilen ebenfalls ignoriert
+%werden. Pro Zeile soll gezählt werden, wieviele Zeichen an der
+%gleichen Position nicht übereinstimmen. Falls die Option \verb|-i|
+%angegeben ist, soll Groß-/Kleinschreibung nicht als Unterschied
+%gezählt werden.
+The program shall read each file line by line
+und compare the characters.
+If two lines have different length,
+then the comparison shall stop upon reaching the end of the shorter line.
+Therefore, the lines \verb+abc\n+ und \verb+abcdef\n+
+shall be treated as being identical.
 
-      Definieren Sie für die maximale Anzahl an Zeichen in einer
-      Zeile eine Konstante, wobei Sie annehmen dürfen, dass keine
-      Zeile mehr Zeichen enthält.
+%Definieren Sie für die maximale Anzahl an Zeichen in einer
+%Zeile eine Konstante, wobei Sie annehmen dürfen, dass keine
+%Zeile mehr Zeichen enthält.
+Your program must accept lines of any length.
 
-\subsection*{Testen}
+If the option \osuearg{-o} is given,
+the output is written to the specified file (\verb|outfile|).
+Otherwise, the output is written to \osueglvar{stdout}.
 
-Erstellen Sie eine Testdatei \osuefilename{difftest1.txt} mit folgendem Inhalt:
+If the option \osuearg{-i} is given,
+the program shall not differentiate between lower and upper case letters,
+i.e. the comparison of the two lines shall be case insensitive.
+
+%\subsection*{Testen}
+\subsection*{Testing}
+
+%Erstellen Sie eine Testdatei \osuefilename{difftest1.txt} mit folgendem Inhalt:
+Test your program with various inputs,
+such as a file \osuefilename{difftest1.txt} with following content:
 
 \begin{osuefmtcode}
-      abcdefg
-      Garten
+      abc
+      operating
       abcdefg
 \end{osuefmtcode}
 
-und eine zweite Testdatei \osuefilename{difftest2.txt} mit folgendem Inhalt:
+%und eine zweite Testdatei \osuefilename{difftest2.txt} mit folgendem Inhalt:
+and a file \osuefilename{difftest2.txt} with following content:
 
 \begin{osuefmtcode}
-      Abcdefg
-      Gartenzaun
+      abcdefg
+      Operating Systems
       ahciejg
       abcdefg
 \end{osuefmtcode}
 
-Rufen Sie Ihr Programm dann mit folgenden Argumenten auf:
+%Rufen Sie Ihr Programm dann mit folgenden Argumenten auf:
+Executing your program should give an output similar to the following:
 
 \begin{osuefmtcode}
+    $ \osueinput{./mydiff difftest1.txt difftest2.txt}
+    Line: 2, characters: 1
+    Line: 3, characters: 3
     $ \osueinput{./mydiff -i difftest1.txt difftest2.txt}
-    Zeile: 3 Zeichen: 3
-    $ \osueinput{./mydiff difftest1.txt bloedsinn.txt}
-    mydiff: Datei bloedsinn.txt existiert nicht!
+    Line: 3, characters: 3
+    $ \osueinput{./mydiff -o example.out difftest1.txt difftest2.txt}
+    $ \osueinput{cat example.out}
+    Line: 2, characters: 1
+    Line: 3, characters: 3
 \end{osuefmtcode}
 
 \osueguidelinesone

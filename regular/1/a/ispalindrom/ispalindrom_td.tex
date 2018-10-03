@@ -4,57 +4,78 @@
 
 \osuetitle{1}
 
-\section*{Aufgabenstellung A -- ispalindrom}
+%\section*{Aufgabenstellung A -- ispalindrom}
+\section*{Assignment A -- ispalindrom}
 
-Implementieren Sie ein Programm \osueprog{ispalindrom}, welches Strings auf
-Palindromeigenschaften überprüft.
+%Implementieren Sie ein Programm \osueprog{ispalindrom}, welches Strings auf
+%Palindromeigenschaften überprüft.
+Implement a program \osueprog{ispalindrom},
+which checks whether strings are palindroms.
 
 \begin{verbatim}
     SYNOPSIS:
-        ispalindrom [-s] [-i] [-o outfile] [infile]
+        ispalindrom [-s] [-i] [-o outfile] [file...]
 \end{verbatim}
 
-Das Programm \osueprog{ispalindrom} soll zeilenweise Strings mit einer Länge
-von bis zu 40 echten Zeichen lesen; prüfen, ob ein Palindrom vorliegt, d.h.\ ob
-der Text rückwärts gelesen mit sich selbst ident ist; und den Text gefolgt
-von \osueoutput{ist ein Palindrom} bzw. \osueoutput{ist kein Palindrom}
-ausgeben.
+%Das Programm \osueprog{ispalindrom} soll zeilenweise Strings mit einer Länge
+%von bis zu 40 echten Zeichen lesen; prüfen, ob ein Palindrom vorliegt, d.h.\ ob
+%der Text rückwärts gelesen mit sich selbst ident ist; und den Text gefolgt
+%von \osueoutput{ist ein Palindrom} bzw. \osueoutput{ist kein Palindrom}
+%ausgeben.
+The program \osueprog{ispalindrom} shall read files line by line
+and for each line check whether it is a palindrom,
+i.e. whether the text read backwards is identical to itself.
+Each line shall be printed followed by the text
+\osueoutput{``is a palindrom"} if the line is a palindrom
+or \osueoutput{``is not a palindrom"} if the line is a not palindrom.
 
-Wird keine Eingabedatei (\verb|infile|) angegeben, so ist von \osueglvar{stdin}
-zu lesen. Fehlt die Option \verb|-o|, wird auf \osueglvar{stdout} ausgegeben.
+Your program must accept lines of any length.
 
-Die Option \osuearg{-s} soll bewirken, dass Leerzeichen ignoriert werden; die
-Option \osuearg{-i} soll bewirken, dass nicht zwischen Groß- und
-Kleinschreibung unterschieden wird.
+%Wird keine Eingabedatei (\verb|infile|) angegeben, so ist von \osueglvar{stdin}
+%zu lesen. Fehlt die Option \verb|-o|, wird auf \osueglvar{stdout} ausgegeben.
+If one or multiple input files are specified (given as positional arguments),
+then \osueprog{ispalindrom} shall read each of them in the order they are given.
+If no input file is specified, the program reads from \osueglvar{stdin}.
 
-\subsection*{Testen}
+If the option \osuearg{-o} is given,
+the output is written to the specified file (\verb|outfile|).
+Otherwise, the output is written to \osueglvar{stdout}.
 
-Testen Sie Ihr Programm mit verschiedenen Eingaben, wie z.B.:
+%Die Option \osuearg{-s} soll bewirken, dass Leerzeichen ignoriert werden; die
+%Option \osuearg{-i} soll bewirken, dass nicht zwischen Groß- und
+%Kleinschreibung unterschieden wird.
+The option \osuearg{-s} causes the program to ignore whitespaces
+when checking whether a line is a palindrom.
+If the option \osuearg{-i} is given,
+the program shall not differentiate between lower and upper case letters,
+i.e. the check for a palindrom shall be case insensitive.
+
+%\subsection*{Testen}
+\subsection*{Testing}
+
+%Testen Sie Ihr Programm mit verschiedenen Eingaben, wie z.B.:
+Test your program with various inputs, such as:
 
 \begin{osuefmtcode}
       $ \osueinput{./ispalindrom}
-      \osueinput{Reliefpfeiler}
-      Reliefpfeiler ist kein Palindrom
-      \osueinput{reliefpfeiler}
-      reliefpfeiler ist ein Palindrom
+      \osueinput{Racecar}
+      Racecar is not a palindrom
+      \osueinput{racecar}
+      racecar is a palindrom
 
       $ \osueinput{./ispalindrom -i -s}
-      \osueinput{Reliefpfeiler}
-      Reliefpfeiler ist ein Palindrom
-      \osueinput{O Genie der Herr ehre Dein Ego}
-      O Genie der Herr ehre Dein Ego ist ein Palindrom
-      \osueinput{aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa}
-      ispalindrom: Eingabe zu lang, max 40 Zeichen!
+      \osueinput{Racecar}
+      Racecar is a palindrom
+      \osueinput{Was it a car or a cat I saw}
+      Was it a car or a cat I saw is a palindrom
 
       $ \osueinput{cat example.in}
-      Otto
-      Rentner
-      neben
-      $ \osueinput{./ispalindrom -o example.out example.in}
+      Madam
+      never odd or even
+      $ \osueinput{./ispalindrom -s -o example.out example.in}
       $ \osueinput{cat example.out}
-      Otto ist kein Palindrom
-      Rentner ist kein Palindrom
-      neben ist ein Palindrom
+      Madam is not a palindrom
+      never odd or even is a palindrom
 \end{osuefmtcode}
 
 \osueguidelinesone

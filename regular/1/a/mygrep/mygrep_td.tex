@@ -1,0 +1,71 @@
+\input{../../../template.ltx}
+
+\begin{document}
+
+\osuetitle{1}
+
+\section*{Assignment A -- mygrep}
+
+Implement a reduced variation of the Unix-command \osueprog{grep}.
+Write a C-program \osueprog{mygrep},
+which reads in several files and prints all lines containing a keyword.
+
+\begin{verbatim}
+    SYNOPSIS
+        mygrep [-i] [-o outfile] keyword [file...]
+\end{verbatim}
+
+The program \osueprog{mygrep} shall read files line by line
+and for each line check whether it contains the search term \osuearg{keyword}.
+The line is printed if it contains \osuearg{keyword},
+otherwise it is not printed.
+
+Your program must accept lines of any length.
+
+If one or multiple input files are specified
+(given as positional arguments after \osuearg{keyword}),
+then \osueprog{mygrep} shall read each of them in the order they are given.
+If no input file is specified, the program reads from \osueglvar{stdin}.
+
+If the option \osuearg{-o} is given,
+the output is written to the specified file (\verb|outfile|).
+Otherwise, the output is written to \osueglvar{stdout}.
+
+If the option \osuearg{-i} is given,
+the program shall not differentiate between lower and upper case letters,
+i.e. the search for the keyword in a line is case insensitive.
+
+\paragraph*{Hint:}
+Take a look at the functions \verb|strstr(3)| and \verb|strcasestr(3)|.
+
+\subsection*{Testing}
+
+Test your program with various inputs, such as:
+
+\begin{osuefmtcode}
+      $ \osueinput{./mygrep rat}
+      \osueinput{Trap a rat!}
+      Trap a rat!
+      \osueinput{Never odd or even}
+      \osueinput{Rating System}
+      \osueinput{Operating Systems}
+      Operating Systems
+
+      $ \osueinput{./mygrep -i rat}
+      \osueinput{Rating System}
+      Rating System
+      \osueinput{Operating Systems}
+      Operating Systems
+
+      $ \osueinput{cat example.in}
+      Operating Systems
+      Rating System
+      $ \osueinput{./mygrep -o example.out rat example.in}
+      $ \osueinput{cat example.out}
+      Operating Systems
+\end{osuefmtcode}
+
+\osueguidelinesone
+
+\end{document}
+
