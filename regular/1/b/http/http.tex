@@ -8,64 +8,184 @@
 
 Implement a client and a server for the Hypertext Transfer Protocol (HTTP).
 
-HTTP is text-based request-response protocol.
+HTTP is a text-based request-response application layer protocol,
+which is used to transfer files between a client and a server.
+Typically a client sends a request for a file located on the server.
+The server then responds and transmits the requested file.
+
+HTTP requests start with a line which contains
+the request method (for instance \verb|GET|),
+the location of the desired resource and the protocol version.
+This line is followed by an arbitrary number of header fields.
+Each header field is a line with a keyword and a value,
+separated by a colon (\verb|:|).
+The request header ends with an empty line,
+which may be followed by a request body
+if the client wishes to transmit a resource to the server.
+
+\begin{center}
+\begin{minipage}{8cm}
+\begin{osuefmtcode}
+GET /index.html HTTP/1.1
+Host: www.myhost.at
+\end{osuefmtcode}
+\end{minipage}
+\begin{minipage}{12cm}
+\vspace{3mm}
+\footnotesize{Example of a HTTP request:
+Request method \verb|GET| is used to request the file \verb|index.html|
+using HTTP version 1.1.
+The request header contains only one header field,
+the \verb|Host| field, which specifies the hostname of the server.
+An empty line ends the header
+and since there is no body this is also the end of the request message.}
+\end{minipage}
+\end{center}
+
+The response starts with a line containing the protocol version,
+a status code and a textual description of the status code.
+As in the request,
+this line is followed by an arbitrary number of header fields
+and again the header ends with an empty line.
+The header is followed by the response body,
+which is typically the content of the requested file.
+
+\begin{center}
+\begin{minipage}{8cm}
+\begin{osuefmtcode}
+HTTP/1.1 200 OK
+Date: Sun, 11 Nov 2018 22:55:00 GMT
+Content-Type: text/html; charset=UTF-8
+Content-Length: 146
+Last-Modified: Mon, 01 Oct 2018 12:15:00 GMT
+Connection: close
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My website</title>
+  </head>
+  <body>
+    <h1>Hi!</h1>
+    <p>This is my website.</p>
+  </body>
+</html>
+\end{osuefmtcode}
+\end{minipage}
+\begin{minipage}{12cm}
+\vspace{3mm}
+\footnotesize{Example of a HTTP response:
+The server responds to the above request with status code 200,
+which indicates that the request was successful.
+The header contains several fields with information about the content,
+such as the file format, the file length or the last time it was modified.
+The header ends with an empty line, which is followed by the file content.}
+\end{minipage}
+\end{center}
+
+The HTTP specification requires
+that each line ending in the header consists of two characters,
+a carriage return followed by a linefeed character,
+instead of the linefeed only which is standard on UNIX systems.
+In a C-string this sequence can be encoded as \verb|"\r\n"|.
+Note that this does not apply to the content in the response body,
+which is transmitted as it is read from the file without modifications.
 
 \subsection*{Instructions}
 
 Write a client program and a server program
 which partially implement version 1.1 of the HTTP.
+%Only the request method \texttt{GET} is used.
 
 \subsubsection*{Client}
 
-The client takes a URL as input,
-connects to the server specified in that URL
+The client takes an URL as input,
+connects to the corresponding server
 and requests the file specified in the URL.
+The transmitted content of that file is written to \verb|stdout| or to a file.
 
 \begin{verbatim}
 SYNOPSIS
     client [-p PORT] [ -o FILE | -d DIR ] URL
 EXAMPLE
-    client en.wikipedia.org/wiki/Hypertext_Transfer_Protocol
+    client http://pan.vmars.tuwien.ac.at/osue/
 \end{verbatim}
 
 The client may be called with a number of options:
 \begin{itemize}
 \item Option \texttt{-p} can be used to specify the port
 on which the client shall attempt to connect to the server.
-If this option is not used the port defaults to 80.
-\item
+If this option is not used the port defaults to 80,
+which is the standard port for HTTP.
+\item Either option \texttt{-o} or \texttt{-d} can be used
+to write the requested content to a file.
+Option \texttt{-o} is used to specify a filename
+to which the transmitted content is written.
+Option \texttt{-d} is used to specify a directory
+in which a file of the same name as the requested file is created
+and filled with the transmitted content.
+If none of these options is given,
+the transmitted content is written to \verb|stdout|.
 \end{itemize}
 
 The client creates a TCP/IP socket
 and connects to the hostname specified in the URL.
-For simplicity you may assume that
-the hostname is the part before any of the following characters:
+For the purpose of this exercise we only consider URLs
+which start with the scheme identifier \verb|http://|,
+immediatly followed by a hostname.
+For simplicity you may therefore assume that
+the hostname is the part after the initial \verb|http://|
+and before any of the following characters:
 
 \texttt{;} \texttt{/} \texttt{?} \texttt{:} \texttt{@} \texttt{=} \texttt{\&}
 
 Once the connection is established,
 the client sends a request for the file specified in the URL
-(the filename is the part starting at the first \texttt{/} )
+(the filename is the part starting at and including the first \texttt{/}
+after the initial \verb|http://|)
 using the HTTP method \texttt{GET}.
 The request header must start with the request line
-and as a minimum must contain the \texttt{Host} field.
-For instance, the minimal request header for the URL
-\texttt{en.wikipedia.org/index.html} is:
+and must contain the \texttt{Host} field,
+which gives the hostname as specified in the URL.
+Also, the header field \verb|Connection| with the value \verb|close|
+should be added to the header
+(which tells the server that the connection should be closed after transmitting one file).
+For instance, the request header for the URL
+\url{http://pan.vmars.tuwien.ac.at/osue/} is:
+
+\vspace{-2mm}
 \begin{verbatim}
-GET /index.html HTTP/1.1
-Host: en.wikipedia.org
+GET /osue/ HTTP/1.1
+Host: pan.vmars.tuwien.ac.at
+Connection: close
 \end{verbatim}
+\vspace{-2mm}
 
-After transmitting his request, the client waits for a response from the server.
-Your client must correctly parse the response header.
+After transmitting its request, the client waits for a response from the server.
+Your client must correctly parse the status code
+in the first line of the response.
 
-If the response header is invald,
+If the response header is invalid,
 the client prints the message \texttt{"Protocol error!"}
 and terminates with exit code 2.
+You can consider the response header to be invalid
+if the first line does not start with \verb|HTTP/1.1|
+or if this is not followed by a number
+which can be parsed with \verb|strtol(3)|.
 
 If the response status in the first line of the response header is not 200,
 the client prints a message with the response status
+(status code and the textual description after it)
 and terminates with exit code 3.
+
+The client may ignore any header fields
+and directly skip ahead to the content in the response body
+by looking for the empty line which ends the header.
+%This empty line can be identified
+%by searching for two subsequent line ending sequences, i.e. \verb|"\r\n\r\n"|.
+The remainder of the response is the content of the requested file
+and is eiter written to \verb|stdout| or to a file,
+according to the options listed above.
 
 \subsubsection*{Server}
 
@@ -79,92 +199,290 @@ EXAMPLE
     server -p 1280 -i index.html ~/Documents/my_website/
 \end{verbatim}
 
+The server may be called with following options:
+\begin{itemize}
+\item Option \texttt{-p} can be used to specify the port
+on which the server shall listen for incoming connections.
+If this option is not used the port defaults to 8080
+(port 80 requires root privileges).
+\item Option \texttt{-i} is used to specify the index filename,
+i.e. the file which the server shall attempt to transmit
+if the request path is a directory.
+The default index filename is \verb|index.html|.
+\end{itemize}
 
-The server must support the HTTP method \texttt{GET}.
-Support for any other method is optional.
-Your server must be able to correctly parse any fields in the request header.
-Fields which are unknown to the server are silently ignored.
+The argument \verb|DOC_ROOT| is the path of the document root directory,
+which contains the files that can be requested from the server.
+%The paths of resources requested by clients are relative to this directory
+%and therefore are appended to \verb|DOC_ROOT|.
 
+The server listens for connections on the specified port
+and upon accepting a connection from a client,
+it reads the request message from the connection socket.
+Your server must be able to correctly identify the request method
+and the path of the requested resource.
 
-If your server receives an invalid request
+If the request header is invalid,
+the server sends a response header with status code 400 (\verb|Bad Request|)
+and closes the connection.
+You can consider the request header to be invalid
+if the first line does not consist of 3 values separated by whitespaces:
+first the request method, second the path of the requested file
+and third the protocol and version identifier \verb|HTTP/1.1|.
 
-If the server cannot locate and open the file identified by the URL,
-then sends a response header with the status code 404
+The server must support the request method \texttt{GET}.
+If a different request method is sent by a client,
+the server sends a response header with status code 501 (\verb|Not implemented|)
 and closes the connection.
 
-Otherwise, the server sends a response header with status code 200
-and at minimum following fields (with the values changed accordingly):
+If the first line of the request message is valid,
+the server may ignore all the rest of the request message
+and directly proceed to transmitting the requested file.
+The server prepends the document root path \verb|DOC_ROOT|
+to the requested path\footnote{
+For the purpose of this exercise you may simply concatenate the
+root path and the request path, for instance by using \texttt{strncat(3)}.
+Your server is not required to check whether the resulting path
+effectively lies within the document directory.
+}.
+If the path of the requested resource ends with a \verb|/|,
+the default index filename (see options above) is appended to it.
+If the server cannot open the resulting filename,
+it sends a response header with status code 404 (\verb|Not Found|)
+and closes the connection.
+
+If the file was successfully opened,
+the server first sends a response header with status code 200 (\verb|OK|)
+and at minimum the fields
+\verb|Date|, which contains the current date and time
+expressed in UTC (often also referred to as GMT)
+and encoded as specified in RFC 822\footnote{RFC 822,
+Section 5: Date and Time Specification,
+\url{https://tools.ietf.org/html/rfc822\#section-5}},
+\verb|Content-Length|, which gives the size of the requested file in bytes,
+and \verb|Connection|, which should contain the value \verb|close|.
+Your server may for instance transmit a response header as follows:
+
 \begin{verbatim}
 HTTP/1.1 200 OK
-Date: Mon, 23 May 2005 22:38:34 GMT
-Content-Type: text/html; charset=UTF-8
-Content-Encoding: UTF-8
-Content-Length: 138
-Last-Modified: Wed, 08 Jan 2003 23:11:55 GMT
+Date: Sun, 11 Nov 2018 22:55:00 GMT
+Content-Length: 146
 Connection: close
 \end{verbatim}
+
 Once the header is transmitted,
-the server proceeds with the transmission of the requested file.
+the server proceeds with the transmission of the requested file,
+by reading the content of the file and writing it to the connection as is
+without any modifications.
+When the server is done with the transmission it closes the connection
+and waits for the next connection.
 
-\subsection*{Protocol}
-\label{sec:prot}
+The response header transmitted in case of an invalid request,
+unsupported request method or missing file must contain
+the header field \verb|Connection| with the value \verb|close|,
+but all other header fields can be omitted and no content is transmitted.
 
+The server must handle the signals \verb|SIGINT| and \verb|SIGTERM|.
+If any of these signals is received,
+the server completes an ongoing request
+and then terminates with exit code 0.
+If there are no open connections to clients when receiving the signal,
+the server terminates immediately with exit code 0.
+
+\subsection*{Hints}
+\begin{itemize}
+\item When parsing the URL
+in order to extract the hostname and the filepath,
+the functions \verb|strchr(3)|, \verb|strpbrk(3)| or \verb|strsep(3)|
+will be helpful to locate the first occurence of a character in a string.
+
+\item Since HTTP is a text-based protocol,
+you might want to use the functions of the stream API.
+This has the advantage that you can process the message headers line by line
+by using for instance \verb|fgets(3)| or \verb|getline(3)|.
+Be aware though that the transmission of binary content
+in the message body requires other functions.
+
+\item The first line of both the request and the response headers of the HTTP
+consists of 3 values separated by whitespaces.
+You might find it helpful to separate these using \verb|strtok(3)|.
+
+\item You might want to use \verb|strftime(3)|
+to format date and time as required for the response header.
+Take a close look at the `Example' section of the man page
+for advice on date formatting in compliance with various standards.
+
+\item Be aware that the server must the read the entire request
+from the connection socket before writing anything to that socket.
+This is also true if your server is responding with an error status.
+\end{itemize}
+
+\clearpage
+\subsection*{Testing}
+
+In order to test the functionality and correct implementation of the protocol,
+you should test your programs in 3 different ways:
+
+\vspace{-4mm}
+
+\subsubsection*{Your client requests files from your server}
+
+\vspace{-4mm}
+Create a directory and populate it with one or more example files.
+Verify that requested files are transmitted correctly
+using the utility \verb|diff|.
+
+\begin{osuefmtcode}
+    $ ls ./my_website
+    test.html
+    $ ./server ./my_website &
+    $ ./client -o received.html -p 8080 localhost/test.html
+    $ diff ./my_website/test.html received.html
+\end{osuefmtcode}
+
+\subsubsection*{Your client requests files from servers on the internet}
+
+\vspace{-4mm}
+Using a web browser (e.g. Firefox),
+download a file which is publicly available on the internet,
+such as for instance \url{http://pan.vmars.tuwien.ac.at/osue/index.html}
+and save it locally (e.g. under \verb|~/Downloads/test.html|).
+Request the same file using your client
+and verify that the content of both files is identical,
+again using \verb|diff|.
+
+\begin{osuefmtcode}
+    $ ./client -o index.html http://pan.vmars.tuwien.ac.at/osue/
+    $ diff ~/Downloads/test.html index.html
+\end{osuefmtcode}
+
+Verify that your client correctly downloads various filetypes,
+including binary files, such as images.
+
+\begin{osuefmtcode}
+    $ ./client -d . http://pan.vmars.tuwien.ac.at/osue/countdown.js
+    $ diff ~/Downloads/countdown.js countdown.js
+    $ ./client -d . http://pan.vmars.tuwien.ac.at/osue/cat.png
+    $ diff ~/Downloads/cat.png received.png
+\end{osuefmtcode}
+
+Unfortunately most websites recently refuse to transmit files via HTTP
+and instead require HTTPS, the encrypted version of HTTP.
+However, websites which still accept HTTP are for instance
+\url{http://pan.vmars.tuwien.ac.at/osue/},
+\url{http://wiki.happylab.at/} or \url{http://cpsiot.at/}.
+
+\subsubsection*{Your server processes requests from a web browser}
+
+\vspace{-4mm}
+Start your server and request files from it using a web browser
+(for instance using Firefox, which is the default browser in the TILAB).
+
+\begin{osuefmtcode}
+    $ ls ./my_website
+    test.html
+    $ ./server -i test.html ./my_website
+\end{osuefmtcode}
+
+Now your server should transmit the file \verb|test.html|
+when you type \verb|127.0.0.1:8080| in the address bar of the browser
+(\verb|127.0.0.1| is the IP address for localhost
+and \verb|:8080| is used to specify the port).
+
+If you are working remotely via SSH
+you can also use the command-line utility \verb|wget|
+instead of a browser with GUI.
+
+\clearpage
 \subsection*{Bonus Points}
 
+\vspace{-3mm}
 \textbf{Bonus points are only awarded
-if both your client and your server program are FULLY FUNCTIONAL
+if your programs are FULLY FUNCTIONAL
 and COMPLY WITH ALL INSTRUCTIONS!
-Do not try to implement any of the bonus tasks
-while your programs do not function properly!
+%Do not try to implement any of the bonus tasks
+%while your programs do not function properly!
 When adding features for bonus tasks,
 check that the basic requirements are still fulfilled,
-otherwise you risk loosing more points than you might gain!}
+otherwise you risk loosing more points than you might gain!
+}
 
 \subsubsection*{Server}
 
 \begin{itemize}
 
-\item \textbf{Compression (2):}
+\item \textbf{Header field \texttt{Content-Type} (2):}
+Add support for the header field \verb|Content-Type| to your server.
+This field is used to inform the client about the MIME-type\footnote{
+Media type, a two-part identifier for file formats,
+see \url{https://en.wikipedia.org/wiki/Media_type}}
+of the transmitted content.
+Your server should recognize following file types:
+
+\begin{center}
+\begin{tabular}{c c}
+\textbf{File extension} & \textbf{MIME type} \\
+\hline
+\verb|.html|, \verb|.htm| & \verb|text/html| \\
+\verb|.css| & \verb|text/css| \\
+\verb|.js| & \verb|application/javascript| \\
+\verb|.png| & \verb|image/png| \\
+\verb|.pdf| & \verb|application/pdf| \\
+\end{tabular}
+\end{center}
+
+2 bonus point are awarded if your server's response header
+contains the field \verb|Content-Type| with the corresponding MIME type value
+if the requested file has any of the above extensions.
+If the file extension is none of those listed in the table,
+the field \verb|Content-Type| should not be used.
+
+\item \textbf{Compression (4):}
 Implement compression of the transferred content in the gzip format.
 Make use of the zlib compression library (see sect.~``\nameref{sect:zlib}'')
 for compressing the data.
 
-2 bonus points are awarded if your server recognizes clients
-which accept data encoded in gzip format,
+4 bonus points are awarded if your server recognizes clients
+which accept data encoded in gzip format
+(by searching for the field \verb|Accept-Encoding| in the request header
+and checking whether it contains the value \verb|gzip|),
 responds to requests from these clients with the line
-\begin{verbatim}
-Content-Encoding: gzip
-\end{verbatim}
+
+\verb|Content-Encoding: gzip|
+
 in the responde header
 and correctly compresses the content in the body into that format.
 
-\item \textbf{Reuse connection (2):}
-Allow a client to make multiple requests using the same connection.
-If a client indicates that he wishes to reuse the connection with the line
-\begin{verbatim}
-Connection: keep-alive
-\end{verbatim}
-in the request header,
-the server sends a response with the same line in the response header
-and once all content has been transfered,
-the server waits for another request from that client.
-A \textbf{timeout must be implemented},
-which closes the connection
-if the client does not send another request within 15 seconds.
+Test this feature by requesting files from your server using a web browser,
+for instance Firefox!
 
-\item \textbf{Simultaneous connections (2):}
-Use a file descriptor set (see the man page \texttt{fd\_set(3)})
-to manage connections from multiple clients in parallel.
+%\item \textbf{Reuse connection (2):}
+%Allow a client to make multiple requests using the same connection.
+%If a client indicates that he wishes to reuse the connection with the line
+%\begin{verbatim}
+%Connection: keep-alive
+%\end{verbatim}
+%in the request header,
+%the server sends a response with the same line in the response header
+%and once all content has been transfered,
+%the server waits for another request from that client on the same connection.
+%A \textbf{timeout must be implemented},
+%which closes the connection
+%if the client does not send another request within 15 seconds.
 
-2 bonus points are awarded if your server uses \texttt{select(3p)} or \texttt{pselect(3p)}
-to monitor all open connections simultaneously,
-accepts new connections instantaneously while other connections are kept open
-and responds to a request on any connection instantaneously.
+%\item \textbf{Simultaneous connections (2):}
+%Use a file descriptor set (see the man page \texttt{fd\_set(3)})
+%to manage connections from multiple clients in parallel.
 
-Do not forget to set a large enough \texttt{backlog} when calling \texttt{listen(2)}.
+%2 bonus points are awarded if your server uses \texttt{select(3p)} or \texttt{pselect(3p)}
+%to monitor all open connections simultaneously,
+%accepts new connections instantaneously while other connections are kept open
+%and responds to a request on any connection instantaneously.
 
-Your server must never repeatedly poll connections for new data
-or use any kind of busy waiting!
+%Do not forget to set a large enough \texttt{backlog} when calling \texttt{listen(2)}.
+
+%Your server must never repeatedly poll connections for new data
+%or use any kind of busy waiting!
 
 \end{itemize}
 
@@ -172,43 +490,56 @@ or use any kind of busy waiting!
 
 \begin{itemize}
 
-\item \textbf{Decompression (2):}
+\item \textbf{Decompression (4):}
 Implement decompression of content in the gzip format.
 Make use of the zlib compression library (see sect.~``\nameref{sect:zlib}'')
 for decompressing the data.
 
-2 bonus points are awarded if your client advertises this capability with the line
-\begin{verbatim}
-Accept-Encoding: gzip
-\end{verbatim}
+4 bonus points are awarded if your client advertises this capability with the line
+
+\verb|Accept-Encoding: gzip|
+
 in the request header and is able to correctly decompress content sent with that encoding.
 
-\item \textbf{Load external content (2):}
-Load external content from \texttt{<link>}, \texttt{<script>} and \texttt{<img>} tags.
+Test this feature by requesting files from a web server which supports gzip,
+such as \url{http://pan.vmars.tuwien.ac.at/osue/}
+(note that this server only compresses text files).
 
-If the transferred content is of content type \texttt{text/html},
-then search for \texttt{<link>}, \texttt{<script>} and \texttt{<img>} tags
-(this can be implemented with a simple search
-for the strings \verb|"<link"|, \verb|"<script"| and \verb|"<img"| in the content).
-If any of these tags contains a \texttt{rel} or \texttt{src} attribute
-(which must come before the \texttt{>} at the end of the tag),
-then the file specified by this attribute is also requested.
+%\item \textbf{Load external content (3):}
+%Load external content from \texttt{<link>}, \texttt{<script>} and \texttt{<img>} tags.
+
+%If the transferred content is of content type \texttt{text/html},
+%then search for \texttt{<link>}, \texttt{<script>} and \texttt{<img>} tags
+%(this can be implemented with a simple search
+%for the strings \verb|"<link"|, \verb|"<script"| and \verb|"<img"| in the content).
+%If any of these tags contains a \texttt{rel} or \texttt{src} attribute
+%(which must come before the \texttt{>} at the end of the tag),
+%then the file specified by this attribute is also requested.
+
+%3 bonus points are awarded if your client requests all external dependencies
+%from \texttt{<link>}, \texttt{<script>} and \texttt{<img>} tags
+%(as descibed above)
 
 \end{itemize}
 
 \subsubsection*{Using zlib}
 \label{sect:zlib}
 
-zlib\footnote{\url{http://zlib.net/}} is installed in the TILab.
+zlib\footnote{\url{http://zlib.net/}} is pre-installed on most UNIX systems.
 You can use it by including the \texttt{zlib.h} header:
-\begin{verbatim}
-#include <zlib.h>
-\end{verbatim}
-Also, you will have to link the zlib library by adding \texttt{-lz} to your linker options.
 
-\textbf{It would be a shame if you loose points because using zlib produces
-compiler or linker warnings or errors.
-Make sure to TEST YOUR IMPLEMENTATION IN THE TILAB!}
+\verb|#include <zlib.h>|
+
+Also, you will have to link the zlib library by adding \texttt{-lz} to your linker options.
+Make sure to test this in the TILAB in order to avoid linker warnings or errors.
+
+%\textbf{It would be a shame if you loose points because using zlib produces
+%compiler or linker warnings or errors.
+%Make sure to TEST YOUR IMPLEMENTATION IN THE TILAB!}
+
+%Following websites give a more detailed and complete overview of the HTTP:
+
+%\url{http://www.ntu.edu.sg/home/ehchua/programming/webprogramming/http_basics.html}
 
 \osueguidelinesone
 
