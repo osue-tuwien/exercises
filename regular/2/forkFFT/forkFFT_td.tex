@@ -69,7 +69,7 @@ the real and the imaginary part of each value.
 
 \subsection*{Hints}
 Use the libraries math.h and complex.h, which needs an additional linker option $-lm$.
-Pay attention to correct termination conditions of forksort to avoid endless recursions \footnote{http://en.wikipedia.org/wiki/Fork\_bomb}.
+Pay attention to correct termination conditions of forkFFT to avoid endless recursions \footnote{http://en.wikipedia.org/wiki/Fork\_bomb}.
 There are two rules to consider:
 \begin{enumerate}
 	\item Because the Cooley-Tukey algorithm divides the input by 2, the number of inputs is limited to a power-of-two. If the input is not a power of two your program should round up to the next power of two.
