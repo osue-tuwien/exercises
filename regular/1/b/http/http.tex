@@ -282,6 +282,10 @@ unsupported request method or missing file must contain
 the header field \verb|Connection| with the value \verb|close|,
 but all other header fields can be omitted and no content is transmitted.
 
+The server is not required to accept more than one connection at once.
+Therefore, you may simply accept the next connection
+after the previous connection has been closed.
+
 The server must handle the signals \verb|SIGINT| and \verb|SIGTERM|.
 If any of these signals is received,
 the server completes an ongoing request
