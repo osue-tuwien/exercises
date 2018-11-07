@@ -57,7 +57,7 @@ HTTP/1.1 200 OK
 Date: Sun, 11 Nov 18 22:55:00 GMT
 Content-Type: text/html; charset=UTF-8
 Content-Length: 146
-Last-Modified: Mon, 01 Oct 2018 12:15:00 GMT
+Last-Modified: Mon, 01 Oct 18 12:15:00 GMT
 Connection: close
 
 <!DOCTYPE html>
@@ -124,6 +124,8 @@ to which the transmitted content is written.
 Option \texttt{-d} is used to specify a directory
 in which a file of the same name as the requested file is created
 and filled with the transmitted content.
+If the URL ends with \verb|/| (thus requesting a directory)
+the filename is assumed to be \verb|index.html|.
 If none of these options is given,
 the transmitted content is written to \verb|stdout|.
 \end{itemize}
@@ -153,13 +155,11 @@ should be added to the header
 For instance, the request header for the URL
 \url{http://pan.vmars.tuwien.ac.at/osue/} is:
 
-\vspace{-2mm}
 \begin{verbatim}
 GET /osue/ HTTP/1.1
 Host: pan.vmars.tuwien.ac.at
 Connection: close
 \end{verbatim}
-\vspace{-2mm}
 
 After transmitting its request, the client waits for a response from the server.
 Your client must correctly parse the status code
@@ -186,6 +186,9 @@ by looking for the empty line which ends the header.
 The remainder of the response is the content of the requested file
 and is eiter written to \verb|stdout| or to a file,
 according to the options listed above.
+The client must not rely on the response header field \verb|Content-Length|
+in order to determine the amount of data transfered,
+but instead read from the socket until the server closes the connection.
 
 \subsubsection*{Server}
 
