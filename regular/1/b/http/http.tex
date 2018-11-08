@@ -119,10 +119,12 @@ If this option is not used the port defaults to 80,
 which is the standard port for HTTP.
 \item Either option \texttt{-o} or \texttt{-d} can be used
 to write the requested content to a file.
-Option \texttt{-o} is used to specify a filename
+Option \texttt{-o} is used to specify a file
 to which the transmitted content is written.
 Option \texttt{-d} is used to specify a directory
-in which a file of the same name as the requested file is created
+in which a file of the same name
+(without the directory part, i.e. only the part after the last \verb|/|)
+as the requested file is created
 and filled with the transmitted content.
 If the URL ends with \verb|/| (thus requesting a directory)
 the filename is assumed to be \verb|index.html|.
@@ -143,7 +145,7 @@ and before any of the following characters:
 
 Once the connection is established,
 the client sends a request for the file specified in the URL
-(the filename is the part starting at and including the first \texttt{/}
+(the filepath is the part starting at and including the first \texttt{/}
 after the initial \verb|http://|)
 using the HTTP method \texttt{GET}.
 The request header must start with the request line
@@ -250,7 +252,7 @@ effectively lies within the document directory.
 }.
 If the path of the requested resource ends with a \verb|/|,
 the default index filename (see options above) is appended to it.
-If the server cannot open the resulting filename,
+If the server cannot open the resulting filepath,
 it sends a response header with status code 404 (\verb|Not Found|)
 and closes the connection.
 
