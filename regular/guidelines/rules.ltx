@@ -1,16 +1,16 @@
 Compliance with these rules is essential to get any points for your
-submission.\\
-In other words, a violation of any of the following rules results in 0~points
+submission.
+A violation of any of the following rules results in 0~points
 for your submission.
 
 \begin{enumerate}
-\item The program must compile via
+\item All source files of your program(s) must compile via
   \begin{lstlisting}
 $ gcc -std=c99 -pedantic -Wall -D_DEFAULT_SOURCE -D_BSD_SOURCE -D_SVID_SOURCE
                                -D_POSIX_C_SOURCE=200809L -g -c filename.c
   \end{lstlisting}
-  without \emph{errors}.
-  These flags must be used in the Makefile, of course.
+  without \emph{errors} and your program(s) must link without \emph{errors}.
+  The compilation flags must be used in the Makefile.
   The feature test macros must not be bypassed
   (i.e., by undefining these macros or adding some in the C source code).
 \item The functionality of the program must conform to the assignment. The

@@ -1,2 +1,10 @@
-No additional guidelines, but note that correct argument parsing and sockets
-(1B) will be the main focus.
+Violation of following guidelines leads to a deduction of points in exercise 1.
+
+\begin{enumerate}
+\item It is forbidden to use the deprecated functions
+\texttt{gethostbyname}, \texttt{gethostbyaddr}, \texttt{gethostbyname2},
+\texttt{gethostbyname\_r}, \texttt{gethostbyname2\_r}
+or any other function of that family
+documented on the man page \texttt{gethostbyname(3)}.
+Use \texttt{getaddrinfo(3)} instead.
+\end{enumerate}

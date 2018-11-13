@@ -1,16 +1,18 @@
 Violation of following guidelines leads to a deduction of points.
 
 \begin{enumerate}
-\item The program must compile with
+\item All source files of your program(s) must compile with
   \begin{lstlisting}
 $ gcc -std=c99 -pedantic -Wall -D_DEFAULT_SOURCE -D_BSD_SOURCE -D_SVID_SOURCE
                                -D_POSIX_C_SOURCE=200809L -g -c filename.c
   \end{lstlisting}
-  without \emph{warnings and info messages}.
+  without \emph{warnings and info messages}
+  and your program(s) must link without warnings.
 
-\item There must be a Makefile for the program implementing the targets:
-  \texttt{all} to build the program from the sources (this must be the first
-  target in the Makefile); \texttt{clean} to delete all files that can be built
+\item There must be a Makefile implementing the targets:
+  \texttt{all} to build the program(s) (i.e. generate executables)
+  from the sources (this must be the first target in the Makefile);
+  \texttt{clean} to delete all files that can be built
   from your sources with the Makefile.
 
 \item The program shall operate according to the specification/assignment
