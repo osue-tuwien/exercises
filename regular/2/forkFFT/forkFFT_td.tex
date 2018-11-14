@@ -14,6 +14,7 @@ Implement the Cooley-Tukey Fast Fourier Transform \footnote{https://en.wikipedia
 \subsection*{Instructions}
 The input of the program are float values, which should be read from \osueglvar{stdin}. Each value is represented in a new line.
 \subsection*{Examples}
+constant signal:
 \begin{verbatim}
 $ ./forkFFT
 1.0
@@ -23,6 +24,29 @@ Output:
 \begin{verbatim}
 	2.0	0.0*i
 	0.0	0.0*i
+\end{verbatim}
+sinus wave:
+\begin{verbatim}
+$ ./forkFFT
+0.000000
+0.707107
+1.000000
+0.707107
+0.000000
+-0.707107
+-1.000000
+-0.707107
+\end{verbatim}
+Output: 
+\begin{verbatim}
+ 	0.000000   +0.000000*i
+ 	0.000000   -4.000001*i
+ 	0.000000   +0.000000*i
+ 	0.000000   -0.000001*i
+ 	0.000000   +0.000000*i
+ 	-0.000000   +0.000001*i
+ 	0.000000   +0.000000*i
+ 	-0.000000   +4.000001*i
 \end{verbatim}
 \subsection*{Approach to work}
 ForkFFT computes recursively the Fourier Transform from its input values. Recursively means that the program calls itself. 
