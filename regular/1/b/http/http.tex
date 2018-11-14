@@ -324,6 +324,14 @@ for advice on date formatting in compliance with various standards.
 \item Be aware that the server must the read the entire request
 from the connection socket before writing anything to that socket.
 This is also true if your server is responding with an error status.
+
+%\item The HTTP specification requires
+%that each line ending in the header consists of two characters,
+%a carriage return followed by a linefeed character,
+%instead of the linefeed only which is standard on UNIX systems.
+%In a C-string this sequence can be encoded as \verb|"\r\n"|.
+%Note that this does not apply to the content in the response body,
+%which is transmitted as it is read from the file without modifications.
 \end{itemize}
 
 \clearpage
