@@ -1,0 +1,75 @@
+\input{../../template.ltx}
+\usepackage{amsmath}
+\begin{document}
+
+\osuetitle{2}
+
+\section*{ Assignment -- Closest Pair of Points}
+Implement a program which searches for the closest pair of points \footnote{https://en.wikipedia.org/wiki/Closest\_pair\_of\_points\_problem} in a set of 2D-points.
+\begin{verbatim}
+    SYNOPSIS
+        cpair
+\end{verbatim}
+
+\subsection*{Instructions}
+The program takes an array $A$ of 2D points, each given by two floating point numbers, as input.
+The input is read from \texttt{stdin}; the first line is the length of the array,
+each additional line consists of two numbers which represent one point (x,y coordinate).
+\subsection*{Examples}
+\begin{verbatim}
+$ ./cpair
+4
+4.0;4.0
+-1.0;1.0
+1.0;-1.0
+-4.0;-4.0
+\end{verbatim}
+Output: 
+\begin{verbatim}
+-1.000000;1.000000
+1.000000;-1.000000
+\end{verbatim}
+\subsection*{Approach to work}
+Cpair computes recursively the closest pair of points from its input values. Recursively means that the program calls itself. 
+\begin{enumerate}
+\item If the array consists of only 1 point, then the program exits without generating any output.
+
+\item If the array consists of two points, then write these to \texttt{stdout} and exit.
+
+\item Otherwise the array consists of $n$ points.
+Calculate $x_m$, the mean of the $x$-coordinates of all the points.
+Divide the array into two parts,
+with one part containing all the points with an $x$-coordinate less than $x_m$
+and the other part containing all the points with an $x$-coordinate greater than $x_m$.
+
+ \item Use \osuefunc{dup2(2)} to redirect \osueglvar{stdin}/\osueglvar{stdout} of the child. In the child process call cpair recursively.
+
+\item Using \texttt{fork()} and \texttt{exec()},
+recursively execute this program two times for each of the two parts.
+Let $P_1$ be the closest pair of the first part and $P_2$ the closest pair of the second part.
+
+\item Compare the distance of each pair with one point in the first part
+and the other point in the second part.
+Remember the pair with the shortest distance as $P_3$.
+
+\item Compare the distances of $P_1$, $P_2$ and $P_3$
+and write the pair with the shortest distance to \texttt{stdout}.
+\end{enumerate}
+
+\subsection*{Hints}
+Use the library math.h, which needs an additional linker option $-lm$.
+Pay attention to correct termination conditions of cpair to avoid endless recursions \footnote{http://en.wikipedia.org/wiki/Fork\_bomb}.
+There are two rules to consider:
+\begin{enumerate}
+	\item Create a struct point, which stores x and y coordinates
+	\item Use malloc to store the points
+	\item Fork only if the input number is greater than 1.
+	\item Think about some edge cases and handle it accordingly. E.g.: what if all points have the same x value $\rightarrow$ take the median instead of the mean to spilt the array.
+\end{enumerate}
+
+To output error messages and debug messages, always use
+\osueglvar{stderr} because \osueglvar{stdout} is redirected in most cases.
+
+\osueguidelinestwo
+
+\end{document}

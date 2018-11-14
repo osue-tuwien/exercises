@@ -1,0 +1,108 @@
+\input{../../template.ltx}
+\usepackage{amsmath}
+\begin{document}
+
+\osuetitle{2}
+
+\section*{ Assignment -- Fork Fourier Transform}
+Implement the Cooley-Tukey Fast Fourier Transform \footnote{https://en.wikipedia.org/wiki/Cooley-Tukey\_FFT\_algorithm} algorithm.
+\begin{verbatim}
+    SYNOPSIS
+        forkFFT
+\end{verbatim}
+
+\subsection*{Instructions}
+The input of the program are float values, which should be read from \osueglvar{stdin}. Each value is represented in a new line.
+\subsection*{Examples}
+constant signal:
+\begin{verbatim}
+$ ./forkFFT
+1.0
+1.0
+\end{verbatim}
+Output: 
+\begin{verbatim}
+	2.0	0.0*i
+	0.0	0.0*i
+\end{verbatim}
+sinus wave:
+\begin{verbatim}
+$ ./forkFFT
+0.000000
+0.707107
+1.000000
+0.707107
+0.000000
+-0.707107
+-1.000000
+-0.707107
+\end{verbatim}
+Output: 
+\begin{verbatim}
+ 	0.000000   +0.000000*i
+ 	0.000000   -4.000001*i
+ 	0.000000   +0.000000*i
+ 	0.000000   -0.000001*i
+ 	0.000000   +0.000000*i
+ 	-0.000000   +0.000001*i
+ 	0.000000   +0.000000*i
+ 	-0.000000   +4.000001*i
+\end{verbatim}
+\subsection*{Approach to work}
+ForkFFT computes recursively the Fourier Transform from its input values. Recursively means that the program calls itself. 
+\begin{enumerate}
+\item If the array consists of only 1 number, write that number to \osueglvar{stdout} and exit.
+\item Otherwise the array consists of $n$ numbers.
+Split it into two parts with $n/2$ numbers each,
+such that one part contains all the numbers at even indices
+and the second part contains all the numbers at odd indices:
+\[
+P_E=\{A[0],\;A[2],\;A[4],\;\dots\}
+\]
+\[
+P_O=\{A[1],\;A[3],\;A[5],\;\dots\}
+\]
+\item Using \osuefunc{fork(2)} and \osuefunc{execlp(3)},
+recursively execute this program two times for each of the two parts.
+Let $R_E$ be the result of the even part and $R_O$ be the result of the odd part.
+The result $R$ of the Fourier Transform of the entire array can now be computed
+by applying the ``butterfly'' operation to the two results:
+\[
+\forall k\;|\;0\leq k<n/2\;:\quad R[k]=R_E[k]+e^{-\frac{2\pi i}{n}\cdot k}\cdot R_O[k]
+\quad\text{and}\quad R[k+n/2]=R_E[k]-e^{-\frac{2\pi i}{n}\cdot k}\cdot R_O[k]
+\]
+which is identical to:
+\[
+\forall k\;|\;0\leq k<n/2\;:\quad
+\renewcommand{\arraystretch}{1.8}
+\begin{array}{r@{\;=\;}l}
+ R[k]     & R_E[k]+\left(\text{cos}(-\frac{2\pi}{n}\cdot k)+i\cdot\text{sin}(-\frac{2\pi}{n}\cdot k)\right)\cdot R_O[k]\\
+R[k+n/2] & R_E[k]-\left(\text{cos}(-\frac{2\pi}{n}\cdot k)+i\cdot\text{sin}(-\frac{2\pi}{n}\cdot k)\right)\cdot R_O[k]
+\end{array}
+\]
+The resulting array is printed to \texttt{stdout}, one value per line.
+Since the resulting numbers are complex, the program prints two values per line:
+the real and the imaginary part of each value.
+
+\item For the even child (do the same for the odd child) create first two unnamed pipes and create with \osuefunc{fork(2)} a child. Use now \osuefunc{dup2(2)} to redirect \osueglvar{stdin}/\osueglvar{stdout} of the child. In the child process call now forkFFT recursively.
+\item Now write the even and odd parts of the array to \osueglvar{stdin} of the children created before. Use the previously specified input format.
+\item Read now the output of the two children and calculate the butterfly. 
+\item Use \osuefunc{wait(2)} or \osuefunc{waitpid(2)} to read the exit status of the children.
+
+\end{enumerate}
+
+\subsection*{Hints}
+Use the libraries math.h and complex.h, which needs an additional linker option $-lm$.
+Pay attention to correct termination conditions of forkFFT to avoid endless recursions \footnote{http://en.wikipedia.org/wiki/Fork\_bomb}.
+There are two rules to consider:
+\begin{enumerate}
+	\item Because the Cooley-Tukey algorithm divides the input by 2, the number of inputs is limited to a power-of-two. If the input is not a power of two your program should round up to the next power of two.
+\item Fork only if the input number is greater than 1.
+\end{enumerate}
+
+To output error messages and debug messages, always use
+\osueglvar{stderr} because \osueglvar{stdout} is redirected in most cases.
+
+\osueguidelinestwo
+
+\end{document}
