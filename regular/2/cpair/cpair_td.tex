@@ -57,8 +57,8 @@ and write the pair with the shortest distance to \texttt{stdout}.
 
 \subsection*{Hints}
 Use the library math.h, which needs an additional linker option $-lm$.
-Pay attention to correct termination conditions of cpair to avoid endless recursions \footnote{http://en.wikipedia.org/wiki/Fork\_bomb}.
-There are two rules to consider:
+Pay attention to correct termination conditions of cpair to avoid endless recursions \footnote{http://en.wikipedia.org/wiki/Fork\_bomb} .
+There are some rules to consider:
 \begin{enumerate}
 	\item Create a struct point, which stores x and y coordinates
 	\item Use malloc to store the points
