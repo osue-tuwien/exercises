@@ -1,41 +1,29 @@
 \input{../../template.ltx}
 \usepackage{amsmath}
+\usepackage{multicol}
 \begin{document}
 
 \osuetitle{2}
 
-\section*{ Assignment -- Integer Multiplication}
-Implement an algorithm for the efficient multiplication of large integers. 
+\section*{Assignment -- Integer Multiplication}
+Implement an algorithm for the efficient multiplication of large integers.
 \begin{verbatim}
     SYNOPSIS
         intmul
 \end{verbatim}
 
 \subsection*{Instructions}
-The program takes two hexadecimal integers $A$ and $B$ with an equal number of digits as input, multiplies them and prints the result. The number of digits might not be fixed!
-\subsection*{Examples}
-\begin{verbatim}
-$ ./intmul
-3
-3
-\end{verbatim}
-Output: 
-\begin{verbatim}
-9
-\end{verbatim}
-\begin{verbatim}
-$ ./intmul
-1A
-B3
-\end{verbatim}
-Output: 
-\begin{verbatim}
-122e
-\end{verbatim}
-\subsection*{Approach to work}
-The input is read from \texttt{stdin}, the first line is the integer $A$ and the second line is the integer $B$.
+The program takes two hexadecimal integers $A$ and $B$ with an equal number of digits as input, multiplies them and prints the result.
+The input is read from \texttt{stdin} and consists of two lines:
+the first line is the integer $A$ and the second line is the integer $B$.
 
-The multiplication is done by using a divide and conquer algorithm:
+Your program must accept any number of digits.
+Terminate the program with exit status \verb|EXIT_ERROR|
+if an invalid input is encountered
+or if the two integers do not have equal length.
+
+The multiplication of the input values is calculated recursively,
+i.e. by the program calling itself:
 \begin{enumerate}
 \item If $A$ and $B$ both consist of only 1 hexadecimal digit, then multiply them,
 write the result to \texttt{stdout} and exit.
@@ -48,32 +36,71 @@ A:\quad\quad\begin{array}{|c|c|}\hline \quad A_h \quad & \quad A_l \quad \\\hlin
 \[
 B:\quad\quad\begin{array}{|c|c|}\hline \quad B_h \quad & \quad B_l \quad \\\hline\end{array}\quad\quad B=B_h\cdot 16^{n/2}+B_l
 \]
-\item Using \osuefunc{fork(2)} and \osuefunc{execlp(3)}, recursively execute this program four times for each of the
-multiplications $A_h\cdot B_h$, $A_h\cdot B_l$, $A_l\cdot B_h$ and  $A_l\cdot B_l$.
-\item  Use unamed pipes and \osuefunc{dup2(2)} to redirect \osueglvar{stdin}/\osueglvar{stdout} of the child.
+Terminate the program with exit status \verb|EXIT_ERROR|
+if the number of digits is not even.
+
+\item Using \osuefunc{fork(2)} and \osuefunc{execlp(3)},
+recursively execute this program in four child processes,
+one for each of the multiplications $A_h\cdot B_h$, $A_h\cdot B_l$, $A_l\cdot B_h$ and  $A_l\cdot B_l$.
+Use two unnamed pipes per child
+to redirect \osueglvar{stdin} and \osueglvar{stdout}
+(see \osuefunc{pipe(2)} and \osuefunc{dup2(3)}).
+Write the two values to be multiplied to \osueglvar{stdin} of each child.
+Read the respective result from each child's \osueglvar{stdout}.
+The four child processes must run simultaneously!
+
+\item Use \osuefunc{wait(2)} or \osuefunc{waitpid(2)}
+to read the exit status of the children.
+Terminate the program with exit status \verb|EXIT_ERROR|
+if the exit status of any of the two child processes is not \verb|EXIT_SUCCESS|.
+
 \item The result of the multiplication $A\cdot B$ can now be calculated as follows:
 \[
 A\cdot B=A_h\cdot B_h\cdot 16^n + A_h\cdot B_l\cdot 16^{n/2} + A_l\cdot B_h\cdot 16^{n/2} + A_l\cdot B_l
 \]
 Find a clever way to write the result of this operation to \texttt{stdout},
 even if the numbers are too large for the C data types.
-
-\item Use \osuefunc{wait(2)} or \osuefunc{waitpid(2)} to read the exit status of the children.
+Remember that your program must deal with integers of any size!
 
 \end{enumerate}
 
 \subsection*{Hints}
 
-Pay attention to correct termination conditions of intmul to avoid endless recursions \footnote{http://en.wikipedia.org/wiki/Fork\_bomb}.
-Fork only if the number of digits is greater than 1.
-
-
 \begin{itemize}
-	\item Use malloc to store the hex values
-	\item Start with multiplying two hex values with only one digit and then expand it to more digits. 
-\end{itemize}
-To output error messages and debug messages, always use
+\item Think of a way to add the four intermediate results together
+one digit at a time while keeping track of the carry.
+\item In order to avoid endless recursion\footnote{\url{http://en.wikipedia.org/wiki/Fork\_bomb}},
+fork only if the input number is greater than 1.
+\item To output error messages and debug messages, always use
 \osueglvar{stderr} because \osueglvar{stdout} is redirected in most cases.
+\end{itemize}
+
+\subsection*{Examples}
+\begin{multicols}{3}
+\begin{verbatim}
+$ cat 1.txt
+3
+3
+$ ./intmul < 1.txt
+9
+\end{verbatim}
+
+\begin{verbatim}
+$ cat 2.txt
+1A
+B3
+$ ./intmul < 2.txt
+122e
+\end{verbatim}
+
+\begin{verbatim}
+$ cat 3.txt
+13AD67F
+DF789AA
+$ ./intmul < 3.txt
+112d52b5656756
+\end{verbatim}
+\end{multicols}
 
 \osueguidelinestwo
 

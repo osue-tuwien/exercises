@@ -1,73 +1,112 @@
 \input{../../template.ltx}
 \usepackage{amsmath}
+\usepackage{multicol}
 \begin{document}
 
 \osuetitle{2}
 
-\section*{ Assignment -- Closest Pair of Points}
-Implement a program which searches for the closest pair of points \footnote{https://en.wikipedia.org/wiki/Closest\_pair\_of\_points\_problem} in a set of 2D-points.
+\section*{Assignment -- Closest Pair of Points}
+Implement a program which searches for the closest pair of points\footnote{\url{https://en.wikipedia.org/wiki/Closest\_pair\_of\_points\_problem}}
+in a set of 2D-points.
 \begin{verbatim}
     SYNOPSIS
         cpair
 \end{verbatim}
 
 \subsection*{Instructions}
-The program takes an array $A$ of 2D points, each given by two floating point numbers, as input.
-The input is read from \texttt{stdin}. The number of rows might not be fixed!
-Each line consists of two numbers which represent one point (x,y coordinate).
-\subsection*{Examples}
-\begin{verbatim}
-$ ./cpair
-4.0;4.0
--1.0;1.0
-1.0;-1.0
--4.0;-4.0
-\end{verbatim}
-Output: 
-\begin{verbatim}
--1.000000;1.000000
-1.000000;-1.000000
-\end{verbatim}
-\subsection*{Approach to work}
-Cpair computes recursively the closest pair of points from its input values. Recursively means that the program calls itself. 
+The program takes an array of 2D points as input.
+The input is read from \texttt{stdin}.
+Each line consists of two floating point numbers,
+separated by whitespace,
+which represent the $x$ and $y$ coordinates of one point.
+The array ends when an EOF (End Of File) is encountered.
+
+Your program must accept any number of points!
+Terminate the program with exit status \verb|EXIT_ERROR|
+if an invalid input is encountered.
+
+The program computes the closest pair of points from its input values recursively,
+i.e. by calling itself:
+
 \begin{enumerate}
 \item If the array consists of only 1 point, then the program exits without generating any output.
 
 \item If the array consists of two points, then write these to \texttt{stdout} and exit.
 
-\item Otherwise the array consists of $n$ points.
+\item Otherwise the array consists of $n>2$ points.
 Calculate $x_m$, the mean of the $x$-coordinates of all the points.
 Divide the array into two parts,
-with one part containing all the points with an $x$-coordinate less than $x_m$
-and the other part containing all the points with an $x$-coordinate greater than $x_m$.
+with one part containing all the points
+with an $x$-coordinate less than (or equal to) $x_m$
+and the other part containing all the points
+with an $x$-coordinate greater than $x_m$.
 
- \item Use \osuefunc{dup2(2)} to redirect \osueglvar{stdin}/\osueglvar{stdout} of the child. In the child process call cpair recursively.
+\item Using \osuefunc{fork(2)} and \osuefunc{execlp(3)},
+recursively execute this program in two child processes,
+one for each of the two parts.
+Use two unnamed pipes per child
+to redirect \osueglvar{stdin} and \osueglvar{stdout}
+(see \osuefunc{pipe(2)} and \osuefunc{dup2(3)}).
+Write one part to \osueglvar{stdin} of one child
+and the other part to \osueglvar{stdin} of the other child.
+Read the respective results from each child's \osueglvar{stdout}.
+The two child processes must run simultaneously!
 
-\item Using \texttt{fork()} and \texttt{exec()},
-recursively execute this program two times for each of the two parts.
-Let $P_1$ be the closest pair of the first part and $P_2$ the closest pair of the second part.
+\item Use \osuefunc{wait(2)} or \osuefunc{waitpid(2)}
+to read the exit status of the children.
+Terminate the program with exit status \verb|EXIT_ERROR|
+if the exit status of any of the two child processes is not \verb|EXIT_SUCCESS|.
 
-\item Compare the distance of each pair with one point in the first part
-and the other point in the second part.
+\item Let $P_1$ be the closest pair of the first part and $P_2$ the closest pair of the second part.
+
+\item For each point in the first part,
+calculate its distance to each point in the second part.
 Remember the pair with the shortest distance as $P_3$.
 
 \item Compare the distances of $P_1$, $P_2$ and $P_3$
-and write the pair with the shortest distance to \texttt{stdout}.
+and write the pair with the shortest distance to \texttt{stdout},
+with the two points separated by a newline.
 \end{enumerate}
 
+Throughout the program,
+it is sufficient to use single precision floating point numbers.
+
+\clearpage
 \subsection*{Hints}
-Use the library math.h, which needs an additional linker option $-lm$.
-Pay attention to correct termination conditions of cpair to avoid endless recursions \footnote{http://en.wikipedia.org/wiki/Fork\_bomb} .
-There are some rules to consider:
 \begin{enumerate}
-	\item Create a struct point, which stores x and y coordinates
-	\item Use malloc to store the points
-	\item Fork only if the input number is greater than 1.
-	\item Think about some edge cases and handle it accordingly. E.g.: what if all points have the same x value $\rightarrow$ take the median instead of the mean to spilt the array.
+\item You may use the header \osueglvar{math.h} for the distance calculations.
+Add \verb|-lm| to the linker options to use these functions.
+\item Create a structure to store the coordinates of a point.
+\item In order to avoid endless recursion\footnote{\url{http://en.wikipedia.org/wiki/Fork\_bomb}},
+fork only if the input number is greater than 1.
+\item To output error messages and debug messages, always use
+\osueglvar{stderr} because \osueglvar{stdout} is redirected in most cases.
+%\item Think about some edge cases and handle it accordingly. E.g.: what if all points have the same x value $\rightarrow$ take the median instead of the mean to spilt the array.
 \end{enumerate}
 
-To output error messages and debug messages, always use
-\osueglvar{stderr} because \osueglvar{stdout} is redirected in most cases.
+\subsection*{Examples}
+\begin{multicols}{2}
+\begin{verbatim}
+$ cat 1.txt
+4.0 4.0
+-1.0 1.0
+1.0 -1.0
+-4.0 -4.0
+$ ./cpair
+-1.000000 1.000000
+1.000000 -1.000000
+\end{verbatim}
+\begin{verbatim}
+$ cat 1.txt
+4.0 4.0
+-1.0 1.0
+1.0 -1.0
+-4.0 -4.0
+$ ./cpair
+-1.000000 1.000000
+1.000000 -1.000000
+\end{verbatim}
+\end{multicols}
 
 \osueguidelinestwo
 
