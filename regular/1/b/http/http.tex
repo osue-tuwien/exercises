@@ -352,8 +352,8 @@ using the utility \verb|diff|.
 \begin{osuefmtcode}
     $ ls ./my_website
     test.html
-    $ ./server ./my_website &
-    $ ./client -o received.html -p 8080 http://localhost/test.html
+    $ ./server -i test.html ./my_website &
+    $ ./client -o received.html -p 8080 http://localhost/
     $ diff ./my_website/test.html received.html
 \end{osuefmtcode}
 
@@ -364,6 +364,12 @@ Using a web browser (e.g. Firefox),
 download a file which is publicly available on the internet,
 such as for instance \url{http://pan.vmars.tuwien.ac.at/osue/index.html}
 and save it locally (e.g. under \verb|~/Downloads/test.html|).
+Instead of a browser you can also use the command-line utility \verb|wget|:
+
+\begin{osuefmtcode}
+    $ wget http://pan.vmars.tuwien.ac.at/osue/index.html
+\end{osuefmtcode}
+
 Request the same file using your client
 and verify that the content of both files is identical,
 again using \verb|diff|.
@@ -394,21 +400,28 @@ However, websites which still accept HTTP are for instance
 \vspace{-4mm}
 Start your server and request files from it using a web browser
 (for instance using Firefox, which is the default browser in the TILAB).
+Again make sure that this works for various filetypes.
 
 \begin{osuefmtcode}
     $ ls ./my_website
-    test.html
-    $ ./server -i test.html ./my_website
+    cat.png  countdown.js  index.html
+    $ ./server ./my_website
 \end{osuefmtcode}
 
-Now your server should transmit the file \verb|test.html|
-when you type \verb|127.0.0.1:8080| in the address bar of the browser
+When you type \verb|127.0.0.1:8080| in the address bar of the browser
 (\verb|127.0.0.1| is the IP address for localhost
-and \verb|:8080| is used to specify the port).
+and \verb|:8080| is used to specify the port),
+then your browser should request and display the file \verb|index.html|.
+A browser will also request any requisites of a HTML document,
+such as images or scripts.
 
 If you are working remotely via SSH
-you can also use the command-line utility \verb|wget|
-instead of a browser with GUI.
+you can also use \verb|wget|
+instead of a browser with GUI:
+
+\begin{osuefmtcode}
+    $ wget -p -nd http://127.0.0.1:8080/
+\end{osuefmtcode}
 
 \clearpage
 \subsection*{Bonus Points}
