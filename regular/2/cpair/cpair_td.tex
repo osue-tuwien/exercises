@@ -92,19 +92,18 @@ $ cat 1.txt
 -1.0 1.0
 1.0 -1.0
 -4.0 -4.0
-$ ./cpair
+$ ./cpair < 1.txt
 -1.000000 1.000000
 1.000000 -1.000000
 \end{verbatim}
 \begin{verbatim}
-$ cat 1.txt
-4.0 4.0
--1.0 1.0
-1.0 -1.0
--4.0 -4.0
-$ ./cpair
--1.000000 1.000000
-1.000000 -1.000000
+$ cat all_x_values_equal_mean.txt
+1;1
+1;1
+1;1
+$ ./cpair < all_x_values_equal_mean.txt
+1.000000;1.000000
+1.000000;1.000000
 \end{verbatim}
 \end{multicols}
 
