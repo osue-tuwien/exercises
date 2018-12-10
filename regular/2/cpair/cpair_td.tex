@@ -34,7 +34,7 @@ i.e. by calling itself:
 \item If the array consists of two points, then write these to \texttt{stdout} and exit.
 
 \item Otherwise the array consists of $n>2$ points.
-Calculate $x_m$, the mean of the $x$-coordinates of all the points.
+Calculate $x_m$, the arithmetic mean of the $x$-coordinates of all the points.
 Divide the array into two parts,
 with one part containing all the points
 with an $x$-coordinate less than (or equal to) $x_m$
@@ -98,12 +98,12 @@ $ ./cpair < 1.txt
 \end{verbatim}
 \begin{verbatim}
 $ cat all_x_values_equal_mean.txt
-1;1
-1;1
-1;1
+1 1
+1 1
+1 1
 $ ./cpair < all_x_values_equal_mean.txt
-1.000000;1.000000
-1.000000;1.000000
+1.000000 1.000000
+1.000000 1.000000
 \end{verbatim}
 \end{multicols}
 
