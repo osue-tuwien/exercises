@@ -22,7 +22,7 @@ which represent the $x$ and $y$ coordinates of one point.
 The array ends when an EOF (End Of File) is encountered.
 
 Your program must accept any number of points!
-Terminate the program with exit status \verb|EXIT_ERROR|
+Terminate the program with exit status \verb|EXIT_FAILURE|
 if an invalid input is encountered.
 
 The program computes the closest pair of points from its input values recursively,
@@ -54,7 +54,7 @@ The two child processes must run simultaneously!
 
 \item Use \osuefunc{wait(2)} or \osuefunc{waitpid(2)}
 to read the exit status of the children.
-Terminate the program with exit status \verb|EXIT_ERROR|
+Terminate the program with exit status \verb|EXIT_FAILURE|
 if the exit status of any of the two child processes is not \verb|EXIT_SUCCESS|.
 
 \item Let $P_1$ be the closest pair of the first part and $P_2$ the closest pair of the second part.
@@ -66,6 +66,7 @@ Remember the pair with the shortest distance as $P_3$.
 \item Compare the distances of $P_1$, $P_2$ and $P_3$
 and write the pair with the shortest distance to \texttt{stdout},
 with the two points separated by a newline.
+Terminate the program with exit status \verb|EXIT_SUCCESS|.
 \end{enumerate}
 
 Throughout the program,
