@@ -36,7 +36,7 @@ i.e. by calling itself:
 %\item Ist die Anzahl gleich Eins, dann geben Sie das "`sortierte"' Ergebnis
   %aus (d.h. den Eingabe-String selbst).
 \item If the input consist of only 1 line,
-then write it to \texttt{stdout} and exit.
+then write it to \texttt{stdout} and exit with status \verb|EXIT_SUCCESS|.
 %\item Ist die Anzahl größer Eins, erstellen Sie zuerst vier Unnamed-Pipes (zwei
   %je Kind) und erzeugen dann zwei Kindprozesse (nicht Kind- und Enkelkind) mittels
   %\osuefunc{fork(2)}. Verwenden Sie \osuefunc{dup2(2)}
@@ -66,7 +66,7 @@ The two child processes must run simultaneously!
 
 \item Use \osuefunc{wait(2)} or \osuefunc{waitpid(2)}
 to read the exit status of the children.
-Terminate the program with exit status \verb|EXIT_ERROR|
+Terminate the program with exit status \verb|EXIT_FAILURE|
 if the exit status of any of the two child processes is not \verb|EXIT_SUCCESS|.
 
 %\item Lesen Sie nun die Ausgabe der Kinder zeilenweise ein, und
@@ -85,6 +85,7 @@ and write them to \osueglvar{stdout}.
 At each step, compare the next line of both parts
 and write the smaller one to \osueglvar{stdout},
 such that the lines are written in alphabetical order.
+Terminate the program with exit status \verb|EXIT_SUCCESS|.
 
 %\item Verwenden Sie \osuefunc{wait(2)} oder \osuefunc{waitpid(2)}, um den
   %Exit-Status der beiden Kinder zu lesen.
