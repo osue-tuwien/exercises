@@ -18,13 +18,14 @@ Subsequent values are separated by a newline character.
 The sequence ends when an EOF (End Of File) is encountered.
 
 Your program must accept any number of values.
-Terminate the program with exit status \verb|EXIT_ERROR|
+Terminate the program with exit status \verb|EXIT_FAILURE|
 if an invalid input is encountered.
 
 The program computes the Fourier Transform of its input values recursively,
 i.e. by calling itself:
 \begin{enumerate}
-\item If the array consists of only 1 number, write that number to \osueglvar{stdout} and exit.
+\item If the array consists of only 1 number, write that number to \osueglvar{stdout}
+and exit with exit status \verb|EXIT_SUCCESS|.
 \item Otherwise the array consists of $n>1$ numbers.
 Split it into two parts with $n/2$ numbers each,
 such that one part contains all the numbers at even indices
@@ -35,7 +36,7 @@ P_E=\{A[0],\;A[2],\;A[4],\;\dots\}
 \[
 P_O=\{A[1],\;A[3],\;A[5],\;\dots\}
 \]
-Terminate the program with exit status \verb|EXIT_ERROR|
+Terminate the program with exit status \verb|EXIT_FAILURE|
 if the length of the array is not even.
 
 \item Using \osuefunc{fork(2)} and \osuefunc{execlp(3)},
@@ -51,7 +52,7 @@ The two child processes must run simultaneously!
 
 \item Use \osuefunc{wait(2)} or \osuefunc{waitpid(2)}
 to read the exit status of the children.
-Terminate the program with exit status \verb|EXIT_ERROR|
+Terminate the program with exit status \verb|EXIT_FAILURE|
 if the exit status of any of the two child processes is not \verb|EXIT_SUCCESS|.
 
 \item Let $R_E$ be the result of the even part $P_E$
@@ -80,6 +81,7 @@ thus when reading them from the child processes,
 two values per line must be parsed).
 You may append \verb|*i| or similar to the second value
 to indicate that it is the imaginary part (see examples).
+Terminate the program with exit status \verb|EXIT_SUCCESS|.
 
 \end{enumerate}
 
