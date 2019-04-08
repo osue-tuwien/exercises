@@ -1,6 +1,7 @@
 \input{../../template.ltx}
 \usepackage{amsmath}
 \usepackage{multicol}
+\usepackage{graphicx}
 \begin{document}
 
 \osuetitle{2}
@@ -76,6 +77,16 @@ fork only if the input number is greater than 1.
 \item To output error messages and debug messages, always use
 \osueglvar{stderr} because \osueglvar{stdout} is redirected in most cases.
 \end{itemize}
+
+\subsection*{Bonus exercise, 5 points}
+Print the parent and child relations in form of a tree to stdout. Print all children which are forked from the parent.
+The tree should be readable at least to a depth of three.
+For every node, the intermediate result should be printed. 
+\newline
+Depending on how often you call fork the wider the tree becomes. A simple example is shown below.
+
+\centering
+\includegraphics[width=0.5\textwidth]{./../BonusExercise.png}
 
 \subsection*{Examples}
 \begin{multicols}{3}
