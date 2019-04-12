@@ -81,13 +81,16 @@ fork only if the input number is greater than 1.
 \subsection*{Bonus exercise, 5 points}
 Print the parent and child relations in form of a tree to stdout. Print all children which are forked from the parent.
 The tree should be readable at least to a depth of three.
-For every node, the intermediate result should be printed. 
-\newline
+For every node, the intermediate result should be printed.\newline
 Depending on how often you call fork the wider the tree becomes. A simple example is shown below.
 
-\centering
-\includegraphics[width=0.5\textwidth]{./../BonusExercise.png}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.5\textwidth]{./../BonusExercise.png}
+\end{figure}
 
+\paragraph{Instructions on how to print the tree}
+A leaf node should output the substep executed by it on stdout with a terminating newline. Every other node has to do two steps. First, it calculates the intermediate result and outputs this and the executed operation to stdout. Thereafter, symbols that are to represent the branches of the tree are output to stdout. Lastly he parses the output from his children via a pipe. Thereafter, each newline character is removed, the output is lined up and then printed with a terminating newline to stdout.
 \subsection*{Examples}
 \begin{multicols}{3}
 \begin{verbatim}
