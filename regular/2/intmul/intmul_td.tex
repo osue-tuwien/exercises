@@ -82,15 +82,24 @@ fork only if the input number is greater than 1.
 Print the parent and child relations in form of a tree to stdout. Print all children which are forked from the parent.
 The tree should be readable at least to a depth of three.
 For every node, the intermediate result should be printed.\newline
-Depending on how often you call fork the wider the tree becomes. A simple example is shown below.
+Depending on how often you call fork the wider the tree becomes. A simple tree example which searches for the maximum number in a set is shown below.
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=0.5\textwidth]{./../BonusExercise.png}
+	\includegraphics[width=0.7\textwidth]{./../BonusExercise.png}
 \end{figure}
 
 \paragraph{Instructions on how to print the tree}
-A leaf node should output the substep executed by it on stdout with a terminating newline. Every other node has to do two steps. First, it calculates the intermediate result and outputs this and the executed operation to stdout. Thereafter, symbols that are to represent the branches of the tree are output to stdout. Lastly he parses the output from his children via a pipe. Thereafter, each newline character is removed, the output is lined up and then printed with a terminating newline to stdout.
+\begin{itemize}
+	\item leaf node: \\
+	A leaf node should print the substep executed by it to stdout with a terminating newline.
+	\item inner node: 
+	\begin{itemize}
+		\item Calculate the intermediate result and print this and the executed operation to stdout. 
+		\item Symbols that are to represent the branches of the tree are printed to stdout.
+		\item Read the output from the children line by line via a pipe. This means read the first line from the first child, then the first line from the second child and so on. Remove the newline characters. Line up the results and then print it with a terminating newline to stdout. Do this for each line returned by the child.
+	\end{itemize}
+\end{itemize}
 \subsection*{Examples}
 \begin{multicols}{3}
 \begin{verbatim}
