@@ -100,8 +100,9 @@ Depending on how often you call fork the wider the tree becomes. A simple tree e
 	A leaf node should print the substep executed by it to stdout with a terminating newline.
 	\item inner node: 
 	\begin{itemize}
-		\item Calculate the intermediate result and print this and the executed operation to stdout. 
-		\item Symbols that are to represent the branches of the tree are printed to stdout.
+		\item To get the necessary identation use several blank characters. Think about a good way to find the right number of blank characters. For example you could use precalculated values or calculate the number from the first line you read from the children.
+		\item Calculate the intermediate result and print this and the executed operation to stdout.
+		\item Slash and backslash, which represent the branches of the tree, are printed to stdout.
 		\item Read the output from the children line by line via a pipe. This means read the first line from the first child, then the first line from the second child and so on. Remove the newline characters. Line up the results and then print it with a terminating newline to stdout. Do this for each line returned by the child.
 	\end{itemize}
 \end{itemize}
