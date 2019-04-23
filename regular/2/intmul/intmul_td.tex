@@ -84,11 +84,16 @@ The tree should be readable at least to a depth of three.
 For every node, the intermediate result should be printed.\newline
 Depending on how often you call fork the wider the tree becomes. A simple tree example which searches for the maximum number in a set is shown below.
 
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=0.7\textwidth]{./../BonusExercise.png}
-\end{figure}
-
+\begin{verbatim}
+                                     10
+                            MAX(10,8,3,5,2,1,6,7)
+                              /             \		
+                         MAX(10,8,3,5)   MAX(2,1,6,7)
+                           /        \        /      \
+                      MAX(10,8)  MAX(3,5)  MAX(2,1) MAX(6,7)
+                       /    \      /   \     /   \    /   \
+                      10    8     3     5   2     1   6    7 
+\end{verbatim}
 \paragraph{Instructions on how to print the tree}
 \begin{itemize}
 	\item leaf node: \\
