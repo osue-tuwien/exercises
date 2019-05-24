@@ -104,6 +104,9 @@ and no other operation with complex numbers is required.
 fork only if the input number is greater than 1.
 \item To output error messages and debug messages, always use
 \osueglvar{stderr} because \osueglvar{stdout} is redirected in most cases.
+\item Due to the rejection of sequences of odd length by each (child-)process,
+the algorithm has the property of only correctly processing sequences
+where the length is a power of 2.
 \end{enumerate}
 
 \subsection*{Examples}
@@ -152,6 +155,10 @@ $ ./forkFFT < sine.txt
 -0.000000 4.000001*i
 \end{verbatim}
 \end{multicols}
+
+Small deviations of the resulting values,
+which are a consequence of the limited precision of floating point numbers,
+are not relevant and not considered to be an error.
 
 \input{./../BonusExercise.tex}
 
