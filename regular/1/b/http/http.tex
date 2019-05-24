@@ -337,6 +337,7 @@ This is also true if your server is responding with an error status.
 \clearpage
 \subsection*{Testing}
 
+\vspace{-5mm}
 In order to test the functionality and correct implementation of the protocol,
 you should test your programs in 3 different ways:
 
@@ -386,7 +387,7 @@ including binary files, such as images.
     $ ./client -d . http://pan.vmars.tuwien.ac.at/osue/countdown.js
     $ diff ~/Downloads/countdown.js countdown.js
     $ ./client -d . http://pan.vmars.tuwien.ac.at/osue/cat.png
-    $ diff ~/Downloads/cat.png received.png
+    $ diff ~/Downloads/cat.png cat.png
 \end{osuefmtcode}
 
 Unfortunately most websites recently refuse to transmit files via HTTP
@@ -423,6 +424,12 @@ instead of a browser with GUI:
     $ wget -p -nd http://127.0.0.1:8080/
 \end{osuefmtcode}
 
+\fbox{\parbox{\textwidth}{
+\bf Please be aware that if you want to get any points for your submission,
+all of the above test cases must work
+and the behavior of your program must conform to the assignment!
+}}
+
 \clearpage
 \subsection*{Bonus Points}
 
@@ -447,7 +454,8 @@ This field is used to inform the client about the MIME-type\footnote{
 Media type, a two-part identifier for file formats,
 see \url{https://en.wikipedia.org/wiki/Media_type}}
 of the transmitted content.
-Your server should recognize following file types:
+Your server should recognize following file types,
+based on the file name extension:
 
 \begin{center}
 \begin{tabular}{c c}
