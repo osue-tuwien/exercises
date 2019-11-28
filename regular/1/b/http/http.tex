@@ -309,8 +309,8 @@ will be helpful to locate the first occurence of a character in a string.
 you might want to use the functions of the stream API.
 This has the advantage that you can process the message headers line by line
 by using for instance \verb|fgets(3)| or \verb|getline(3)|.
-Be aware though that the transmission of binary content
-in the message body requires other functions.
+%Be aware though that the transmission of binary content
+%in the message body requires other functions.
 
 \item The first line of both the request and the response headers of the HTTP
 consists of 3 values separated by whitespaces.
@@ -378,16 +378,8 @@ again using \verb|diff|.
 \begin{osuefmtcode}
     $ ./client http://pan.vmars.tuwien.ac.at/osue/ > index.html
     $ diff ~/Downloads/test.html index.html
-\end{osuefmtcode}
-
-Verify that your client correctly downloads various filetypes,
-including binary files, such as images.
-
-\begin{osuefmtcode}
     $ ./client -d . http://pan.vmars.tuwien.ac.at/osue/countdown.js
     $ diff ~/Downloads/countdown.js countdown.js
-    $ ./client -d . http://pan.vmars.tuwien.ac.at/osue/cat.png
-    $ diff ~/Downloads/cat.png cat.png
 \end{osuefmtcode}
 
 Unfortunately most websites recently refuse to transmit files via HTTP
@@ -405,7 +397,7 @@ Again make sure that this works for various filetypes.
 
 \begin{osuefmtcode}
     $ ls ./my_website
-    cat.png  countdown.js  index.html
+    index.html
     $ ./server ./my_website
 \end{osuefmtcode}
 
@@ -424,11 +416,17 @@ instead of a browser with GUI:
     $ wget -p -nd http://127.0.0.1:8080/
 \end{osuefmtcode}
 
+\vspace{5mm}
+
 \fbox{\parbox{\textwidth}{
 \bf Please be aware that if you want to get any points for your submission,
 all of the above test cases must work
 and the behavior of your program must conform to the assignment!
 }}
+
+Note that your implementation is not required
+to be able to transmit binary files (such as images).
+This is instead a bonus task (see next page).
 
 \clearpage
 \subsection*{Bonus Points}
@@ -444,9 +442,22 @@ check that the basic requirements are still fulfilled,
 otherwise you risk loosing more points than you might gain!
 }
 
-\subsubsection*{Server}
+%\subsubsection*{Server}
 
 \begin{itemize}
+
+\item \textbf{Binary data (3):}
+
+HTTP is a text-based protocol, but it can also transmit binary data.
+If so far your client is reading the message body received from the server
+with \verb|fgets(3)| or \verb|getline(3)|
+and your server writes the message body with functions such as \verb|fputs(3)|,
+then replace these with functions such as \verb|fread(3)| and \verb|fwrite(3)|,
+which are able to handle text and binary content alike.
+You should keep line-based functions for reading and writing the headers though.
+
+3 bonus points are awarded if your server is able to serve
+and your client is able to receive binary files, such as images.
 
 \item \textbf{Header field \texttt{Content-Type} (2):}
 Add support for the header field \verb|Content-Type| to your server.
@@ -464,8 +475,8 @@ based on the file name extension:
 \verb|.html|, \verb|.htm| & \verb|text/html| \\
 \verb|.css| & \verb|text/css| \\
 \verb|.js| & \verb|application/javascript| \\
-\verb|.png| & \verb|image/png| \\
-\verb|.pdf| & \verb|application/pdf| \\
+%\verb|.png| & \verb|image/png| \\
+%\verb|.pdf| & \verb|application/pdf| \\
 \end{tabular}
 \end{center}
 
@@ -475,101 +486,42 @@ if the requested file has any of the above extensions.
 If the file extension is none of those listed in the table,
 the field \verb|Content-Type| should not be used.
 
-\item \textbf{Compression (4):}
+\item \textbf{Compression (5):}
 Implement compression of the transferred content in the gzip format.
-Make use of the zlib compression library (see sect.~``\nameref{sect:zlib}'')
-for compressing the data.
-
-4 bonus points are awarded if your server recognizes clients
-which accept data encoded in gzip format
-(by searching for the field \verb|Accept-Encoding| in the request header
-and checking whether it contains the value \verb|gzip|),
-responds to requests from these clients with the line
-
-\verb|Content-Encoding: gzip|
-
-in the responde header
-and correctly compresses the content in the body into that format.
-
-Test this feature by requesting files from your server using a web browser,
-for instance Firefox!
-
-%\item \textbf{Reuse connection (2):}
-%Allow a client to make multiple requests using the same connection.
-%If a client indicates that he wishes to reuse the connection with the line
-%\begin{verbatim}
-%Connection: keep-alive
-%\end{verbatim}
-%in the request header,
-%the server sends a response with the same line in the response header
-%and once all content has been transfered,
-%the server waits for another request from that client on the same connection.
-%A \textbf{timeout must be implemented},
-%which closes the connection
-%if the client does not send another request within 15 seconds.
-
-%\item \textbf{Simultaneous connections (2):}
-%Use a file descriptor set (see the man page \texttt{fd\_set(3)})
-%to manage connections from multiple clients in parallel.
-
-%2 bonus points are awarded if your server uses \texttt{select(3p)} or \texttt{pselect(3p)}
-%to monitor all open connections simultaneously,
-%accepts new connections instantaneously while other connections are kept open
-%and responds to a request on any connection instantaneously.
-
-%Do not forget to set a large enough \texttt{backlog} when calling \texttt{listen(2)}.
-
-%Your server must never repeatedly poll connections for new data
-%or use any kind of busy waiting!
-
-\end{itemize}
-
-\subsubsection*{Client}
-
-\begin{itemize}
-
-\item \textbf{Decompression (4):}
-Implement decompression of content in the gzip format.
-Make use of the zlib compression library (see sect.~``\nameref{sect:zlib}'')
-for decompressing the data.
-
-4 bonus points are awarded if your client advertises this capability with the line
-
-\verb|Accept-Encoding: gzip|
-
-in the request header and is able to correctly decompress content sent with that encoding.
-
-Test this feature by requesting files from a web server which supports gzip,
-such as \url{http://pan.vmars.tuwien.ac.at/osue/}
-(note that this server only compresses text files).
-
-%\item \textbf{Load external content (3):}
-%Load external content from \texttt{<link>}, \texttt{<script>} and \texttt{<img>} tags.
-
-%If the transferred content is of content type \texttt{text/html},
-%then search for \texttt{<link>}, \texttt{<script>} and \texttt{<img>} tags
-%(this can be implemented with a simple search
-%for the strings \verb|"<link"|, \verb|"<script"| and \verb|"<img"| in the content).
-%If any of these tags contains a \texttt{rel} or \texttt{src} attribute
-%(which must come before the \texttt{>} at the end of the tag),
-%then the file specified by this attribute is also requested.
-
-%3 bonus points are awarded if your client requests all external dependencies
-%from \texttt{<link>}, \texttt{<script>} and \texttt{<img>} tags
-%(as descibed above)
-
-\end{itemize}
-
-\subsubsection*{Using zlib}
-\label{sect:zlib}
-
-zlib\footnote{\url{http://zlib.net/}} is pre-installed on most UNIX systems.
+Make use of the zlib compression library\footnote{\url{http://zlib.net/}}
+for compressing and decompressing the data.
 You can use it by including the \texttt{zlib.h} header:
 
 \verb|#include <zlib.h>|
 
 Also, you will have to link the zlib library by adding \texttt{-lz} to your linker options.
 Make sure to test this in the TILAB in order to avoid linker warnings or errors.
+
+5 bonus points are awarded if your server is able to compress data
+into the gzip format and your client is able to decompress such data.
+
+Your server must recognize clients which accept data encoded in gzip format
+(by searching for the field \verb|Accept-Encoding| in the request header
+and checking whether it contains the value \verb|gzip|),
+and respond to requests from these clients with the line
+
+\verb|Content-Encoding: gzip|
+
+in the response header
+and correctly compress the content in the body into that format.
+Test your server by requesting files from your server
+using a web browser which supports gzip, for instance Firefox!
+
+Your client must advertise his decompression capability with the line
+
+\verb|Accept-Encoding: gzip|
+
+in the request header and be able to correctly decompress content sent with that encoding.
+Test your client by requesting files from a web server which supports gzip,
+such as \url{http://pan.vmars.tuwien.ac.at/osue/}
+(note that this server only compresses text files).
+
+\end{itemize}
 
 %\textbf{It would be a shame if you loose points because using zlib produces
 %compiler or linker warnings or errors.
