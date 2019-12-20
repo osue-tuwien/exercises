@@ -86,7 +86,6 @@ fork only if the input number is greater than 1.
 \end{enumerate}
 
 \subsection*{Examples}
-\begin{multicols}{2}
 \begin{verbatim}
 $ cat 1.txt
 4.0 4.0
@@ -97,16 +96,6 @@ $ ./cpair < 1.txt
 -1.000000 1.000000
 1.000000 -1.000000
 \end{verbatim}
-\begin{verbatim}
-$ cat all_x_values_equal_mean.txt
-1 1
-1 1
-1 1
-$ ./cpair < all_x_values_equal_mean.txt
-1.000000 1.000000
-1.000000 1.000000
-\end{verbatim}
-\end{multicols}
 
 Small deviations of the resulting values,
 which are a consequence of the limited precision of floating point numbers,
