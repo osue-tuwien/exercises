@@ -83,13 +83,13 @@ where the length is a power of 2.
 
 
 \subsection*{Examples}
-\begin{multicols}{3}
+\begin{multicols}{2}
 \begin{verbatim}
 $ cat 1.txt
 3
 3
 $ ./intmul < 1.txt
-9
+09
 \end{verbatim}
 
 \begin{verbatim}
@@ -102,9 +102,17 @@ $ ./intmul < 2.txt
 
 \begin{verbatim}
 $ cat 3.txt
+1000
+0001
+$ ./intmul < 3.txt
+00001000
+\end{verbatim}
+
+\begin{verbatim}
+$ cat 4.txt
 13A5D87E85412E5F
 7812C53B014D5DF8
-$ ./intmul < 3.txt
+$ ./intmul < 4.txt
 09372e47ae47c3f68e45d1a816906f08
 \end{verbatim}
 \end{multicols}
