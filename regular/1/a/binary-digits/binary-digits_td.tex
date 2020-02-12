@@ -1,0 +1,122 @@
+\input{../../../template.ltx}
+
+\begin{document}
+
+\osuetitle{1}
+
+\section*{Assignment A -- binary-digits}
+
+Write a C-program that visualizes data in it's binary representation.
+In other words by printing \osueglvar{1}s and \osueglvar{0}s.
+
+\begin{verbatim}
+
+SYNOPSIS:
+	binary-digits [-d DELAY] [-o OUTPUTFILE] [FILE]...
+
+\end{verbatim}
+
+
+The program shall read each file given as positional argument
+(or \osuefilename{stdin} if there are no positional arguments)
+and print it byte per byte to \osuefilename{stdout} or a specified output file in \textbf{big endian byte order}.
+\footnote{
+	\url{https://en.wikipedia.org/wiki/Endianness}\\
+}
+
+Your program must work on a stream of characters.
+I.e. not wait until all input is available, but process
+the data immediately.
+
+The program must run until either all files specified as
+positional arguments are processed, there is no more input
+from \osuefilename{stdin} (i.e. \osueglvar{EOF} is reached)
+or the program receives some signal demanding termination,
+which ever comes first.
+No special signal handling is necessary.
+
+For example a call to program with a file as an argument
+only containing the ASCII characters \verb|a|, \verb|b|
+and a new-line character (\verb|\n|), should produce this
+output:
+
+\verb|011000010110001000001010|
+
+\verb|3 * 8| digits, because every character is represented
+by \verb|8| bits.
+
+If the option \osuearg{-o} is given,
+the output is written to the specified file \osuefilename{outfile}.
+Otherwise, the output is written to \osuefilename{stdout}.
+
+If the option \osuearg{-d} is given,
+the program should wait the specified amount of seconds after each
+digit written.
+The delay may be specified as an ASCII represented decimal floating point number, e.g. 0.5.
+
+\subsection*{Hints}
+\begin{itemize}
+	\item The functions \osuefunc{nanosleep(2)} and \osuefunc{strtod(3)}
+	might be helpful for implementing the delay part.
+	
+	\item \osuefunc{fgetc(3)} and \osuefunc{fputc(3)} can be used to operate
+	on character streams.
+
+\end{itemize}
+
+\pagebreak
+
+\subsection*{Testing}
+
+Test your program with various inputs,
+such as a file \osuefilename{in1.txt} containing \verb|"OSUE\n"|.
+
+Executing your program should produce:
+
+\begin{osuefmtcode}
+	
+$ \osueinput{./binary-digits in1.txt}
+0100111101010011010101010100010100001010
+
+\end{osuefmtcode}
+
+Or you can let the programm read from \osuefilename{stdin}
+interactively, by just calling:
+
+\begin{osuefmtcode}
+
+	$ \osueinput{./binary-digits}
+
+\end{osuefmtcode}
+
+And then entering arbitrary letters on your keyboard
+this way you can see the representation for anything you want.
+Note that the shell input is buffered and you will only see
+a result every time a new-line character (\verb|\n|) is sent
+by pressing return. End the input with Ctrl+D.
+
+A more complex invocation could be:
+
+\begin{osuefmtcode}
+	
+	$ \osueinput{./binary-digits -o outfile.txt -d 0.5 in1.txt in2.txt}
+\end{osuefmtcode}
+
+This will store the contents of \osuefilename{in1.txt} and
+\osuefilename{in2.txt} expanded to \verb|1| and \verb|0| characters in
+\osuefilename{outfile.txt}, but wait \verb|0.5| seconds after writing
+each character.
+
+What you could also do is read random input from \osueprog{/dev/urandom}
+and create an endless stream of text.
+
+\begin{osuefmtcode}
+
+	$ \osueinput{./binary-digits -d 0.05 /dev/urandom}
+
+\end{osuefmtcode}
+
+
+\osueguidelinesone
+
+\end{document}
