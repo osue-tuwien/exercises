@@ -1,14 +1,10 @@
 Violation of following guidelines leads to a deduction of points in exercise 3.
 
 \begin{enumerate}
-\item Correct use of named sempahores (\texttt{sem\_open(3)},
-  \texttt{sem\_close(3)} \texttt{sem\_unlink(3)}) and POSIX shared memory
-  (\texttt{shm\_overview(7)}) for inter-process communication of separated
-  programs (e.g., server and client).
-
-  Use your matriculation number as prefix in the names of all resources.
-\item ``Busy waiting'' is forbidden. (Busy waiting is the repeated check of a
-  condition in a loop for synchronization purposes.)
-\item Synchronization with \texttt{sleep} is forbidden.
+\item It is forbidden to use the deprecated functions
+\texttt{gethostbyname}, \texttt{gethostbyaddr}, \texttt{gethostbyname2},
+\texttt{gethostbyname\_r}, \texttt{gethostbyname2\_r}
+or any other function of that family
+documented on the man page \texttt{gethostbyname(3)}.
+Use \texttt{getaddrinfo(3)} instead.
 \end{enumerate}
-
