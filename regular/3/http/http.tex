@@ -1,12 +1,9 @@
-\input{../../../template.ltx}
+\input{../../template.ltx}
 
 \begin{document}
-\osuetitle{1}
+\osuetitle{3}
 
-\section*{Assignment B -- HTTP}
-\label{sec:intro}
-
-Implement a client and a server for the Hypertext Transfer Protocol (HTTP).
+%Implement a client and a server for the Hypertext Transfer Protocol (HTTP).
 
 HTTP is a text-based request-response application layer protocol,
 which is used to transfer files between a client and a server.
@@ -91,18 +88,18 @@ In a C-string this sequence can be encoded as \verb|"\r\n"|.
 Note that this does not apply to the content in the response body,
 which is transmitted as it is read from the file without modifications.
 
-\subsection*{Instructions}
 
-Write a client program and a server program
+\subsection*{Assignment A -- HTTP Client (10)}
+
+Write a client program
 which partially implement version 1.1 of the HTTP.
 %Only the request method \texttt{GET} is used.
-
-\subsubsection*{Client}
-
 The client takes an URL as input,
 connects to the corresponding server
 and requests the file specified in the URL.
 The transmitted content of that file is written to \verb|stdout| or to a file.
+
+\vspace{-3mm}
 
 \begin{verbatim}
 SYNOPSIS
@@ -110,6 +107,8 @@ SYNOPSIS
 EXAMPLE
     client http://pan.vmars.tuwien.ac.at/osue/
 \end{verbatim}
+
+\vspace{-3mm}
 
 The client may be called with a number of options:
 \begin{itemize}
@@ -192,10 +191,16 @@ The client must not rely on the response header field \verb|Content-Length|
 in order to determine the amount of data transfered,
 but instead read from the socket until the server closes the connection.
 
-\subsubsection*{Server}
 
+\subsection*{Assignment B -- HTTP Server (10)}
+%\subsubsection*{Server}
+
+Write a server program
+which partially implement version 1.1 of the HTTP.
 The server waits for connections from clients
 and transmits the requested files.
+
+\vspace{-3mm}
 
 \begin{verbatim}
 SYNOPSIS
@@ -203,6 +208,8 @@ SYNOPSIS
 EXAMPLE
     server -p 1280 -i index.html ~/Documents/my_website/
 \end{verbatim}
+
+\vspace{-3mm}
 
 The server may be called with following options:
 \begin{itemize}
@@ -298,7 +305,9 @@ and then terminates with exit code 0.
 If there are no open connections to clients when receiving the signal,
 the server terminates immediately with exit code 0.
 
-\subsection*{Hints}
+\vspace{20mm}
+
+\subsection*{Hints (for both assignments)}
 \begin{itemize}
 \item When parsing the URL
 in order to extract the hostname and the filepath,
@@ -339,26 +348,11 @@ This is also true if your server is responding with an error status.
 
 \vspace{-5mm}
 In order to test the functionality and correct implementation of the protocol,
-you should test your programs in 3 different ways:
+you should test your programs in following ways:
 
 \vspace{-4mm}
 
-\subsubsection*{Your client requests files from your server}
-
-\vspace{-4mm}
-Create a directory and populate it with one or more example files.
-Verify that requested files are transmitted correctly
-using the utility \verb|diff|.
-
-\begin{osuefmtcode}
-    $ ls ./my_website
-    test.html
-    $ ./server -i test.html ./my_website &
-    $ ./client -o received.html -p 8080 http://localhost/
-    $ diff ./my_website/test.html received.html
-\end{osuefmtcode}
-
-\subsubsection*{Your client requests files from servers on the internet}
+\subsubsection*{Assignment A -- Your client requests files from servers on the internet}
 
 \vspace{-4mm}
 Using a web browser (e.g. Firefox),
@@ -372,8 +366,7 @@ Instead of a browser you can also use the command-line utility \verb|wget|:
 \end{osuefmtcode}
 
 Request the same file using your client
-and verify that the content of both files is identical,
-again using \verb|diff|.
+and verify that the content of both files is identical using the utility \verb|diff|.
 
 \begin{osuefmtcode}
     $ ./client http://pan.vmars.tuwien.ac.at/osue/ > index.html
@@ -388,11 +381,11 @@ However, websites which still accept HTTP are for instance
 \url{http://pan.vmars.tuwien.ac.at/osue/},
 \url{http://neverssl.com/} or \url{http://www.nonhttps.com/}.
 
-\subsubsection*{Your server processes requests from a web browser}
+\subsubsection*{Assignment B -- Your server processes requests from a web browser}
 
 \vspace{-4mm}
 Start your server and request files from it using a web browser
-(for instance using Firefox, which is the default browser in the TILAB).
+(for instance using Firefox, which is the default browser in the lab).
 Again make sure that this works for various filetypes.
 
 \begin{osuefmtcode}
@@ -416,24 +409,44 @@ instead of a browser with GUI:
     $ wget -p -nd http://127.0.0.1:8080/
 \end{osuefmtcode}
 
+\subsubsection*{Assignment A and B -- Your client requests files from your server}
+
+\vspace{-4mm}
+If you have implemented both, the server and the client,
+you may also test both programs together.
+Create a directory and populate it with one or more example files.
+Verify that requested files are transmitted correctly
+using the utility \verb|diff|.
+
+\begin{osuefmtcode}
+    $ ls ./my_website
+    test.html
+    $ ./server -i test.html ./my_website &
+    $ ./client -o received.html -p 8080 http://localhost/
+    $ diff ./my_website/test.html received.html
+\end{osuefmtcode}
+
 \vspace{5mm}
 
+%\fbox{\parbox{\textwidth}{
+%\bf Please be aware that if you want to get any points for your submission,
+%all of the above test cases must work
+%and the behavior of your program must conform to the assignment!
+%}}
 \fbox{\parbox{\textwidth}{
-\bf Please be aware that if you want to get any points for your submission,
-all of the above test cases must work
-and the behavior of your program must conform to the assignment!
-}}
-
 Note that your implementation is not required
 to be able to transmit binary files (such as images).
 This is instead a bonus task (see next page).
+}}
+
 
 \clearpage
 \subsection*{Bonus Points}
 
 \vspace{-3mm}
-\textbf{Bonus points are only awarded
-if your programs are FULLY FUNCTIONAL
+\textbf{Bonus points are only awarded if both assignments,
+ A (the client) and B (the server),
+have been implemented, are FULLY FUNCTIONAL
 and COMPLY WITH ALL INSTRUCTIONS!
 %Do not try to implement any of the bonus tasks
 %while your programs do not function properly!
@@ -445,19 +458,6 @@ otherwise you risk loosing more points than you might gain!
 %\subsubsection*{Server}
 
 \begin{itemize}
-
-\item \textbf{Binary data (3):}
-
-HTTP is a text-based protocol, but it can also transmit binary data.
-If so far your client is reading the message body received from the server
-with \verb|fgets(3)| or \verb|getline(3)|
-and your server writes the message body with functions such as \verb|fputs(3)|,
-then replace these with functions such as \verb|fread(3)| and \verb|fwrite(3)|,
-which are able to handle text and binary content alike.
-You should keep line-based functions for reading and writing the headers though.
-
-3 bonus points are awarded if your server is able to serve
-and your client is able to receive binary files, such as images.
 
 \item \textbf{Header field \texttt{Content-Type} (2):}
 Add support for the header field \verb|Content-Type| to your server.
@@ -486,6 +486,21 @@ if the requested file has any of the above extensions.
 If the file extension is none of those listed in the table,
 the field \verb|Content-Type| should not be used.
 
+
+\item \textbf{Binary data (3):}
+
+HTTP is a text-based protocol, but it can also transmit binary data.
+If so far your client is reading the message body received from the server
+with \verb|fgets(3)| or \verb|getline(3)|
+and your server writes the message body with functions such as \verb|fputs(3)|,
+then replace these with functions such as \verb|fread(3)| and \verb|fwrite(3)|,
+which are able to handle text and binary content alike.
+You should keep line-based functions for reading and writing the headers though.
+
+3 bonus points are awarded if your server is able to serve
+and your client is able to receive binary files, such as images.
+
+
 \item \textbf{Compression (5):}
 Implement compression of the transferred content in the gzip format.
 Make use of the zlib compression library\footnote{\url{http://zlib.net/}}
@@ -495,7 +510,7 @@ You can use it by including the \texttt{zlib.h} header:
 \verb|#include <zlib.h>|
 
 Also, you will have to link the zlib library by adding \texttt{-lz} to your linker options.
-Make sure to test this in the TILAB in order to avoid linker warnings or errors.
+Make sure to test this in the lab in order to avoid linker warnings or errors.
 
 5 bonus points are awarded if your server is able to compress data
 into the gzip format and your client is able to decompress such data.
@@ -525,12 +540,12 @@ such as \url{http://pan.vmars.tuwien.ac.at/osue/}
 
 %\textbf{It would be a shame if you loose points because using zlib produces
 %compiler or linker warnings or errors.
-%Make sure to TEST YOUR IMPLEMENTATION IN THE TILAB!}
+%Make sure to TEST YOUR IMPLEMENTATION IN THE LAB!}
 
 %Following websites give a more detailed and complete overview of the HTTP:
 
 %\url{http://www.ntu.edu.sg/home/ehchua/programming/webprogramming/http_basics.html}
 
-\osueguidelinesone
+\osueguidelinesthree
 
 \end{document}

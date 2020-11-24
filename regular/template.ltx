@@ -83,44 +83,44 @@ and check if your program complies.
 \subsection*{Exercise 3 Guidelines}
 \input{../../guidelines/ex3.ltx}
 
-\subsection*{Hints}
-Below are several hints regarding this exercise which should help you to ensure
-the guidelines.
-
-\begin{description}
-\item[Client/server architecture.]
-  Derive from the exercise if a client/server architecture makes sense. In case
-  of a client/server architecture (server creates the resources):
-  \begin{itemize}
-  \item The client shall terminate with an appropriate error message if the
-    resources cannot be found.
-  \item Assume that more than one client can start concurrently. You can assume
-    only one server runs at the same time.
-  \item The server should stay functional after error-free termination of a
-    client.
-  \end{itemize}
-  If you don't use a client/server architecture, assume that each process can
-  be started once in random order.
-\item[Cleanup resources.]
-  Resources shall be cleaned up also in case of errors.
-
-  Note, shared memory objects and semaphores won't be automatically deleted
-  after the termination of a program. Hence, these resources have to be
-  explicitly removed.
-
-  Shared memory and semaphores, that haven't been removed due to a program
-  error or crash, can be listed and removed with the usual commands,
-  \texttt{ls} and \texttt{rm} respectively, in the folder
-  \texttt{/dev/shm/}. You can identify your resources by the chosen name
-  (matriculation number) or ownership of the resource files.
-\item[Avoid wasting resources.]
-  Use a shared memory of fixed size. Use a minimum number of semaphores
-  possible, but ensure correct synchronization (you may ask our tutors during
-  lab hours).
-\item[Termination.] After correct program execution (without errors) a
-  synchronous termination shall be performed, i.e., take care of the
-  synchronization between running processes when deleting the resources.
-\end{description}
+%\subsection*{Hints}
+%Below are several hints regarding this exercise which should help you to ensure
+%the guidelines.
+%
+%\begin{description}
+%\item[Client/server architecture.]
+%  Derive from the exercise if a client/server architecture makes sense. In case
+%  of a client/server architecture (server creates the resources):
+%  \begin{itemize}
+%  \item The client shall terminate with an appropriate error message if the
+%    resources cannot be found.
+%  \item Assume that more than one client can start concurrently. You can assume
+%    only one server runs at the same time.
+%  \item The server should stay functional after error-free termination of a
+%    client.
+%  \end{itemize}
+%  If you don't use a client/server architecture, assume that each process can
+%  be started once in random order.
+%\item[Cleanup resources.]
+%  Resources shall be cleaned up also in case of errors.
+%
+%  Note, shared memory objects and semaphores won't be automatically deleted
+%  after the termination of a program. Hence, these resources have to be
+%  explicitly removed.
+%
+%  Shared memory and semaphores, that haven't been removed due to a program
+%  error or crash, can be listed and removed with the usual commands,
+%  \texttt{ls} and \texttt{rm} respectively, in the folder
+%  \texttt{/dev/shm/}. You can identify your resources by the chosen name
+%  (matriculation number) or ownership of the resource files.
+%\item[Avoid wasting resources.]
+%  Use a shared memory of fixed size. Use a minimum number of semaphores
+%  possible, but ensure correct synchronization (you may ask our tutors during
+%  lab hours).
+%\item[Termination.] After correct program execution (without errors) a
+%  synchronous termination shall be performed, i.e., take care of the
+%  synchronization between running processes when deleting the resources.
+%\end{description}
 }
 
 % semantic markup formatting commands:
