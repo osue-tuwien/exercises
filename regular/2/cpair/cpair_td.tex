@@ -40,6 +40,7 @@ with one part containing all the points
 with an $x$-coordinate less than (or equal to) $x_m$
 and the other part containing all the points
 with an $x$-coordinate greater than $x_m$.
+\footnote{If all $x$-coordinates have the same value then this does not divide the array into two parts of equal length. It is not required to handle this special case. Your program's behavior may be undefined for such inputs (including infinite recursion).} 
 
 \item Using \osuefunc{fork(2)} and \osuefunc{execlp(3)},
 recursively execute this program in two child processes,
