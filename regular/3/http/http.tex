@@ -105,7 +105,7 @@ The transmitted content of that file is written to \verb|stdout| or to a file.
 SYNOPSIS
     client [-p PORT] [ -o FILE | -d DIR ] URL
 EXAMPLE
-    client http://pan.vmars.tuwien.ac.at/osue/
+    client http://www.nonhttps.com/
 \end{verbatim}
 
 \vspace{-3mm}
@@ -154,11 +154,11 @@ Also, the header field \verb|Connection| with the value \verb|close|
 should be added to the header
 (which tells the server that the connection should be closed after transmitting one file).
 For instance, the request header for the URL
-\url{http://pan.vmars.tuwien.ac.at/osue/} is:
+\url{http://www.nonhttps.com/} is:
 
 \begin{verbatim}
-GET /osue/ HTTP/1.1
-Host: pan.vmars.tuwien.ac.at
+GET / HTTP/1.1
+Host: www.nonhttps.com
 Connection: close
 \end{verbatim}
 
@@ -357,28 +357,28 @@ you should test your programs in following ways:
 \vspace{-4mm}
 Using a web browser (e.g. Firefox),
 download a file which is publicly available on the internet,
-such as for instance \url{http://pan.vmars.tuwien.ac.at/osue/index.html}
+such as for instance \url{http://www.nonhttps.com/}
 and save it locally (e.g. under \verb|~/Downloads/test.html|).
 Instead of a browser you can also use the command-line utility \verb|wget|:
 
 \begin{osuefmtcode}
-    $ wget http://pan.vmars.tuwien.ac.at/osue/index.html
+    $ wget http://www.nonhttps.com/
 \end{osuefmtcode}
 
 Request the same file using your client
 and verify that the content of both files is identical using the utility \verb|diff|.
 
 \begin{osuefmtcode}
-    $ ./client http://pan.vmars.tuwien.ac.at/osue/ > index.html
+    $ ./client http://www.nonhttps.com/ > index.html
     $ diff ~/Downloads/test.html index.html
-    $ ./client -d . http://pan.vmars.tuwien.ac.at/osue/countdown.js
-    $ diff ~/Downloads/countdown.js countdown.js
+    $ mkdir dir
+    $ ./client -d dir http://www.nonhttps.com/index.html
+    $ diff ~/Downloads/test.html dir/index.html
 \end{osuefmtcode}
 
-Unfortunately most websites recently refuse to transmit files via HTTP
+Most websites recently refuse to transmit files via HTTP
 and instead require HTTPS, the encrypted version of HTTP.
 However, websites which still accept HTTP are for instance
-\url{http://pan.vmars.tuwien.ac.at/osue/},
 \url{http://neverssl.com/} or \url{http://www.nonhttps.com/}.
 
 \subsubsection*{Assignment B -- Your server processes requests from a web browser}
@@ -533,8 +533,7 @@ Your client must advertise his decompression capability with the line
 
 in the request header and be able to correctly decompress content sent with that encoding.
 Test your client by requesting files from a web server which supports gzip,
-such as \url{http://pan.vmars.tuwien.ac.at/osue/}
-(note that this server only compresses text files).
+such as \url{http://www.nonhttps.com/}.
 
 \end{itemize}
 
