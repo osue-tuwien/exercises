@@ -3,7 +3,11 @@
 START=$(pwd)
 PDFLATEX="pdflatex -interaction=nonstopmode -halt-on-error"
 
-for file in $(find . -name "*.tex"); do
+for file in $(find . -name "*.tex" | grep -v BonusExercise); do
+   echo "========================================================================"
+   echo "generate PDF for ${file}"
+   echo "========================================================================"
+
    cd $(dirname ${file})
    BASENAME=$(basename ${file})
 
